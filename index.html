@@ -6,39 +6,51 @@
     <title>머니폴(MoneyPole) - 스마트 금리 비교</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --main-blue: #007AFF; --bg-grey: #F8F9FA; --border: #E9ECEF; --text-dark: #2D3436; }
+        /* 변수 설정: 공통적으로 사용하는 색상 및 간격 정의 */
+        :root { 
+            --main-blue: #007AFF; 
+            --bg-grey: #F8F9FA; 
+            --border: #E9ECEF; 
+            --text-dark: #2D3436; 
+        }
+
+        /* 기본 레이아웃 설정 */
         body { font-family: 'Pretendard', sans-serif; margin: 0; background: var(--bg-grey); color: var(--text-dark); }
         
-        /* 헤더 & 네비게이션 */
+        /* 헤더 영역: 로고와 상단 네비게이션 메뉴 */
         header { background: #fff; padding: 40px 20px 10px 20px; text-align: center; }
-        .logo-img { height: 150px; cursor: pointer; }
+        .logo-img { height: 150px; cursor: pointer; } /* 로고 클릭 시 홈으로 이동 */
+        
+        /* 네비게이션 바 디자인 */
         nav { display: flex; justify-content: center; gap: 15px; margin-top: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         nav a { text-decoration: none; color: #636E72; font-weight: 600; font-size: 1.1rem; cursor: pointer; padding: 10px 20px; border-radius: 10px; }
         nav a:hover, nav a.active { background: rgba(0,122,255,0.08); color: var(--main-blue); }
 
-        /* 필터 및 검색창 */
+        /* 검색 및 필터 영역 (상단 고정) */
         .filter-section { background: #fff; padding: 20px; display: flex; justify-content: center; gap: 12px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 99; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .search-input { width: 300px; padding: 12px 15px; border: 2px solid var(--border); border-radius: 10px; font-size: 1rem; outline: none; }
         .filter-select { padding: 12px; border: 1px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer; }
         .btn-search { background: var(--main-blue); color: #fff; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; }
 
-        /* 공통 레이아웃 */
+        /* 컨텐츠 영역 레이아웃 */
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; min-height: 60vh; }
         .card { background: #fff; border-radius: 24px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin-bottom: 25px; }
         
-        /* 리스트 스타일 */
+        /* 금융 상품 리스트 아이템 디자인 */
         .product-item { display: flex; justify-content: space-between; align-items: center; padding: 18px; border-bottom: 1px solid #F8F9FA; cursor: pointer; border-radius: 12px; transition: 0.2s; }
         .product-item:hover { background: #F8F9FA; transform: translateX(5px); }
+        
+        /* 은행 이름표(배지) 디자인 */
         .bank-badge { color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; margin-right: 15px; display: inline-block; min-width: 70px; text-align: center; }
         .rate-val { color: var(--main-blue); font-weight: 800; font-size: 1.2rem; }
 
-        /* 상세 페이지 (계산기 & 차트) */
+        /* 상세 페이지 (이자 계산기 및 차트 영역) */
         .calculator-box { background: #F1F3F5; padding: 20px; border-radius: 15px; margin: 20px 0; border: 1px solid #E5E7EB; }
         .calculator-box input { padding: 10px; width: 150px; border-radius: 8px; border: 1px solid #ccc; font-size: 1rem; text-align: right; }
         .chart-container { height: 400px; width: 100%; margin-top: 20px; }
         .back-btn { background: #f1f3f5; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
 
-        /* 푸터 */
+        /* 푸터 영역 */
         footer { display: flex; align-items: center; gap: 25px; padding: 50px 0; margin-top: 60px; border-top: 1px solid var(--border); color: #636E72; }
         .footer-logo { height: 50px; opacity: 0.5; filter: grayscale(100%); }
     </style>
@@ -52,8 +64,8 @@
         <a onclick="loadCategory('savings')" id="nav-savings">적금</a>
         <a onclick="loadCategory('cp')" id="nav-cp">발행어음</a>
         <a onclick="loadCategory('bond')" id="nav-bond">채권</a>
-        <a onclick="loadCategory('els')" id="nav-els">ELS/ELB</a>
-    </nav>
+        <a id="nav-els" style="color:#ccc; cursor:default;" title="서비스 예정입니다.">ELS/ELB (예정)</a>
+        </nav>
 </header>
 
 <div class="filter-section">
@@ -70,8 +82,8 @@
 <div class="container">
     <div id="section-home">
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-            <div class="card"><h3>💰 예금 TOP 10</h3><div id="home-dep-list"></div></div>
-            <div class="card"><h3>📈 적금 TOP 10</h3><div id="home-sav-list"></div></div>
+            <div class="card"><h3>💰 예금 금리 순위 TOP 10</h3><div id="home-dep-list"></div></div>
+            <div class="card"><h3>📈 적금 금리 순위 TOP 10</h3><div id="home-sav-list"></div></div>
         </div>
     </div>
 
@@ -99,13 +111,22 @@
 </div>
 
 <script>
-    // 1. 금융사별 색상 맵핑 (기본값 회색)
+    // 1. 브랜드별 테마 색상 설정
     const colors = {
         "KB국민은행": "#FFBC00", "우리은행": "#0067AC", "신한은행": "#0046FF", 
         "NH농협은행": "#00A651", "미래에셋": "#F15A22", "카카오뱅크": "#FEE500", "토스뱅크": "#0019FF"
     };
 
-    // 실제로는 data.json을 fetch로 불러옵니다 (현재는 샘플 테스트용)
+    // [중요 수정] 카테고리 영문명을 한글 명칭으로 매핑하는 객체 추가
+    const categoryNames = {
+        'deposit': '예금 금리 순위',
+        'savings': '적금 금리 순위',
+        'cp': '발행어음 금리 순위',
+        'bond': '채권 금리 순위',
+        'els': 'ELS/ELB 금리 순위'
+    };
+
+    // 2. 가상 데이터베이스 (실제 운영 시에는 외부 JSON 또는 API에서 호출)
     const db = [
         {id: 1, bank: "KB국민은행", name: "Star 정기예금", type: "deposit", base: 3.5, max: 4.3, term: 12, history: [4.0, 4.1, 4.3]},
         {id: 2, bank: "우리은행", name: "WON 적금", type: "savings", base: 3.8, max: 5.2, term: 12, history: [4.8, 5.0, 5.2]},
@@ -114,17 +135,20 @@
         {id: 5, bank: "미래에셋", name: "발행어음 1년", type: "cp", base: 4.0, max: 4.0, term: 12, history: [4.0, 4.0, 4.0]}
     ];
 
-    let currentCategory = 'deposit';
-    let myChart = null;
-    let currentItem = null;
+    let currentCategory = 'deposit'; // 현재 선택된 카테고리
+    let myChart = null;              // Chart.js 인스턴스 저장 변수
+    let currentItem = null;          // 현재 상세 보기 중인 상품 데이터
 
+    // 은행 이름에 따른 색상 반환 함수
     function getBankColor(bankName) { return colors[bankName] || "#888888"; }
 
+    // 특정 섹션만 화면에 보여주는 제어 함수
     function showSection(id) {
         ['section-home', 'section-list', 'section-detail'].forEach(s => document.getElementById(s).style.display = 'none');
         document.getElementById(id).style.display = 'block';
     }
 
+    // [수정] 필터 적용 및 리스트 렌더링 함수
     function applyFilters() {
         const keyword = document.getElementById('searchInput').value.trim().toLowerCase();
         const term = document.getElementById('filterTerm').value;
@@ -132,25 +156,38 @@
 
         showSection('section-list');
 
+        // 데이터 필터링 로직 (검색어, 기간, 카테고리 일치 여부)
         let filtered = db.filter(item => {
             const matchBank = item.bank.toLowerCase().includes(keyword);
             const matchTerm = term === "" || item.term == term;
+            // 검색어가 있을 때는 전체에서 찾고, 없을 때는 현재 선택된 카테고리만 노출
             const matchType = (keyword !== "") ? true : (item.type === currentCategory);
             return matchBank && matchTerm && matchType;
         });
 
+        // 정렬 로직 (최고 금리순 또는 기본 금리순)
         filtered.sort((a, b) => b[sort] - a[sort]);
-        document.getElementById('list-title').innerText = keyword ? `'${keyword}' 검색 결과` : `${currentCategory.toUpperCase()} 순위`;
+
+        // [요청사항 반영] 리스트 제목을 영어(SAVINGS)에서 한글(적금 금리 순위)로 변경
+        const koreanTitle = categoryNames[currentCategory] || '금리 순위';
+        document.getElementById('list-title').innerText = keyword ? `'${keyword}' 검색 결과` : koreanTitle;
+        
         renderList(filtered);
     }
 
+    // 네비게이션 메뉴 클릭 시 카테고리 로드 함수
     function loadCategory(type) {
+        // [참고] ELS 탭의 경우 HTML에서 onclick을 제거했으나, 만약 호출되더라도 처리하지 않도록 방어 코드 가능
+        if(type === 'els') return; 
+
         currentCategory = type;
+        // 메뉴 활성화 스타일 적용
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
         if(document.getElementById(`nav-${type}`)) document.getElementById(`nav-${type}`).classList.add('active');
         applyFilters();
     }
 
+    // 필터링된 결과 리스트를 HTML로 그리는 함수
     function renderList(data) {
         const listDiv = document.getElementById('list-content');
         if(data.length === 0) { listDiv.innerHTML = "<p style='text-align:center;'>상품이 없습니다.</p>"; return; }
@@ -165,17 +202,18 @@
             </div>`).join('');
     }
 
-    // ★ 이자 계산기 로직 포함 ★
+    // 상품 상세 정보 보기 기능
     function viewDetail(id) {
         showSection('section-detail');
         currentItem = db.find(p => p.id === id);
         
+        // 상세 페이지 상단 헤더 구성
         document.getElementById('detail-header').innerHTML = `
             <h2 style="margin:0;"><span class="bank-badge" style="background:${getBankColor(currentItem.bank)}">${currentItem.bank}</span> ${currentItem.name}</h2>
             <p style="font-size:1.2rem; margin-top:15px;">최고 <b>연 ${currentItem.max}%</b> (기본 ${currentItem.base}%) / ${currentItem.term}개월</p>
         `;
 
-        // 계산기 HTML 삽입
+        // 이자 계산기 영역 생성
         document.getElementById('calc-area').innerHTML = `
             <strong>🧮 만기 예상 이자 계산기</strong><br><br>
             가입 금액: <input type="number" id="calcInput" value="10000000" step="1000000" oninput="calculateInterest()"> 원<br>
@@ -183,28 +221,39 @@
                 만기 예상 이자 (세후 15.4%): <strong id="calcResult" style="color:var(--main-blue);">0</strong> 원
             </div>
         `;
-        calculateInterest(); // 초기 계산 실행
+        calculateInterest(); // 초기 이자 계산 실행
 
+        // Chart.js를 이용한 금리 추이 그래프 생성
         const ctx = document.getElementById('rateChart').getContext('2d');
-        if(myChart) myChart.destroy();
+        if(myChart) myChart.destroy(); // 기존 차트가 있다면 삭제 후 재생성
         myChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: ['2개월 전', '1개월 전', '현재'], datasets: [{ label: '금리 추이', data: currentItem.history, borderColor: '#007AFF', fill: true, backgroundColor: 'rgba(0,122,255,0.05)' }] },
+            data: { 
+                labels: ['2개월 전', '1개월 전', '현재'], 
+                datasets: [{ 
+                    label: '금리 추이', 
+                    data: currentItem.history, 
+                    borderColor: '#007AFF', 
+                    fill: true, 
+                    backgroundColor: 'rgba(0,122,255,0.05)' 
+                }] 
+            },
             options: { responsive: true, maintainAspectRatio: false }
         });
     }
 
-    // 이자 계산 함수 (단리, 일반과세 기준)
+    // 세후 이자 계산 로직 (일반 단리 예금 기준)
     function calculateInterest() {
         if(!currentItem) return;
         const principal = Number(document.getElementById('calcInput').value) || 0;
-        // 예금 이자 = 원금 * (금리/100) * (개월수/12)
+        // 이자 공식: 원금 * 연이율 * (유지개월수 / 12)
         let interest = principal * (currentItem.max / 100) * (currentItem.term / 12);
-        // 세후 (15.4% 세금 공제)
+        // 이자소득세 15.4% 공제 (소수점 버림)
         let netInterest = Math.floor(interest * (1 - 0.154));
         document.getElementById('calcResult').innerText = netInterest.toLocaleString();
     }
 
+    // 메인 홈으로 이동하는 함수
     function goHome() {
         showSection('section-home');
         document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
@@ -212,12 +261,15 @@
         renderHomeRank();
     }
 
+    // 목록으로 되돌아가기 함수
     function goBack() { showSection('section-list'); }
 
+    // 홈 화면의 예적금 TOP 10 데이터를 표시하는 함수
     function renderHomeRank() {
         const dps = db.filter(i => i.type === 'deposit').slice(0, 10);
         const svs = db.filter(i => i.type === 'savings').slice(0, 10);
         
+        // 예금 TOP 10 렌더링
         document.getElementById('home-dep-list').innerHTML = dps.map((i, idx) => `
             <div class="product-item" onclick="viewDetail(${i.id})">
                 <div style="display:flex; align-items:center;">
@@ -227,6 +279,7 @@
                 <span class="rate-val">${i.max}%</span>
             </div>`).join('');
             
+        // 적금 TOP 10 렌더링
         document.getElementById('home-sav-list').innerHTML = svs.map((i, idx) => `
             <div class="product-item" onclick="viewDetail(${i.id})">
                 <div style="display:flex; align-items:center;">
@@ -237,6 +290,7 @@
             </div>`).join('');
     }
 
+    // 페이지 로드 시 홈 화면 초기화
     window.onload = goHome;
 </script>
 </body>
