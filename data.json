@@ -1,12 +1,2 @@
 [
-  {
-    "id": 1,
-    "bank": "KB국민은행",
-    "name": "Star 정기예금",
-    "type": "deposit",
-    "base": 3.5,
-    "max": 4.3,
-    "term": 12,
-    "history": [{"date": "2024-02-01", "rate": 4.3}]
-  }
 ]
