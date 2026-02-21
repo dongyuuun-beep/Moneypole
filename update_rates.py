@@ -21,9 +21,9 @@ def update_process():
     
     # [매뉴얼 입력 예시] 실제로는 외부 API나 CSV에서 읽어올 수 있습니다.
     # 예시: 금리가 변동된 최신 리스트 정보를 여기에 입력합니다.
-    latest_data = [
-        {"id": 1, "bank": "KB국민은행", "name": "Star 정기예금", "type": "deposit", "max": 4.5, "term": 12},
-        {"id": 2, "bank": "우리은행", "name": "WON 적금", "type": "savings", "max": 5.3, "term": 12},
+latest_data = [
+        {"id": 1, "max": 4.5}, # 국민은행 예금 금리가 4.5로 올랐다고 가정
+        {"id": 2, "max": 5.2}, 
     ]
 
     updated = False
