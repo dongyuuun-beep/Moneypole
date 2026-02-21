@@ -1,0 +1,29 @@
+name: Daily Rate Update
+
+on:
+  schedule:
+    - cron: '0 17 * * *' # 한국 시간 매일 02:00 (UTC 17:00)
+  workflow_dispatch: # 수동으로도 실행 가능하게 함
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Run Update Script
+        run: python update_rates.py
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Auto Bot"
+          git config --global user.email "bot@github.com"
+          git add data.json
+          git commit -m "Update interest rates [${{ format('{0}', github.event.head_commit.timestamp) }}]" || exit 0
+          git push
