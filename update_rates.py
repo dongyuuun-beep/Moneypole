@@ -7,42 +7,54 @@ from datetime import datetime
 API_KEY = os.getenv('FSS_API_KEY')
 DATA_FILE = 'data.json'
 
-def fetch_fss_data():
-    """금감원 API에서 예금 데이터를 가져와서 정제합니다."""
+def fetch_fss_data(product_type):
+    """
+    금감원 API에서 데이터를 가져옵니다.
+    product_type: 'deposit' (예금) 또는 'savings' (적금)
+    """
     if not API_KEY:
-        print("API 키가 없습니다. 환경변수를 확인하세요.")
+        print("API 키가 없습니다. GitHub Secrets 설정을 확인하세요.")
         return []
 
-    # 정기예금(deposit) API 호출
-    url = f"http://finlife.fss.or.kr/api/depositProductsSearch.json?auth={API_KEY}&topFinGrpNo=020000&pageNo=1"
-    res = requests.get(url)
-    data = res.json()
+    # API 주소 결정
+    api_url_map = {
+        'deposit': 'depositProductsSearch.json',
+        'savings': 'savingProductsSearch.json'
+    }
     
-    base_list = data.get('result', {}).get('baseList', [])
-    option_list = data.get('result', {}).get('optionList', [])
-
-    # 금리 정보(optionList)를 상품코드별로 정리 (12개월 기준 최고금리 추출)
-    rate_dict = {}
-    for opt in option_list:
-        p_code = opt['fin_prdt_cd']
-        intr_rate2 = float(opt['intr_rate2'] or 0) # 우대금리 포함 최고금리
+    url = f"http://finlife.fss.or.kr/api/{api_url_map[product_type]}?auth={API_KEY}&topFinGrpNo=020000&pageNo=1"
+    
+    try:
+        res = requests.get(url)
+        data = res.json()
         
-        # 12개월물 기준이거나 아직 해당 상품코드가 저장되지 않았다면 저장
-        if opt['save_trm'] == "12":
-            rate_dict[p_code] = intr_rate2
+        base_list = data.get('result', {}).get('baseList', [])
+        option_list = data.get('result', {}).get('optionList', [])
 
-    # 상품명과 금리를 하나로 합치기
-    latest_data = []
-    for base in base_list:
-        p_code = base['fin_prdt_cd']
-        if p_code in rate_dict:
-            latest_data.append({
-                "bank": base['kor_co_nm'],
-                "name": base['fin_prdt_nm'],
-                "max": rate_dict[p_code],
-                "p_code": p_code # 비교를 위한 고유 코드
-            })
-    return latest_data
+        # 12개월물 기준 최고 우대금리(intr_rate2) 추출
+        rate_dict = {}
+        for opt in option_list:
+            if opt['save_trm'] == "12": # 12개월물 기준
+                p_code = opt['fin_prdt_cd']
+                rate = float(opt['intr_rate2'] or 0)
+                # 동일 상품 중 가장 높은 금리 선택
+                if p_code not in rate_dict or rate > rate_dict[p_code]:
+                    rate_dict[p_code] = rate
+
+        final_list = []
+        for base in base_list:
+            p_code = base['fin_prdt_cd']
+            if p_code in rate_dict:
+                final_list.append({
+                    "bank": base['kor_co_nm'],
+                    "name": base['fin_prdt_nm'],
+                    "max": rate_dict[p_code],
+                    "type": product_type
+                })
+        return final_list
+    except Exception as e:
+        print(f"{product_type} 데이터 호출 중 오류 발생: {e}")
+        return []
 
 def load_db():
     if os.path.exists(DATA_FILE):
@@ -56,30 +68,36 @@ def save_db(data):
 
 def update_process():
     db = load_db()
-    latest_api_data = fetch_fss_data() # API에서 최신 데이터 가져오기
     today = datetime.now().strftime('%Y-%m-%d')
     updated = False
 
-    for latest in latest_api_data:
-        # DB에서 같은 은행 & 같은 상품명을 찾음
-        target = next((item for item in db if item['bank'] == latest['bank'] and item['name'] == latest['name']), None)
+    # 예금과 적금 데이터를 모두 가져옴
+    all_latest_data = fetch_fss_data('deposit') + fetch_fss_data('savings')
+
+    for latest in all_latest_data:
+        # DB에서 같은 은행, 같은 상품명, 같은 타입(예금/적금)을 찾음
+        target = next((item for item in db if 
+                       item['bank'] == latest['bank'] and 
+                       item['name'] == latest['name'] and 
+                       item['type'] == latest['type']), None)
         
         if target:
-            # 1. 기존 상품이 있을 경우: 금리 변동 체크
+            # 기존 상품: 금리 변동 시 히스토리 추가
             if float(target['max']) != float(latest['max']):
-                print(f"변동 감지 [{latest['bank']}]: {target['max']}% -> {latest['max']}%")
+                print(f"[{latest['type'].upper()} 변동] {latest['bank']} : {target['max']}% -> {latest['max']}%")
                 target['max'] = latest['max']
                 target['history'].append({"date": today, "rate": latest['max']})
                 updated = True
         else:
-            # 2. 새로운 상품이 발견되었을 경우: DB에 새로 추가
-            print(f"새 상품 발견: {latest['bank']} - {latest['name']}")
+            # 새 상품: DB에 추가
+            print(f"[{latest['type'].upper()} 신규] {latest['bank']} - {latest['name']}")
+            new_id = max([i['id'] for i in db], default=0) + 1
             new_item = {
-                "id": len(db) + 1,
+                "id": new_id,
                 "bank": latest['bank'],
                 "name": latest['name'],
-                "type": "deposit", # 기본값 예금
-                "base": latest['max'], # API 구조상 단순화를 위해 동일하게 세팅
+                "type": latest['type'],
+                "base": latest['max'],
                 "max": latest['max'],
                 "term": 12,
                 "history": [{"date": today, "rate": latest['max']}]
@@ -88,10 +106,12 @@ def update_process():
             updated = True
 
     if updated:
+        # 금리 높은 순으로 정렬하여 저장 (웹에서 TOP 10 보여주기 편하게)
+        db.sort(key=lambda x: x['max'], reverse=True)
         save_db(db)
-        print("데이터 업데이트 완료.")
+        print(f"[{today}] 업데이트 완료!")
     else:
-        print("변동 사항이 없습니다.")
+        print(f"[{today}] 변동 사항 없음.")
 
 if __name__ == "__main__":
     update_process()
