@@ -68,6 +68,10 @@ def save_db(data):
 
 def update_process():
     db = load_db()
+    latest_api_data = fetch_fss_data('deposit') + fetch_fss_data('savings')
+    print(f"가져온 데이터 개수: {len(latest_api_data)}") # 이 줄을 추가해서 로그를 보세요
+    # ... 나머지 코드
+    
     today = datetime.now().strftime('%Y-%m-%d')
     updated = False
 
