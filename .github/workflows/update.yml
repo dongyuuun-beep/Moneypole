@@ -1,29 +1,50 @@
-name: Daily Rate Update
+name: MoneyPole Daily Rate Update  # 워크플로우(자동화 작업)의 이름
 
 on:
   schedule:
-    - cron: '0 17 * * *' # 한국 시간 매일 02:00 (UTC 17:00)
-  workflow_dispatch: # 수동으로도 실행 가능하게 함
+    # 한국 시간(KST)은 UTC보다 9시간 빠릅니다.
+    # 새벽 2시(KST)에 실행하려면 UTC 기준 전날 오후 5시(17:00)로 설정해야 합니다.
+    - cron: '0 17 * * *' 
+  workflow_dispatch:      # GitHub 웹사이트에서 버튼을 눌러 수동으로 즉시 실행할 수 있게 함
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  update-data:
+    runs-on: ubuntu-latest  # 최신 리눅스 환경에서 실행
     steps:
-      - name: Checkout code
+      # 1. GitHub 저장소의 코드를 서버로 가져옴
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
+      # 2. 파이썬 환경 설정 (버전 3.10 권장)
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
+      # 3. 필요한 라이브러리 설치 (requests는 API 호출에 필요함)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      # 4. 금리 업데이트 파이썬 스크립트 실행
       - name: Run Update Script
+        env:
+          # GitHub Secrets에 저장한 API 키를 파이썬 환경변수로 전달
+          FSS_API_KEY: ${{ secrets.FSS_API_KEY }}
         run: python update_rates.py
 
-      - name: Commit and Push
+      # 5. 변경된 데이터(data.json)가 있다면 GitHub 저장소에 다시 커밋하고 푸시
+      - name: Commit and Push changes
         run: |
-          git config --global user.name "Auto Bot"
-          git config --global user.email "bot@github.com"
+          # Git 사용자 설정 (봇 이름으로 기록됨)
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          
+          # 변경사항 확인 및 커밋
           git add data.json
-          git commit -m "Update interest rates [${{ format('{0}', github.event.head_commit.timestamp) }}]" || exit 0
+          # 변경사항이 없을 경우 에러로 처리되지 않도록 '|| exit 0' 추가
+          git commit -m "Update: 실시간 금리 데이터 업데이트 ($(date +'%Y-%m-%d'))" || exit 0
+          
+          # 업데이트된 내용을 내 저장소로 푸시
           git push
