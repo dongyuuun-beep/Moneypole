@@ -136,12 +136,10 @@
             
             listArea.innerHTML = '';
             
-            // [수정] 데이터 로드 전 호출 방지
             if (!allData || allData.length === 0) return;
 
             let filtered = allData.filter(d => d.type === currentType);
 
-            // [수정] options 배열 내 기간까지 검색하도록 하여 필터링 시 상품 누락 방지
             if (termFilter !== 'all') {
                 filtered = filtered.filter(d => {
                     if (d.options && Array.isArray(d.options)) {
@@ -151,7 +149,6 @@
                 });
             }
 
-            // [수정] bank/name 필드 부재 시 에러 방지 (방어 코드)
             if (keyword) {
                 filtered = filtered.filter(d => 
                     (d.bank && d.bank.toLowerCase().includes(keyword)) || 
@@ -159,7 +156,6 @@
                 );
             }
 
-            // [수정] 정렬 시 값이 없는 경우 0으로 처리하여 스크립트 중단 방지
             filtered.sort((a,b) => {
                 const valA = isBaseOnly ? (a.base || 0) : (a.max || 0);
                 const valB = isBaseOnly ? (b.base || 0) : (b.max || 0);
@@ -170,7 +166,6 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 
-                // [수정] 리스트에서도 필터링된 기간의 금리를 우선적으로 보여줌
                 let displayMax = item.max || 0;
                 let displayBase = item.base || 0;
                 let displayTrm = item.save_trm || 0;
@@ -213,14 +208,25 @@
             const calcInput = document.getElementById('calcInput');
             const calcTermSelect = document.getElementById('calcTermSelect');
             
+            // [수정] 중복 제거 및 기본/최고 금리 동시 노출 로직 반영
             calcTermSelect.innerHTML = '';
             if (item.options && item.options.length > 0) {
                 calcTermSelect.style.display = 'block';
-                const sortedOpts = [...item.options].sort((a,b) => a.save_trm - b.save_trm);
-                sortedOpts.forEach(opt => {
+                
+                // 개월수와 최고금리가 같은 중복 옵션 제거
+                const uniqueOpts = item.options.filter((opt, index, self) =>
+                    index === self.findIndex((t) => (
+                        t.save_trm === opt.save_trm && t.intr_rate2 === opt.intr_rate2
+                    ))
+                );
+
+                uniqueOpts.sort((a,b) => a.save_trm - b.save_trm);
+
+                uniqueOpts.forEach(opt => {
                     const optionEl = document.createElement('option');
                     optionEl.value = opt.save_trm;
-                    optionEl.innerText = `${opt.save_trm}개월 (최고 ${opt.intr_rate2.toFixed(2)}%)`;
+                    // 기본 금리와 최고 금리를 모두 표시
+                    optionEl.innerText = `${opt.save_trm}개월 (기본 ${opt.intr_rate.toFixed(2)}% / 최고 ${opt.intr_rate2.toFixed(2)}%)`;
                     if (opt.save_trm === item.save_trm) optionEl.selected = true; 
                     calcTermSelect.appendChild(optionEl);
                 });
@@ -230,7 +236,6 @@
 
             calcInput.placeholder = (currentType === 'savings') ? "매월 납입할 금액 입력 (원)" : "한 번에 예치할 금액 입력 (원)";
 
-            // [수정] 히스토리 데이터 안전 처리
             const history = (item.history && item.history.length > 0) ? item.history : [{date: '현재', rate: item.max || 0}];
             if(chartInstance) chartInstance.destroy();
             const ctx = document.getElementById('rateChart').getContext('2d');
@@ -270,7 +275,8 @@
             const calcTermSelect = document.getElementById('calcTermSelect');
             if (currentItem.options && currentItem.options.length > 0 && calcTermSelect.value) {
                 months = parseInt(calcTermSelect.value);
-                const selectedOpt = currentItem.options.find(o => o.save_trm === months);
+                // 선택된 기간의 옵션을 찾되, 셀렉트 박스 텍스트와 일치시키기 위해 정교하게 검색
+                const selectedOpt = currentItem.options.find(o => String(o.save_trm) === String(months));
                 if (selectedOpt) {
                     applyBaseRate = selectedOpt.intr_rate;
                     applyMaxRate = selectedOpt.intr_rate2;
