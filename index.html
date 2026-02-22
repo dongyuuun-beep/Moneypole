@@ -6,60 +6,39 @@
     <title>MoneyPole - 스마트 금리 비교</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* 기본 테마 및 색상 변수 */
-        :root { --primary: #2b6cb0; --accent: #e53e3e; --bg: #f4f7f8; }
+        /* 기존 스타일 유지 */
+        :root { --primary: #2b6cb0; --accent: #e53e3e; --bg: #f4f7f8; --base-color: #718096; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
-        
-        /* [수정] 상세페이지 오픈 시 메인 스크롤 방지용 */
         body.modal-open { overflow: hidden; height: 100vh; }
-
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-
-        /* 로고 영역 스타일 */
         header { text-align: center; padding: 20px 0; cursor: pointer; }
         .logo-container { width: 100%; max-width: 280px; height: 60px; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         header img { max-width: 100%; height: auto; object-fit: contain; transform: translateY(-5px) scale(1.15); transition: transform 0.3s ease; }
-        
-        /* 메뉴 및 필터 스타일 */
         .scroll-menu { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; scrollbar-width: none; }
         .tab-btn { background: #fff; border: 1px solid #ddd; padding: 8px 18px; border-radius: 20px; white-space: nowrap; font-weight: 600; cursor: pointer; }
         .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
         .filter-section { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .search-input { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
-
-        /* 상품 카드 디자인 */
         .card { background: #fff; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
         .bank-tag { font-size: 11px; color: #888; margin-bottom: 4px; }
         .rate-main { color: var(--accent); font-size: 20px; font-weight: 800; }
-
-        /* [핵심 수정] 상세 페이지 레이아웃 - 스크롤 잘림 완벽 방지 */
-        #detailView { 
-            display: none; 
-            background: #fff; 
-            position: fixed; 
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; 
-            height: 100%;
-            z-index: 1000; 
-            overflow-y: auto; /* 자체 스크롤 */
-            -webkit-overflow-scrolling: touch; 
-        }
+        #detailView { display: none; background: #fff; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 1000; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .detail-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; background: #fff; position: sticky; top: 0; z-index: 1001; }
         .back-btn { font-size: 24px; cursor: pointer; margin-right: 15px; padding: 5px; }
-        .detail-body { padding: 20px; padding-bottom: 120px; } /* 하단에 아주 넉넉한 여백 추가 */
-        
-        /* 우대금리 조건 및 차트 박스 */
+        .detail-body { padding: 20px; padding-bottom: 120px; }
         .info-box { background: #f0f7ff; padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid var(--primary); }
         .info-title { font-size: 14px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
         .info-content { font-size: 13px; line-height: 1.5; color: #444; white-space: pre-wrap; }
         .chart-container { margin: 20px 0; height: 200px; }
-        
-        /* 계산기 디자인 */
         .calc-box { background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #e2e8f0; }
         .calc-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 18px; margin-top: 10px; box-sizing: border-box; outline-color: var(--primary); }
         .calc-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #666; }
         .calc-total { border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-        
+        /* [추가] 계산기 비교용 스타일 */
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .compare-card { background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #edf2f7; }
+        .compare-label { font-size: 11px; color: #718096; margin-bottom: 4px; }
+        .compare-val { font-size: 15px; font-weight: bold; }
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid #eee; margin-top: 30px; }
         .footer-logo { height: 15px; filter: grayscale(1); opacity: 0.5; margin-bottom: 10px; }
         .disclaimer { font-size: 11px; color: #999; line-height: 1.6; word-break: keep-all; }
@@ -82,10 +61,12 @@
             <input type="text" id="searchInput" class="search-input" placeholder="은행명 또는 상품명 검색...">
             <div style="display:flex; justify-content:space-between; font-size:13px; color:#666;">
                 <label><input type="checkbox" id="baseOnly"> 우대금리 제외</label>
-                <select id="termSelect" style="border:none; background:none;">
+                <select id="termSelect" style="border:none; background:none; font-weight: bold; color: var(--primary);" onchange="renderList()">
                     <option value="all">전체 기간</option>
-                    <option value="12">12개월</option>
+                    <option value="6">6개월</option>
+                    <option value="12" selected>12개월</option>
                     <option value="24">24개월</option>
+                    <option value="36">36개월</option>
                 </select>
             </div>
         </div>
@@ -108,20 +89,27 @@
         </div>
         <div class="detail-body">
             <div id="detailBank" style="color:#888; font-size:13px;">금융기관</div>
-            <div id="detailName" style="font-size:22px; font-weight:bold; margin:5px 0;">상품명</div>
-            <div id="detailRate" style="font-size:32px; font-weight:900; color:var(--accent);">0.00%</div>
+            <div id="detailNameContainer" style="display:flex; align-items: baseline; gap: 8px;">
+                <div id="detailName" style="font-size:22px; font-weight:bold; margin:5px 0;">상품명</div>
+                <div id="detailTermTag" style="color: var(--primary); font-size: 14px; font-weight: 600;"></div>
+            </div>
+            
+            <div id="detailRateContainer">
+                <div id="detailBaseRate" style="font-size: 14px; color: #718096;">기본 0.00%</div>
+                <div id="detailRate" style="font-size:36px; font-weight:900; color:var(--accent); line-height: 1.2;">최고 0.00%</div>
+            </div>
             
             <div class="info-box" id="specialConditionBox">
                 <div class="info-title">💡 우대금리 조건</div>
                 <div id="detailCondition" class="info-content">정보를 불러오고 있습니다...</div>
             </div>
 
-            <div style="margin-top:25px; font-weight:bold; font-size:14px;">금리 변동 추이 (Log)</div>
+            <div style="margin-top:25px; font-weight:bold; font-size:14px;">금리 변동 추이 (최고금리 기준)</div>
             <div class="chart-container"><canvas id="rateChart"></canvas></div>
 
             <div class="calc-box">
-                <div style="font-weight:bold; font-size: 15px; margin-bottom: 5px;">만기 수령액 계산기 (세후)</div>
-                <div id="calcTypeDesc" style="font-size: 12px; color: #666; margin-bottom: 10px;">기준: 12개월 납입</div>
+                <div style="font-weight:bold; font-size: 15px; margin-bottom: 5px;">만기 수령액 비교 계산기 (세후)</div>
+                <div id="calcTypeDesc" style="font-size: 12px; color: #2b6cb0; font-weight: 600; margin-bottom: 10px;">기준: 12개월 납입</div>
                 <input type="number" id="calcInput" class="calc-input" placeholder="금액 입력" oninput="doCalc()">
                 <div id="calcResult" style="margin-top:15px;"></div>
             </div>
@@ -143,9 +131,16 @@
             const listArea = document.getElementById('listArea');
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const isBaseOnly = document.getElementById('baseOnly').checked;
+            const termFilter = document.getElementById('termSelect').value; // [변경] 개월 수 필터 값 가져오기
             
             listArea.innerHTML = '';
             let filtered = allData.filter(d => d.type === currentType);
+
+            // [변경] 선택된 개월 수(save_trm)와 일치하는 상품만 필터링
+            if (termFilter !== 'all') {
+                filtered = filtered.filter(d => String(d.save_trm) === termFilter);
+            }
+
             if (keyword) filtered = filtered.filter(d => d.bank.includes(keyword) || d.name.includes(keyword));
 
             filtered.sort((a,b) => (isBaseOnly ? a.base : a.max) < (isBaseOnly ? b.base : b.max) ? 1 : -1);
@@ -154,7 +149,7 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
-                    <div class="bank-tag">${item.bank}</div>
+                    <div class="bank-tag">${item.bank} | ${item.save_trm}개월</div>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div class="prod-name">${item.name}</div>
                         <div class="rate-main">${(isBaseOnly ? item.base : item.max).toFixed(2)}%</div>
@@ -169,24 +164,30 @@
             currentItem = item;
             const detailView = document.getElementById('detailView');
             
-            // 1. 상세 뷰 표시 및 메인 바디 스크롤 차단
             detailView.style.display = 'block';
             document.body.classList.add('modal-open');
             detailView.scrollTo(0, 0); 
 
             document.getElementById('detailBank').innerText = item.bank;
             document.getElementById('detailName').innerText = item.name;
-            document.getElementById('detailRate').innerText = item.max.toFixed(2) + "%";
+            document.getElementById('detailTermTag').innerText = `${item.save_trm}개월 기준`; // [변경] 개월 수 태그 표시
+            
+            // [변경] 기본/최고 금리 분리 표출
+            document.getElementById('detailBaseRate').innerText = `기본 연 ${item.base.toFixed(2)}%`;
+            document.getElementById('detailRate').innerText = `최고 연 ${item.max.toFixed(2)}%`;
+            
             document.getElementById('detailCondition').innerText = item.spcl_cnd || "우대 금리 조건 정보가 없습니다.";
 
             const calcInput = document.getElementById('calcInput');
             const calcTypeDesc = document.getElementById('calcTypeDesc');
+            
+            // [변경] 계산기 가이드에 실제 개월 수(item.save_trm) 반영
             if (currentType === 'savings') {
                 calcInput.placeholder = "매월 납입할 금액 입력 (원)";
-                calcTypeDesc.innerText = "기준: 12개월 정기 적금 (단리)";
+                calcTypeDesc.innerText = `기준: ${item.save_trm}개월 정기 적금 (단리)`;
             } else {
                 calcInput.placeholder = "한 번에 예치할 금액 입력 (원)";
-                calcTypeDesc.innerText = "기준: 12개월 거치 예금 (단리)";
+                calcTypeDesc.innerText = `기준: ${item.save_trm}개월 거치 예금 (단리)`;
             }
 
             const history = item.history || [{date: '현재', rate: item.max}];
@@ -197,7 +198,7 @@
                 data: {
                     labels: history.map(h => h.date),
                     datasets: [{
-                        label: '금리 추이',
+                        label: '최고 금리 추이',
                         data: history.map(h => h.rate),
                         borderColor: '#2b6cb0',
                         tension: 0.3,
@@ -213,7 +214,7 @@
 
         function closeDetail() { 
             document.getElementById('detailView').style.display = 'none'; 
-            document.body.classList.remove('modal-open'); // 메인 스크롤 복구
+            document.body.classList.remove('modal-open');
         }
 
         function doCalc() {
@@ -223,35 +224,48 @@
                 return;
             }
 
-            const rate = currentItem.max / 100;
-            const months = 12; 
-            let totalPrincipal = 0; 
-            let totalInterest = 0; 
+            // [변경] 개월 수를 데이터에서 가져옴 (currentItem.save_trm)
+            const months = parseInt(currentItem.save_trm) || 12; 
+            
+            // 헬퍼 함수: 금리에 따른 세후 수령액 계산
+            const getResult = (ratePercent) => {
+                const rate = ratePercent / 100;
+                let principal = 0;
+                let interest = 0;
 
-            if (currentType === 'savings') {
-                totalPrincipal = val * months;
-                totalInterest = val * rate * (months * (months + 1) / 2 / 12);
-            } else {
-                totalPrincipal = val;
-                totalInterest = val * rate * (months / 12);
-            }
+                if (currentType === 'savings') {
+                    principal = val * months;
+                    // 적금 이자 계산 공식: 월납입액 * 이율 * (n*(n+1)/2/12)
+                    interest = val * rate * (months * (months + 1) / 2 / 12);
+                } else {
+                    principal = val;
+                    // 예금 이자 계산 공식: 예치금 * 이율 * (n/12)
+                    interest = val * rate * (months / 12);
+                }
+                const tax = interest * 0.154;
+                return { principal, afterTaxInterest: interest - tax };
+            };
 
-            const tax = totalInterest * 0.154; 
-            const afterTaxInterest = totalInterest - tax;
-            const finalAmount = totalPrincipal + afterTaxInterest;
+            const baseRes = getResult(currentItem.base);
+            const maxRes = getResult(currentItem.max);
 
+            // [변경] 기본금리 vs 최대금리 결과를 비교해서 보여줌
             document.getElementById('calcResult').innerHTML = `
-                <div class="calc-row">
-                    <span>원금 합계</span>
-                    <span>${Math.floor(totalPrincipal).toLocaleString()}원</span>
+                <div class="compare-grid">
+                    <div class="compare-card">
+                        <div class="compare-label">기본 금리 적용 시</div>
+                        <div class="compare-val">${Math.floor(baseRes.principal + baseRes.afterTaxInterest).toLocaleString()}원</div>
+                        <div style="font-size:10px; color:#999; margin-top:4px;">이자: ${Math.floor(baseRes.afterTaxInterest).toLocaleString()}원</div>
+                    </div>
+                    <div class="compare-card" style="border-color: var(--accent); background: #fff5f5;">
+                        <div class="compare-label" style="color:var(--accent)">최고 금리 적용 시</div>
+                        <div class="compare-val" style="color:var(--accent)">${Math.floor(maxRes.principal + maxRes.afterTaxInterest).toLocaleString()}원</div>
+                        <div style="font-size:10px; color:var(--accent); margin-top:4px;">이자: ${Math.floor(maxRes.afterTaxInterest).toLocaleString()}원</div>
+                    </div>
                 </div>
-                <div class="calc-row">
-                    <span>세후 이자 (15.4% 공제)</span>
-                    <span style="color:var(--accent);">+${Math.floor(afterTaxInterest).toLocaleString()}원</span>
-                </div>
-                <div class="calc-total">
-                    <span>최종 만기 수령액</span>
-                    <span style="font-size:20px; color:var(--primary);">${Math.floor(finalAmount).toLocaleString()}원</span>
+                <div class="calc-total" style="margin-top:15px;">
+                    <span style="font-size:13px;">우대 금리 혜택 차이</span>
+                    <span style="font-size:18px; color:var(--accent);">+${Math.floor(maxRes.afterTaxInterest - baseRes.afterTaxInterest).toLocaleString()}원</span>
                 </div>
             `;
         }
