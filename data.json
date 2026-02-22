@@ -1,2 +1,749 @@
 [
+  {
+    "bank": "우리은행",
+    "name": "WON플러스예금",
+    "base": 2.9,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "한국스탠다드차타드은행",
+    "name": "e-그린세이브예금",
+    "base": 2.95,
+    "max": 3.25,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "아이엠뱅크",
+    "name": "iM함께예금",
+    "base": 2.35,
+    "max": 2.8,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "부산은행",
+    "name": "LIVE정기예금",
+    "base": 1.95,
+    "max": 2.4,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "부산은행",
+    "name": "더(The) 특판 정기예금",
+    "base": 2.2,
+    "max": 3.1,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "부산은행",
+    "name": "더(The) 레벨업 정기예금",
+    "base": 2.65,
+    "max": 3.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "광주은행",
+    "name": "미즈월복리정기예금",
+    "base": 2.74,
+    "max": 2.94,
+    "term": 12,
+    "intr_type": "M",
+    "type": "deposit"
+  },
+  {
+    "bank": "광주은행",
+    "name": "스마트모아Dream정기예금",
+    "base": 2.64,
+    "max": 2.84,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "광주은행",
+    "name": "굿스타트예금",
+    "base": 2.54,
+    "max": 2.94,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "광주은행",
+    "name": "The플러스예금",
+    "base": 2.7,
+    "max": 2.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "제주은행",
+    "name": "제주Dream\n정기예금\n(개인/만기\n지급식)",
+    "base": 2.3,
+    "max": 2.4,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "제주은행",
+    "name": "J정기예금\n(만기지급식)",
+    "base": 2.0,
+    "max": 2.98,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "제주은행",
+    "name": "스마일드림 \n정기예금\n(개인/선이자\n지급식)",
+    "base": 1.9,
+    "max": 2.75,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "전북은행",
+    "name": "JB 다이렉트예금통장\n(만기일시지급식)",
+    "base": 3.01,
+    "max": 3.01,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "전북은행",
+    "name": "JB 123 정기예금\n (만기일시지급식)",
+    "base": 2.6,
+    "max": 3.1,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "전북은행",
+    "name": "내맘 쏙 정기예금",
+    "base": 2.35,
+    "max": 2.45,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "경남은행",
+    "name": "BNK더조은정기예금",
+    "base": 2.05,
+    "max": 2.55,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "경남은행",
+    "name": "The든든예금(시즌2)",
+    "base": 2.0,
+    "max": 3.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "경남은행",
+    "name": "The파트너예금",
+    "base": 2.6,
+    "max": 3.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK평생한가족통장(실세금리정기예금)",
+    "base": 2.25,
+    "max": 2.45,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK더굴리기통장(실세금리정기예금)",
+    "base": 2.7,
+    "max": 2.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK굴리기통장(정기예금)",
+    "base": 2.7,
+    "max": 2.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "한국산업은행",
+    "name": "KDB 정기예금",
+    "base": 2.9,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "국민은행",
+    "name": "KB Star 정기예금",
+    "base": 2.15,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "신한은행",
+    "name": "신한My플러스 정기예금",
+    "base": 2.05,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "신한은행",
+    "name": "쏠편한 정기예금",
+    "base": 2.05,
+    "max": 2.8,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH왈츠회전예금 II",
+    "base": 2.8,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH내가Green초록세상예금",
+    "base": 2.15,
+    "max": 2.55,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH올원e예금",
+    "base": 2.9,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH고향사랑기부예금",
+    "base": 2.15,
+    "max": 2.6,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "주식회사 하나은행",
+    "name": "하나의정기예금",
+    "base": 2.05,
+    "max": 2.85,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "주식회사 케이뱅크",
+    "name": "코드K 정기예금",
+    "base": 2.96,
+    "max": 2.96,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "수협은행",
+    "name": "Sh해양플라스틱Zero!예금\n(만기일시지급식)",
+    "base": 2.6,
+    "max": 2.95,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "수협은행",
+    "name": "헤이(Hey)정기예금",
+    "base": 3.0,
+    "max": 3.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "수협은행",
+    "name": "Sh첫만남우대예금",
+    "base": 2.05,
+    "max": 3.1,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "주식회사 카카오뱅크",
+    "name": "카카오뱅크 정기예금",
+    "base": 3.0,
+    "max": 3.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "토스뱅크 주식회사",
+    "name": "토스뱅크 먼저 이자 받는 정기예금",
+    "base": 2.8,
+    "max": 2.8,
+    "term": 12,
+    "intr_type": "S",
+    "type": "deposit"
+  },
+  {
+    "bank": "우리은행",
+    "name": "우리SUPER주거래적금",
+    "base": 2.15,
+    "max": 3.55,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "우리은행",
+    "name": "WON적금",
+    "base": 2.95,
+    "max": 3.15,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "한국스탠다드차타드은행",
+    "name": "퍼스트가계적금",
+    "base": 2.7,
+    "max": 2.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "아이엠뱅크",
+    "name": "iM함께적금",
+    "base": 2.75,
+    "max": 3.6,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "부산은행",
+    "name": "펫 적금",
+    "base": 2.0,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "부산은행",
+    "name": "저탄소 실천 적금",
+    "base": 2.1,
+    "max": 2.6,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "부산은행",
+    "name": "BNK내맘대로 \n적금",
+    "base": 2.25,
+    "max": 2.45,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "부산은행",
+    "name": "부산이라 좋다\nBig적금",
+    "base": 2.2,
+    "max": 4.4,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "부산은행",
+    "name": "Only One 주거래 우대적금",
+    "base": 2.0,
+    "max": 4.5,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "광주은행",
+    "name": "해피라이프_여행스케치적금V",
+    "base": 2.3,
+    "max": 3.5,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "광주은행",
+    "name": "여행스케치_남도투어적금",
+    "base": 2.0,
+    "max": 3.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "광주은행",
+    "name": "VIP플러스적금",
+    "base": 2.4,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "제주은행",
+    "name": "jbank 저금통적금",
+    "base": 2.6,
+    "max": 4.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "제주은행",
+    "name": "MZ 플랜적금",
+    "base": 2.95,
+    "max": 4.95,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "제주은행",
+    "name": "사이버우대매일부금",
+    "base": 2.4,
+    "max": 2.8,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "전북은행",
+    "name": "JB 다이렉트적금(자유적립식)",
+    "base": 3.0,
+    "max": 3.1,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "전북은행",
+    "name": "JB 다이렉트적금(정액적립식)",
+    "base": 3.1,
+    "max": 3.2,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "경남은행",
+    "name": "행복 DREAM 적금",
+    "base": 2.7,
+    "max": 3.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "경남은행",
+    "name": "BNK더조은자유적금",
+    "base": 3.1,
+    "max": 3.8,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "경남은행",
+    "name": "BNK 위더스자유적금",
+    "base": 2.1,
+    "max": 4.6,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "경남은행",
+    "name": "주거래 프리미엄 적금",
+    "base": 2.5,
+    "max": 4.1,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK D-day적금(자유적립식)",
+    "base": 2.85,
+    "max": 4.35,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK탄소제로적금(자유적립식)",
+    "base": 2.5,
+    "max": 4.5,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK중기근로자우대적금\n(자유적립식)",
+    "base": 2.5,
+    "max": 4.7,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "중소기업은행",
+    "name": "IBK모으기통장(자유적립식)",
+    "base": 2.55,
+    "max": 2.75,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "한국산업은행",
+    "name": "KDB 기업정기적금",
+    "base": 2.61,
+    "max": 2.61,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "한국산업은행",
+    "name": "KDB 자유적금",
+    "base": 2.81,
+    "max": 2.81,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "국민은행",
+    "name": "KB국민프리미엄적금(정액)",
+    "base": 2.5,
+    "max": 3.4,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "국민은행",
+    "name": "KB내맘대로적금",
+    "base": 2.55,
+    "max": 3.15,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "국민은행",
+    "name": "KB맑은하늘적금",
+    "base": 2.45,
+    "max": 3.25,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "신한은행",
+    "name": "신한 알.쏠 적금",
+    "base": 2.45,
+    "max": 3.75,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH1934월복리적금",
+    "base": 2.3,
+    "max": 5.8,
+    "term": 12,
+    "intr_type": "M",
+    "type": "savings"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH내가Green초록세상적금",
+    "base": 2.3,
+    "max": 3.3,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH고향사랑기부적금",
+    "base": 2.6,
+    "max": 3.45,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "농협은행주식회사",
+    "name": "NH직장인월복리적금",
+    "base": 2.58,
+    "max": 3.38,
+    "term": 12,
+    "intr_type": "M",
+    "type": "savings"
+  },
+  {
+    "bank": "주식회사 하나은행",
+    "name": "주거래하나 월복리적금",
+    "base": 2.75,
+    "max": 3.75,
+    "term": 12,
+    "intr_type": "M",
+    "type": "savings"
+  },
+  {
+    "bank": "주식회사 하나은행",
+    "name": "내맘적금",
+    "base": 2.1,
+    "max": 2.6,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "주식회사 케이뱅크",
+    "name": "코드K 자유적금",
+    "base": 3.4,
+    "max": 3.4,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "주식회사 케이뱅크",
+    "name": "데굴데굴 농장",
+    "base": 2.5,
+    "max": 2.5,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "주식회사 케이뱅크",
+    "name": "주거래우대 자유적금",
+    "base": 3.3,
+    "max": 3.9,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "수협은행",
+    "name": "Sh해양플라스틱Zero!적금\n(정액적립식)",
+    "base": 3.5,
+    "max": 4.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "수협은행",
+    "name": "Sh월복리자유적금",
+    "base": 2.2,
+    "max": 2.9,
+    "term": 12,
+    "intr_type": "M",
+    "type": "savings"
+  },
+  {
+    "bank": "수협은행",
+    "name": "Sh해양플라스틱Zero!적금\n(자유적립식)",
+    "base": 3.65,
+    "max": 4.15,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "주식회사 카카오뱅크",
+    "name": "카카오뱅크 자유적금",
+    "base": 3.15,
+    "max": 3.35,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "토스뱅크 주식회사",
+    "name": "토스뱅크 자유 적금",
+    "base": 2.5,
+    "max": 3.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  },
+  {
+    "bank": "토스뱅크 주식회사",
+    "name": "토스뱅크 아이 적금",
+    "base": 2.5,
+    "max": 5.0,
+    "term": 12,
+    "intr_type": "S",
+    "type": "savings"
+  }
 ]
