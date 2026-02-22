@@ -7,9 +7,16 @@
 
         /* 로고 영역: 흰색 배경을 최소화하고 글자가 잘리지 않도록 배율을 조절했습니다. */
         header { text-align: center; padding: 20px 0; cursor: pointer; }
-        .logo-container { width: 100%; max-width: 280px; height: 60px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
-        header img { max-width: 100%; height: auto; object-fit: contain; transform: scale(1.1); } /* pole이 잘리지 않도록 scale 조정 */
+        /* 로고 컨테이너: 높이를 줄이고 위치를 고정합니다. */
+        .logo-container { width: 100%;max-width: 280px; height: 60px; /* 기존보다 높이를 줄여서 불필요한 여백을 제거합니다. */
+        margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden; /* 영역을 벗어나는 흰색 부분을 잘라냅니다. */
+        }
 
+        /* 로고 이미지: 상단 여백을 밀어올리고 중앙 텍스트만 강조합니다. */
+        header img { max-width: 100%; height: auto; object-fit: contain; /* 중요: 이미지를 위로 살짝 이동시켜 상단 흰 공백을 프레임 밖으로 밀어냅니다. */
+            transform: translateY(-5px) scale(1.15); transition: transform 0.3s ease;}
+
+        
         /* 메뉴 및 필터 스타일입니다. */
         .scroll-menu { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; scrollbar-width: none; }
         .tab-btn { background: #fff; border: 1px solid #ddd; padding: 8px 18px; border-radius: 20px; white-space: nowrap; font-weight: 600; cursor: pointer; }
@@ -205,3 +212,4 @@
     </script>
 </body>
 </html>
+
