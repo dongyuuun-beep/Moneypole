@@ -66,59 +66,40 @@ def fetch_all_products(p_type):
     return all_products # 수집된 전체 API 상품 리스트를 반환합니다.
 # 4. [크롤링] 파킹통장(입출금자유예금) 데이터 수집 함수
 def crawl_parking_accounts():
-    parking_products = [] # 파킹통장 데이터를 담을 리스트입니다.
-    # 금융감독원 '입출금자유예금' 목록 페이지 URL입니다.
-    url = "https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.do?menuNo=700002"
+    parking_products = []
+    # 웹페이지 대신 금감원이 사용하는 데이터 경로(JSON)를 직접 호출합니다.
+    url = "https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.json?menuNo=700002"
     
     try:
-        # 크롤링 봇 차단을 피하기 위해 User-Agent 헤더를 설정합니다.
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-        res = requests.get(url, headers=headers)
-        res.raise_for_status()
+        headers = {
+            'User-Agent': 'Mozilla/5.0',
+            'Referer': 'https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.do?menuNo=700002'
+        }
+        # 금감원 서버에 데이터를 요청합니다.
+        res = requests.post(url, headers=headers) 
+        data = res.json()
         
-        # BeautifulSoup으로 HTML을 분석합니다.
-        soup = BeautifulSoup(res.text, 'html.parser')
+        # 내부 데이터 리스트를 가져옵니다.
+        items = data.get('result', {}).get('list', [])
         
-        # 금감원 페이지의 실제 테이블 행(tr)을 선택합니다. (보통 #resultList 내의 tr)
-        # 테이블 구조에 따라 'table tbody tr' 또는 구체적인 ID를 사용합니다.
-        items = soup.select('#resultList tr') 
-        
-        if not items: # 만약 ID로 못 찾을 경우 일반적인 테이블 구조로 시도합니다.
-            items = soup.select('table.as_table tbody tr')
-
         for index, item in enumerate(items):
-            tds = item.select('td')
-            if len(tds) < 4: continue # 필요한 열이 부족하면 건너뜁니다.
-
-            # 1. strip()을 사용하여 \r\n\t 등 불필요한 공백을 완전히 제거합니다.
-            bank_name = tds[1].text.strip() # 금융회사명
-            prod_name = tds[2].text.strip() # 상품명
-            
-            # 2. 정규식을 사용하여 텍스트 내에서 숫자(금리)만 추출합니다.
-            import re
-            rate_text = tds[3].text.strip() # 세전 금리 칸
-            rate_match = re.search(r"(\d+\.?\d*)", rate_text)
-            rate_val = float(rate_match.group(1)) if rate_match else 0.0
-
-            # 금리가 정상적으로 추출된 경우에만 추가합니다.
+            rate_val = float(item.get('intr_rate', 0) or 0)
             if rate_val > 0:
                 parking_products.append({
                     "id": f"parking_{index}",
-                    "bank": bank_name,
-                    "name": prod_name,
-                    "spcl_cnd": "입출금이 자유로운 파킹통장입니다.",
+                    "bank": item.get('kor_co_nm', '').strip(),
+                    "name": item.get('fin_prdt_nm', '').strip(),
+                    "spcl_cnd": item.get('spcl_cnd', '입출금이 자유로운 파킹통장입니다.'),
                     "max": rate_val,
                     "base": rate_val,
-                    "intr_type": "S",
                     "type": "parking"
                 })
-                
-        print(f"🔎 파킹통장 크롤링 결과: {len(parking_products)}건 수집됨")
-
+        print(f"✅ 파킹통장 JSON 수집 결과: {len(parking_products)}건")
     except Exception as e:
-        print(f"⚠️ 파킹통장 크롤링 중 에러 발생: {e}")
-        
+        print(f"⚠️ 파킹통장 수집 실패: {e}")
+    
     return parking_products
+
 
 # 5. 메인 실행 로직 (API + 크롤링 병합 및 히스토리 업데이트)
 def main():
@@ -130,7 +111,7 @@ def main():
     preserved_data = [item for item in master_data if item.get('type') in manual_types]
     
     print("🚀 API(예/적금) 및 크롤링(파킹통장) 데이터 수집 시작...")
-    api_deposits = fetch_all_products("deposit") # API로 예금을 가져옵니다.
+    #api_deposits = fetch_all_products("deposit") # API로 예금을 가져옵니다.
     ##api_savings = fetch_all_products("savings") # API로 적금을 가져옵니다.
     crawled_parking = crawl_parking_accounts() # 크롤링으로 파킹통장을 가져옵니다.
     
@@ -158,10 +139,16 @@ def main():
         
     # 수동 보존 데이터와 새로 수집/갱신된 데이터를 합칩니다.
     final_output = preserved_data + updated_items
-    
-    # 최종 결과물을 data.json 파일에 저장(덮어쓰기)합니다.
+
+    # [방어 로직] 수집된 데이터가 너무 적으면 비정상으로 간주하고 업데이트를 중단합니다.
+    # (예: API 점검 등으로 0건이 수집되었을 때 기존 데이터를 지우지 않기 위함)
+    if len(all_new_data) < 10: # 최소 10건 이상일 때만 저장 (기준 숫자는 적절히 조절 가능)
+        print(f"❌ 수집된 데이터가 너무 적습니다 ({len(all_new_data)}건). 파일을 업데이트하지 않고 종료합니다.")
+        return
+
+    # 위 조건을 통과한 경우에만 아래의 파일 저장(json.dump) 코드가 실행되도록 합니다.
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(final_output, f, ensure_ascii=False, indent=2) # 가독성을 위해 들여쓰기 2칸을 적용합니다.
+        json.dump(final_output, f, ensure_ascii=False, indent=2)
         
     print(f"✅ 업데이트 완료! (수동 보존: {len(preserved_data)}건, API+크롤링 갱신: {len(updated_items)}건)")
 
