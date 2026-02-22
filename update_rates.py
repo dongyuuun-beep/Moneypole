@@ -67,36 +67,57 @@ def fetch_all_products(p_type):
 # 4. [크롤링] 파킹통장(입출금자유예금) 데이터 수집 함수
 def crawl_parking_accounts():
     parking_products = []
-    # 웹페이지 대신 금감원이 사용하는 데이터 경로(JSON)를 직접 호출합니다.
-    url = "https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.json?menuNo=700002"
+    # 데이터 요청을 위한 URL 설정
+    main_url = "https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.do?menuNo=700002"
+    json_url = "https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.json?menuNo=700002"
     
     try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0',
-            'Referer': 'https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.do?menuNo=700002'
-        }
-        # 금감원 서버에 데이터를 요청합니다.
-        res = requests.post(url, headers=headers) 
-        data = res.json()
+        # 브라우저 세션을 생성하여 쿠키와 세션을 유지합니다.
+        session = requests.Session()
         
-        # 내부 데이터 리스트를 가져옵니다.
+        # 1. 실제 사용자처럼 보이기 위한 상세 헤더 설정
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Referer': main_url,
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+
+        # 2. 메인 페이지를 먼저 방문하여 보안 토큰이나 쿠키를 확보합니다.
+        session.get(main_url, headers={'User-Agent': headers['User-Agent']}, timeout=10)
+        
+        # 3. 확보된 세션으로 JSON 데이터를 POST 요청합니다.
+        # 금감원 서버는 빈 데이터라도 POST 형식을 갖춰야 에러를 내지 않습니다.
+        res = session.post(json_url, headers=headers, data={'pageNo': '1'}, timeout=15)
+        
+        # 응답이 비어있거나 HTML인 경우를 대비한 방어 코드
+        if not res.text.strip() or not res.text.strip().startswith('{'):
+            print(f"⚠️ 서버 응답이 올바른 JSON 형식이 아닙니다. (내용: {res.text[:50]}...)")
+            return []
+
+        data = res.json()
         items = data.get('result', {}).get('list', [])
         
         for index, item in enumerate(items):
+            # 금리 정보가 없는 상품은 제외합니다.
             rate_val = float(item.get('intr_rate', 0) or 0)
             if rate_val > 0:
                 parking_products.append({
-                    "id": f"parking_{index}",
+                    "id": f"parking_{item.get('fin_prdt_cd', index)}", # 고유 코드 우선 사용
                     "bank": item.get('kor_co_nm', '').strip(),
                     "name": item.get('fin_prdt_nm', '').strip(),
-                    "spcl_cnd": item.get('spcl_cnd', '입출금이 자유로운 파킹통장입니다.'),
+                    "spcl_cnd": item.get('spcl_cnd', '입출금이 자유로운 파킹통장입니다.').strip(),
                     "max": rate_val,
                     "base": rate_val,
+                    "intr_type": "S", # 입출금은 보통 단리
                     "type": "parking"
                 })
-        print(f"✅ 파킹통장 JSON 수집 결과: {len(parking_products)}건")
+        
+        print(f"✅ 파킹통장 수집 결과: {len(parking_products)}건 수집됨")
+        
     except Exception as e:
-        print(f"⚠️ 파킹통장 수집 실패: {e}")
+        print(f"⚠️ 파킹통장 수집 중 상세 에러 발생: {e}")
     
     return parking_products
 
