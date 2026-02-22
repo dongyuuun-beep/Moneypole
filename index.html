@@ -41,8 +41,6 @@
         footer { text-align: center; padding: 40px 20px; border-top: 1px solid #eee; margin-top: 30px; }
         .footer-logo { height: 15px; filter: grayscale(1); opacity: 0.5; margin-bottom: 10px; }
         .disclaimer { font-size: 11px; color: #999; line-height: 1.6; word-break: keep-all; }
-        
-        /* [추가] 계산기 내 기간 선택 셀렉트 박스 스타일 */
         .calc-term-select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: #fff; font-size: 14px; outline: none; }
     </style>
 </head>
@@ -111,9 +109,7 @@
 
             <div class="calc-box">
                 <div style="font-weight:bold; font-size: 15px; margin-bottom: 10px;">만기 수령액 비교 계산기 (세후)</div>
-                
                 <select id="calcTermSelect" class="calc-term-select" onchange="doCalc()" style="display:none;"></select>
-                
                 <div id="calcTypeDesc" style="font-size: 12px; color: #2b6cb0; font-weight: 600; margin-bottom: 10px;">기준: 12개월 납입</div>
                 <input type="number" id="calcInput" class="calc-input" placeholder="금액 입력" oninput="doCalc()">
                 <div id="calcResult" style="margin-top:15px;"></div>
@@ -130,7 +126,7 @@
         fetch('data.json').then(res => res.json()).then(data => {
             allData = data;
             renderList();
-        });
+        }).catch(err => console.error("데이터 로드 실패:", err));
 
         function renderList() {
             const listArea = document.getElementById('listArea');
@@ -139,33 +135,60 @@
             const termFilter = document.getElementById('termSelect').value; 
             
             listArea.innerHTML = '';
+            
+            // [수정] 데이터 로드 전 호출 방지
+            if (!allData || allData.length === 0) return;
+
             let filtered = allData.filter(d => d.type === currentType);
 
-            // [변경 1] 필터 로직 개선
-            // 기존에는 대표기간(save_trm)만 비교하여 숨겨버렸으나, 
-            // 이제 모든 기간을 보존한 options 데이터가 있으므로, 해당 기간의 옵션이 하나라도 존재하면 리스트에 표시합니다.
+            // [수정] options 배열 내 기간까지 검색하도록 하여 필터링 시 상품 누락 방지
             if (termFilter !== 'all') {
                 filtered = filtered.filter(d => {
-                    if (d.options && d.options.length > 0) {
+                    if (d.options && Array.isArray(d.options)) {
                         return d.options.some(o => String(o.save_trm) === termFilter);
                     }
                     return String(d.save_trm) === termFilter;
                 });
             }
 
-            if (keyword) filtered = filtered.filter(d => d.bank.includes(keyword) || d.name.includes(keyword));
+            // [수정] bank/name 필드 부재 시 에러 방지 (방어 코드)
+            if (keyword) {
+                filtered = filtered.filter(d => 
+                    (d.bank && d.bank.toLowerCase().includes(keyword)) || 
+                    (d.name && d.name.toLowerCase().includes(keyword))
+                );
+            }
 
-            filtered.sort((a,b) => (isBaseOnly ? a.base : a.max) < (isBaseOnly ? b.base : b.max) ? 1 : -1);
+            // [수정] 정렬 시 값이 없는 경우 0으로 처리하여 스크립트 중단 방지
+            filtered.sort((a,b) => {
+                const valA = isBaseOnly ? (a.base || 0) : (a.max || 0);
+                const valB = isBaseOnly ? (b.base || 0) : (b.max || 0);
+                return valB - valA;
+            });
 
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                // 메인 리스트 표출은 데이터의 대표값(item.save_trm, max, base)을 사용하여 기존과 동일하게 유지
+                
+                // [수정] 리스트에서도 필터링된 기간의 금리를 우선적으로 보여줌
+                let displayMax = item.max || 0;
+                let displayBase = item.base || 0;
+                let displayTrm = item.save_trm || 0;
+
+                if (termFilter !== 'all' && item.options) {
+                    const targetOpt = item.options.find(o => String(o.save_trm) === termFilter);
+                    if (targetOpt) {
+                        displayMax = targetOpt.intr_rate2;
+                        displayBase = targetOpt.intr_rate;
+                        displayTrm = targetOpt.save_trm;
+                    }
+                }
+
                 card.innerHTML = `
-                    <div class="bank-tag">${item.bank} | ${item.save_trm}개월 기준</div>
+                    <div class="bank-tag">${item.bank || '금융기관'} | ${displayTrm}개월</div>
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div class="prod-name">${item.name}</div>
-                        <div class="rate-main">${(isBaseOnly ? item.base : item.max).toFixed(2)}%</div>
+                        <div class="prod-name" style="font-weight:600;">${item.name || '상품명'}</div>
+                        <div class="rate-main">${(isBaseOnly ? displayBase : displayMax).toFixed(2)}%</div>
                     </div>
                 `;
                 card.onclick = () => openDetail(item);
@@ -176,49 +199,39 @@
         function openDetail(item) {
             currentItem = item;
             const detailView = document.getElementById('detailView');
-            
             detailView.style.display = 'block';
             document.body.classList.add('modal-open');
             detailView.scrollTo(0, 0); 
 
-            document.getElementById('detailBank').innerText = item.bank;
-            document.getElementById('detailName').innerText = item.name;
-            document.getElementById('detailTermTag').innerText = `${item.save_trm}개월 기준`; 
-            
-            document.getElementById('detailBaseRate').innerText = `기본 연 ${item.base.toFixed(2)}%`;
-            document.getElementById('detailRate').innerText = `최고 연 ${item.max.toFixed(2)}%`;
-            
+            document.getElementById('detailBank').innerText = item.bank || '';
+            document.getElementById('detailName').innerText = item.name || '';
+            document.getElementById('detailTermTag').innerText = `${item.save_trm || 0}개월 기준`; 
+            document.getElementById('detailBaseRate').innerText = `기본 연 ${(item.base || 0).toFixed(2)}%`;
+            document.getElementById('detailRate').innerText = `최고 연 ${(item.max || 0).toFixed(2)}%`;
             document.getElementById('detailCondition').innerText = item.spcl_cnd || "우대 금리 조건 정보가 없습니다.";
 
             const calcInput = document.getElementById('calcInput');
             const calcTermSelect = document.getElementById('calcTermSelect');
             
-            // [변경 2] 계산기에 기간별 모든 데이터 맵핑 (모든 경우의 수 제공)
-            calcTermSelect.innerHTML = ''; // 기존 옵션 초기화
+            calcTermSelect.innerHTML = '';
             if (item.options && item.options.length > 0) {
                 calcTermSelect.style.display = 'block';
-                // 개월 수 기준으로 오름차순 정렬
                 const sortedOpts = [...item.options].sort((a,b) => a.save_trm - b.save_trm);
                 sortedOpts.forEach(opt => {
                     const optionEl = document.createElement('option');
                     optionEl.value = opt.save_trm;
-                    optionEl.innerText = `${opt.save_trm}개월 (기본 ${opt.intr_rate.toFixed(2)}% / 최고 ${opt.intr_rate2.toFixed(2)}%)`;
-                    // 대표 기간(item.save_trm)과 일치하면 기본으로 선택됨
+                    optionEl.innerText = `${opt.save_trm}개월 (최고 ${opt.intr_rate2.toFixed(2)}%)`;
                     if (opt.save_trm === item.save_trm) optionEl.selected = true; 
                     calcTermSelect.appendChild(optionEl);
                 });
             } else {
-                // 파킹통장처럼 options가 없는 경우 숨김
                 calcTermSelect.style.display = 'none';
             }
 
-            if (currentType === 'savings') {
-                calcInput.placeholder = "매월 납입할 금액 입력 (원)";
-            } else {
-                calcInput.placeholder = "한 번에 예치할 금액 입력 (원)";
-            }
+            calcInput.placeholder = (currentType === 'savings') ? "매월 납입할 금액 입력 (원)" : "한 번에 예치할 금액 입력 (원)";
 
-            const history = item.history || [{date: '현재', rate: item.max}];
+            // [수정] 히스토리 데이터 안전 처리
+            const history = (item.history && item.history.length > 0) ? item.history : [{date: '현재', rate: item.max || 0}];
             if(chartInstance) chartInstance.destroy();
             const ctx = document.getElementById('rateChart').getContext('2d');
             chartInstance = new Chart(ctx, {
@@ -238,7 +251,7 @@
             });
             calcInput.value = '';
             document.getElementById('calcResult').innerHTML = '';
-            doCalc(); // 열릴 때 초기 계산 실행 안내
+            doCalc();
         }
 
         function closeDetail() { 
@@ -250,16 +263,13 @@
             const val = parseFloat(document.getElementById('calcInput').value);
             const calcTypeDesc = document.getElementById('calcTypeDesc');
             
-            // [변경 3] 계산기 기간 변경 시 실시간으로 금리 데이터 가져오기
             let months = parseInt(currentItem.save_trm) || 12; 
-            let applyBaseRate = currentItem.base;
-            let applyMaxRate = currentItem.max;
+            let applyBaseRate = currentItem.base || 0;
+            let applyMaxRate = currentItem.max || 0;
 
             const calcTermSelect = document.getElementById('calcTermSelect');
             if (currentItem.options && currentItem.options.length > 0 && calcTermSelect.value) {
-                // 사용자가 계산기에서 선택한 개월 수를 덮어씌움
                 months = parseInt(calcTermSelect.value);
-                // 선택한 개월 수에 해당하는 실제 기본/최고 금리를 찾아서 적용
                 const selectedOpt = currentItem.options.find(o => o.save_trm === months);
                 if (selectedOpt) {
                     applyBaseRate = selectedOpt.intr_rate;
@@ -267,24 +277,13 @@
                 }
             }
 
-            // 개월 수 변경에 따라 안내 문구 실시간 업데이트
-            if (currentType === 'savings') {
-                calcTypeDesc.innerText = `기준: ${months}개월 정기 적금 (단리)`;
-            } else {
-                calcTypeDesc.innerText = `기준: ${months}개월 거치 예금 (단리)`;
-            }
+            calcTypeDesc.innerText = `기준: ${months}개월 ${currentType === 'savings' ? '적금' : '예금'} (단리)`;
 
-            if(!val || isNaN(val)) {
-                document.getElementById('calcResult').innerHTML = '';
-                return;
-            }
+            if(!val || isNaN(val)) return;
 
-            // 헬퍼 함수: 동적으로 찾아낸 기간별 금리(applyBaseRate, applyMaxRate)를 사용하도록 수정
             const getResult = (ratePercent) => {
                 const rate = ratePercent / 100;
-                let principal = 0;
-                let interest = 0;
-
+                let principal = 0, interest = 0;
                 if (currentType === 'savings') {
                     principal = val * months;
                     interest = val * rate * (months * (months + 1) / 2 / 12);
@@ -292,8 +291,7 @@
                     principal = val;
                     interest = val * rate * (months / 12);
                 }
-                const tax = interest * 0.154;
-                return { principal, afterTaxInterest: interest - tax };
+                return { principal, afterTaxInterest: interest * 0.846 };
             };
 
             const baseRes = getResult(applyBaseRate);
@@ -304,17 +302,11 @@
                     <div class="compare-card">
                         <div class="compare-label">기본 금리 (${applyBaseRate.toFixed(2)}%)</div>
                         <div class="compare-val">${Math.floor(baseRes.principal + baseRes.afterTaxInterest).toLocaleString()}원</div>
-                        <div style="font-size:10px; color:#999; margin-top:4px;">이자: ${Math.floor(baseRes.afterTaxInterest).toLocaleString()}원</div>
                     </div>
                     <div class="compare-card" style="border-color: var(--accent); background: #fff5f5;">
                         <div class="compare-label" style="color:var(--accent)">최고 금리 (${applyMaxRate.toFixed(2)}%)</div>
                         <div class="compare-val" style="color:var(--accent)">${Math.floor(maxRes.principal + maxRes.afterTaxInterest).toLocaleString()}원</div>
-                        <div style="font-size:10px; color:var(--accent); margin-top:4px;">이자: ${Math.floor(maxRes.afterTaxInterest).toLocaleString()}원</div>
                     </div>
-                </div>
-                <div class="calc-total" style="margin-top:15px;">
-                    <span style="font-size:13px;">우대 금리 혜택 차이</span>
-                    <span style="font-size:18px; color:var(--accent);">+${Math.floor(maxRes.afterTaxInterest - baseRes.afterTaxInterest).toLocaleString()}원</span>
                 </div>
             `;
         }
