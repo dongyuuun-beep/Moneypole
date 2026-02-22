@@ -1,83 +1,83 @@
 <!DOCTYPE html> <html lang="ko"> <head>
     <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>MoneyPole - 스마트한 금리 비교</title> <style>
-        /* 디자인을 위한 CSS 변수 설정: 일관된 색상 관리를 위해 사용합니다. */
+        /* CSS 변수 설정: 일관된 색상 테마를 유지하기 위해 사용합니다. */
         :root { --primary-color: #2b6cb0; --accent-color: #e53e3e; --bg-color: #f4f7f8; }
         
-        /* 기본 바디 스타일: 폰트, 배경색, 여백 등을 초기화합니다. */
+        /* 기본 바디 스타일: 폰트와 배경색, 기본 여백을 설정합니다. */
         body { font-family: 'Pretendard', -apple-system, sans-serif; background-color: var(--bg-color); margin: 0; color: #333; line-height: 1.6; }
         
-        /* 전체 컨텐츠 영역 가로폭 제한 및 중앙 정렬을 설정합니다. */
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+        /* 전체 컨테이너: 최대 가로폭을 600px로 제한하여 모바일 앱 느낌을 줍니다. */
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
 
-        /* 상단 헤더: 로고를 배치하며 클릭 시 홈으로 이동하도록 커서를 포인터로 바꿉니다. */
+        /* 상단 헤더: 로고 이미지를 배치하며 클릭 시 홈으로 이동하도록 커서를 설정합니다. */
         header { display: flex; align-items: center; padding: 10px 5px; margin-bottom: 10px; cursor: pointer; }
         
-        /* 로고 스타일: 굵은 폰트와 파란색 테마를 적용합니다. */
-        .logo { font-size: 26px; font-weight: 900; color: var(--primary-color); letter-spacing: -1px; }
-        
-        /* 로고의 'Pole' 부분에 검은색을 입혀 디자인 포인트를 줍니다. */
-        .logo span { color: #111; }
+        /* 로고 이미지 크기 조절: 로고 이미지를 적절한 크기로 표시합니다. */
+        header img { height: 35px; }
 
-        /* 가로 스크롤 메뉴: 메뉴가 많을 때 옆으로 밀어서 볼 수 있게 합니다. */
+        /* 가로 스크롤 메뉴: 메뉴가 넘칠 때 옆으로 밀어서 볼 수 있게 합니다. */
         .scroll-menu { display: flex; overflow-x: auto; white-space: nowrap; gap: 10px; padding: 10px 0; -webkit-overflow-scrolling: touch; }
         
-        /* 메뉴 스크롤바를 숨겨서 디자인의 깔끔함을 유지합니다. */
+        /* 메뉴 스크롤바 숨기기: 깔끔한 디자인을 위해 크롬/사파리 스크롤바를 보이지 않게 합니다. */
         .scroll-menu::-webkit-scrollbar { display: none; }
         
-        /* 일반 탭 버튼 스타일: 흰 배경과 둥근 모서리를 설정합니다. */
+        /* 탭 버튼 스타일: 둥근 모서리와 흰 배경을 가진 버튼입니다. */
         .tab-btn { background: #fff; border: 1px solid #ddd; padding: 10px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
         
-        /* 선택된 메뉴 버튼 스타일: 강조색인 파란색 배경을 적용합니다. */
+        /* 활성화된 버튼: 클릭 시 파란색 배경으로 강조합니다. */
         .tab-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
         
-        /* 비활성화된 메뉴(채권 예정 등) 스타일: 회색으로 처리하고 클릭이 안 보이게 합니다. */
+        /* 비활성화 버튼: 채권(예정) 메뉴처럼 클릭이 안 되는 메뉴의 스타일입니다. */
         .tab-btn.disabled { background: #eee; color: #aaa; cursor: default; border-color: #eee; }
 
-        /* 필터 및 검색 영역: 배경색과 그림자로 영역을 구분합니다. */
+        /* 검색 및 필터 영역: 검색창과 체크박스 등이 담길 구역입니다. */
         .filter-section { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
-        /* 검색창 스타일: 입력 영역을 가득 채우고 테두리를 설정합니다. */
+        /* 검색창 입력 스타일입니다. */
         .search-input { width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
         
-        /* 필터 조절부 배치: 체크박스와 드롭다운을 양옆으로 정렬합니다. */
+        /* 필터 컨트롤러 배치: 체크박스와 드롭다운을 양옆으로 정렬합니다. */
         .filter-controls { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #666; }
-        
-        /* 기간 선택 드롭다운 스타일을 설정합니다. */
-        select { padding: 5px; border-radius: 5px; border: 1px solid #ddd; }
 
-        /* 섹션 제목 스타일: 홈 화면의 '예금 금리 Top 10' 등에 사용됩니다. */
+        /* 섹션 제목 스타일: 홈 화면의 요약 타이틀입니다. */
         .section-title { font-size: 18px; font-weight: bold; margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Top 10에 붙는 'Best' 뱃지 스타일입니다. */
-        .top-badge { background: #fff1f1; color: var(--accent-color); font-size: 11px; padding: 2px 8px; border-radius: 10px; }
-        
-        /* 개별 상품 카드 스타일: 흰색 배경에 그림자 효과를 주어 입체감을 높입니다. */
-        .card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
-        
-        /* 은행명 스타일: 상품명보다 작고 연한 회색으로 표시합니다. */
-        .bank-name { font-size: 12px; color: #888; }
-        
-        /* 상품명 스타일: 굵고 크게 표시하여 시인성을 높입니다. */
-        .prod-name { font-size: 16px; font-weight: bold; margin-top: 2px; }
-        
-        /* 금리 수치 스타일: 붉은색 강조와 큰 폰트로 가장 잘 보이게 합니다. */
-        .rate-val { font-size: 22px; font-weight: 800; color: var(--accent-color); text-align: right; }
-        
-        /* 개월 수 등 부가 정보 스타일입니다. */
-        .term-info { font-size: 11px; color: #999; }
 
-        /* 하단 푸터 영역: 로고와 주의사항 문구를 배치합니다. */
-        footer { font-size: 11px; color: #999; text-align: center; padding: 20px; border-top: 1px solid #eee; margin-top: 30px; }
+        /* 개별 상품 카드: 은행명, 상품명, 금리 정보를 담은 흰색 박스입니다. */
+        .card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); position: relative; }
         
-        /* 푸터 내부에 들어가는 로고 텍스트 스타일입니다. */
-        .footer-logo { font-size: 14px; font-weight: bold; color: #ccc; margin-bottom: 5px; }
+        /* 카드 내부 정렬: 상단 정보와 우측 금리를 배치합니다. */
+        .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        
+        /* 은행 및 상품 정보 구역입니다. */
+        .info-area { flex: 1; }
+        .bank-name { font-size: 12px; color: #888; }
+        .prod-name { font-size: 16px; font-weight: bold; margin: 2px 0; }
+        
+        /* 금리 및 단리/복리 정보 구역입니다. */
+        .rate-area { text-align: right; }
+        .rate-val { font-size: 20px; font-weight: 800; color: var(--accent-color); }
+        .interest-type { font-size: 11px; background: #f0f0f0; padding: 2px 5px; border-radius: 4px; color: #666; }
+
+        /* 계산기 버튼: 카드 하단에 작게 배치하여 접근성을 높입니다. */
+        .calc-btn { display: inline-block; margin-top: 10px; font-size: 12px; color: var(--primary-color); border: 1px solid var(--primary-color); padding: 4px 10px; border-radius: 10px; cursor: pointer; }
+
+        /* 계산기 모달: 클릭 시 화면 중앙에 나타날 레이어입니다. */
+        #calcModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #fff; width: 90%; max-width: 400px; padding: 25px; border-radius: 20px; box-sizing: border-box; }
+        .modal-title { font-weight: bold; margin-bottom: 15px; font-size: 18px; }
+        .modal-input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .modal-result { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid var(--primary-color); }
+        .close-btn { background: #eee; width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        /* 하단 푸터: 로고와 주의사항이 표시됩니다. */
+        footer { font-size: 11px; color: #999; text-align: center; padding: 30px 20px; border-top: 1px solid #eee; margin-top: 30px; }
+        .footer-logo { height: 20px; opacity: 0.3; margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header onclick="renderView('home')">
-            <div class="logo">Money<span>Pole</span></div>
-        </header>
+            <img src="logo.png" alt="MoneyPole Logo"> </header>
 
         <div class="scroll-menu" id="tabMenu">
             <button class="tab-btn" data-type="parking">파킹통장</button>
@@ -106,135 +106,158 @@
         <div id="contentArea"></div>
 
         <footer>
-            <div class="footer-logo">MoneyPole</div>
-            주의: 위 정보는 실제 금리와 차이가 있을 수 있으므로 가입 전 해당 금융기관에 반드시 확인하시기 바랍니다.<br>
-            투자 시 원금 손실이 발생할 수 있으며, 모든 투자의 책임은 투자자 본인에게 있습니다.
+            <img src="logo.png" alt="MoneyPole" class="footer-logo"> <p>주의: 위 정보는 실제 금리와 차이가 있을 수 있으므로 가입 전 해당 금융기관에 반드시 확인하시기 바랍니다.<br>
+            투자 시 원금 손실이 발생할 수 있으며, 모든 투자의 책임은 투자자 본인에게 있습니다.</p>
         </footer>
     </div>
 
-    <script>
-        let fullData = []; // 서버에서 받아온 전체 데이터를 담을 전역 배열입니다.
-        
-        // 데이터 카테고리 명칭을 한글로 매핑하는 객체입니다.
-        const typeMap = {
-            'parking': '파킹통장',
-            'deposit': '예금',
-            'savings': '적금',
-            'cma': 'CMA',
-            'bill': '발행어음',
-            'els': 'ELS/ELB'
-        };
+    <div id="calcModal">
+        <div class="modal-content">
+            <div class="modal-title" id="calcProdName">이자 계산기</div>
+            <label style="font-size:12px; color:#666;">저축 금액 (원)</label>
+            <input type="number" id="calcAmount" class="modal-input" placeholder="예: 1000000" oninput="calculate()">
+            <div class="modal-result" id="calcResultText">금액을 입력해주세요.</div>
+            <button class="close-btn" onclick="document.getElementById('calcModal').style.display='none'">닫기</button>
+        </div>
+    </div>
 
-        // 페이지 로드 시 data.json 파일을 비동기로 가져옵니다.
+    <script>
+        let fullData = []; // 서버에서 불러온 전체 데이터를 저장할 변수입니다.
+        let activeProduct = null; // 현재 계산기를 돌릴 타겟 상품 정보입니다.
+
+        // JSON 데이터를 비동기로 불러옵니다.
         fetch('data.json').then(res => res.json()).then(data => {
-            fullData = data; // 가져온 데이터를 변수에 저장합니다.
-            renderView('home'); // 첫 화면은 항상 홈(Top 10)으로 시작합니다.
+            fullData = data;
+            renderView('home'); // 초기 진입 시 홈 노출
         });
 
-        // 특정 화면(홈 또는 카테고리)으로 렌더링을 전환하는 함수입니다.
+        // 화면 전환 함수: 홈 또는 카테고리 뷰를 처리합니다.
         function renderView(type) {
-            const content = document.getElementById('contentArea'); // 컨텐츠 영역 선택
-            const filterArea = document.getElementById('filterArea'); // 필터 영역 선택
-            const btns = document.querySelectorAll('.tab-btn'); // 모든 버튼 선택
+            const content = document.getElementById('contentArea');
+            const filterArea = document.getElementById('filterArea');
+            const btns = document.querySelectorAll('.tab-btn');
             
-            // 모든 메뉴 버튼의 강조 색상을 초기화합니다.
-            btns.forEach(b => b.classList.remove('active'));
+            btns.forEach(b => b.classList.remove('active')); // 버튼 초기화
             
             if (type === 'home') {
-                // 홈 화면일 경우 필터창을 숨기고 홈 함수를 실행합니다.
-                filterArea.style.display = 'none';
+                filterArea.style.display = 'none'; // 홈에서는 필터 숨김
                 renderHome();
             } else {
-                // 특정 카테고리일 경우 해당 버튼을 강조하고 필터창을 보입니다.
                 const targetBtn = Array.from(btns).find(b => b.dataset.type === type);
-                if(targetBtn) targetBtn.classList.add('active');
-                filterArea.style.display = 'block';
+                if(targetBtn) targetBtn.classList.add('active'); // 클릭한 탭 강조
+                filterArea.style.display = 'block'; // 카테고리에서는 필터 노출
                 renderCategory(type);
             }
         }
 
-        // 홈 화면: 예금과 적금에서 금리가 가장 높은 Top 10을 각각 보여줍니다.
+        // 홈 화면: 예금/적금 금리 Top 10을 각각 요약해서 보여줍니다.
         function renderHome() {
-            const content = document.getElementById('contentArea'); // 컨텐츠 영역 선택
-            content.innerHTML = ''; // 기존 내용을 비웁니다.
+            const content = document.getElementById('contentArea');
+            content.innerHTML = '';
             
-            // 예금 상품 중 금리 순으로 상위 10개를 뽑습니다.
+            // 데이터 정렬 로직: 금리 내림차순 상위 10개 추출
             const topDeposits = fullData.filter(d => d.type === 'deposit').sort((a,b) => b.max - a.max).slice(0, 10);
-            // 적금 상품 중 금리 순으로 상위 10개를 뽑습니다.
             const topSavings = fullData.filter(d => d.type === 'savings').sort((a,b) => b.max - a.max).slice(0, 10);
 
-            // 예금 섹션 타이틀과 카드 리스트를 생성합니다.
-            content.innerHTML += `<div class="section-title">예금 금리 Top 10 <span class="top-badge">Best</span></div>`;
+            content.innerHTML += `<div class="section-title">예금 금리 Top 10</div>`;
             topDeposits.forEach(item => content.innerHTML += createCard(item));
 
-            // 적금 섹션 타이틀과 카드 리스트를 생성합니다.
-            content.innerHTML += `<div class="section-title">적금 금리 Top 10 <span class="top-badge">Best</span></div>`;
+            content.innerHTML += `<div class="section-title">적금 금리 Top 10</div>`;
             topSavings.forEach(item => content.innerHTML += createCard(item));
         }
 
-        // 카테고리 화면: 선택한 종류의 상품들을 검색어와 기간 필터에 맞게 정렬하여 Top 100을 보여줍니다.
+        // 카테고리 상세 화면: 필터 및 정렬을 거쳐 Top 100을 리스트업합니다.
         function renderCategory(type) {
-            const keyword = document.getElementById('searchInput').value.toLowerCase(); // 검색어 수집
-            const isBaseOnly = document.getElementById('baseRateOnly').checked; // 우대금리 제외 여부 수집
-            const selectedTerm = document.getElementById('termFilter').value; // 필터링할 기간 수집
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const isBaseOnly = document.getElementById('baseRateOnly').checked;
+            const selectedTerm = document.getElementById('termFilter').value;
 
-            // 선택된 타입의 상품들만 걸러냅니다.
+            // 검색어 및 기간 필터링 로직입니다.
             let filtered = fullData.filter(d => d.type === type);
-            
-            // 검색어가 있으면 은행명에 포함된 경우만 남깁니다.
             if (keyword) filtered = filtered.filter(d => d.bank.toLowerCase().includes(keyword));
-            
-            // 기간 필터가 '전체'가 아니면 해당 기간과 일치하는 상품만 남깁니다.
             if (selectedTerm !== 'all') filtered = filtered.filter(d => String(d.term) === selectedTerm);
 
-            // 체크박스 상태에 따라 '기본금리' 또는 '최고금리' 순으로 정렬합니다.
+            // 정렬 로직: 기본금리 혹은 우대금리 기준으로 내림차순 정렬합니다.
             filtered.sort((a, b) => isBaseOnly ? (b.base || b.max) - (a.base || a.max) : b.max - a.max);
 
-            // 리스트 중 상위 100개만 화면에 그릴 준비를 합니다.
-            const listToRender = filtered.slice(0, 100);
             const content = document.getElementById('contentArea');
-            const korTitle = typeMap[type] || type.toUpperCase(); // 카테고리 명칭을 한글로 변환합니다.
-            content.innerHTML = `<div class="section-title">${korTitle} 상품 리스트 (Top 100)</div>`;
+            content.innerHTML = `<div class="section-title">최상위 상품 리스트</div>`;
             
-            // 검색 결과가 없는 경우의 안내 문구를 처리합니다.
-            if (listToRender.length === 0) {
-                content.innerHTML += `<p style="text-align:center; padding:40px; color:#999;">조건에 맞는 상품이 없습니다.</p>`;
-            } else {
-                // 결과 리스트를 카드 형태로 하나씩 추가합니다.
-                listToRender.forEach(item => content.innerHTML += createCard(item, isBaseOnly));
-            }
+            filtered.slice(0, 100).forEach(item => content.innerHTML += createCard(item, isBaseOnly));
         }
 
-        // 개별 상품을 HTML 카드 형태로 만들어주는 공통 함수입니다.
+        // 상품 카드 생성: 각 상품의 HTML 조각을 생성합니다.
         function createCard(item, isBaseOnly = false) {
-            const rate = isBaseOnly ? (item.base || item.max) : item.max; // 필터에 따라 표시할 금리를 결정합니다.
+            const rate = isBaseOnly ? (item.base || item.max) : item.max;
+            // 단리/복리 정보가 있을 경우 표시하고 없으면 생략합니다.
+            const interestLabel = item.intr_type === 'M' ? '복리' : '단리'; 
+            
             return `
                 <div class="card">
-                    <div>
-                        <div class="bank-name">${item.bank}</div> <div class="prod-name">${item.name}</div> <div class="term-info">${item.term ? item.term + '개월 기준' : '수시입출금'}</div> </div>
-                    <div>
-                        <div class="rate-val">${rate.toFixed(2)}%</div> </div>
+                    <div class="card-top">
+                        <div class="info-area">
+                            <div class="bank-name">${item.bank}</div>
+                            <div class="prod-name">${item.name}</div>
+                            <div class="term-info">${item.term ? item.term + '개월' : '입출금 자유'} | ${interestLabel}</div>
+                        </div>
+                        <div class="rate-area">
+                            <div class="rate-val">${rate.toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    <div class="calc-btn" onclick='openCalculator(${JSON.stringify(item)})'>이자 계산해보기</div>
                 </div>
             `;
         }
 
-        // 상단 탭 버튼마다 클릭 이벤트를 연결합니다.
+        // 계산기 모달 열기 함수입니다.
+        function openCalculator(item) {
+            activeProduct = item; // 선택한 상품 정보 저장
+            document.getElementById('calcProdName').innerText = item.name + ' 계산기';
+            document.getElementById('calcAmount').value = '';
+            document.getElementById('calcResultText').innerText = '금액을 입력해주세요.';
+            document.getElementById('calcModal').style.display = 'flex';
+        }
+
+        // 실제 이자 계산 로직: 단리와 복리를 구분하여 처리합니다.
+        function calculate() {
+            const amount = parseFloat(document.getElementById('calcAmount').value);
+            if (!amount || !activeProduct) return;
+
+            const rate = (activeProduct.max / 100); // 연이율 소수점 변환
+            const months = activeProduct.term || 12; // 기간 (입출금은 기본 12개월 가정)
+            let interest = 0;
+
+            if (activeProduct.intr_type === 'M') {
+                // 월 복리 계산 공식 적용 (예금 기준)
+                interest = amount * (Math.pow(1 + rate/12, months) - 1);
+            } else {
+                // 단리 계산 공식 적용 (원금 * 이율 * 기간/12)
+                interest = amount * rate * (months / 12);
+            }
+
+            const tax = interest * 0.154; // 일반 과세 15.4% 적용
+            const netInterest = interest - tax; // 세후 이자 계산
+
+            document.getElementById('calcResultText').innerHTML = `
+                <div style="font-size:13px; color:#666;">${months}개월 후 세후 이자</div>
+                <div style="font-size:20px; font-weight:bold; color:var(--primary-color);">+ ${Math.floor(netInterest).toLocaleString()}원</div>
+                <div style="font-size:11px; color:#999; margin-top:5px;">(이자소득세 15.4% 공제 후)</div>
+            `;
+        }
+
+        // 탭 버튼 클릭 이벤트 바인딩입니다.
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // 비활성화된 메뉴(disabled)인 경우 아무 동작도 하지 않습니다.
-                if(btn.classList.contains('disabled')) return;
-                // 클릭한 카테고리로 화면을 전환합니다.
-                renderView(btn.dataset.type);
+            btn.addEventListener('click', () => {
+                if(!btn.classList.contains('disabled')) renderView(btn.dataset.type);
             });
         });
 
-        // 검색창 및 필터 컨트롤러에 실시간 반응 이벤트를 연결합니다.
+        // 검색 및 필터 요소 이벤트 바인딩입니다.
         ['searchInput', 'baseRateOnly', 'termFilter'].forEach(id => {
             const el = document.getElementById(id);
-            // 검색창은 글자를 입력할 때마다(keyup), 나머지는 상태가 바뀔 때(change) 리스트를 갱신합니다.
             el.addEventListener(id === 'searchInput' ? 'keyup' : 'change', () => {
                 const activeTab = document.querySelector('.tab-btn.active')?.dataset.type;
-                if(activeTab) renderCategory(activeTab); // 현재 보고 있는 카테고리 리스트를 즉시 다시 그립니다.
+                if(activeTab) renderCategory(activeTab);
             });
         });
     </script>
