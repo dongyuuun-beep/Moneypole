@@ -9,8 +9,8 @@
         body { font-family: 'Pretendard', -apple-system, sans-serif; background-color: var(--bg-color); margin: 0; color: #333; line-height: 1.6; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
 
-        /* 로고 및 헤더 */
-        header { display: flex; align-items: center; padding: 10px 5px; margin-bottom: 10px; }
+        /* 로고: 클릭 시 홈으로 이동 */
+        header { display: flex; align-items: center; padding: 10px 5px; margin-bottom: 10px; cursor: pointer; }
         .logo { font-size: 26px; font-weight: 900; color: var(--primary-color); letter-spacing: -1px; }
         .logo span { color: #111; }
 
@@ -19,14 +19,15 @@
         .scroll-menu::-webkit-scrollbar { display: none; }
         .tab-btn { background: #fff; border: 1px solid #ddd; padding: 10px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
         .tab-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+        .tab-btn.disabled { background: #eee; color: #aaa; cursor: default; border-color: #eee; }
 
-        /* 검색 및 필터 영역 */
+        /* 필터 영역 */
         .filter-section { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .search-input { width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
         .filter-controls { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #666; }
         select { padding: 5px; border-radius: 5px; border: 1px solid #ddd; }
 
-        /* 카드 리스트 */
+        /* 리스트 및 카드 */
         .section-title { font-size: 18px; font-weight: bold; margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; }
         .top-badge { background: #fff1f1; color: var(--accent-color); font-size: 11px; padding: 2px 8px; border-radius: 10px; }
         .card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
@@ -35,25 +36,25 @@
         .rate-val { font-size: 22px; font-weight: 800; color: var(--accent-color); text-align: right; }
         .term-info { font-size: 11px; color: #999; }
 
-        /* 하단 푸터 */
+        /* 하단 푸터 및 로고 */
         footer { font-size: 11px; color: #999; text-align: center; padding: 20px; border-top: 1px solid #eee; margin-top: 30px; }
+        .footer-logo { font-size: 14px; font-weight: bold; color: #ccc; margin-bottom: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header onclick="renderView('home')">
             <div class="logo">Money<span>Pole</span></div>
         </header>
 
         <div class="scroll-menu" id="tabMenu">
-            <button class="tab-btn active" data-type="home">홈(Top 10)</button>
-            <button class="tab-btn" data-type="parking">파킹통장</button>
+            <button class="tab-btn active" data-type="parking">파킹통장</button>
             <button class="tab-btn" data-type="deposit">예금</button>
             <button class="tab-btn" data-type="savings">적금</button>
             <button class="tab-btn" data-type="cma">CMA</button>
-            <button class="tab-btn" data-type="bond">채권</button>
             <button class="tab-btn" data-type="bill">발행어음</button>
             <button class="tab-btn" data-type="els">ELS/ELB</button>
+            <button class="tab-btn disabled" data-type="bond">채권(예정)</button>
         </div>
 
         <div id="filterArea" class="filter-section" style="display:none;">
@@ -73,6 +74,7 @@
         <div id="contentArea"></div>
 
         <footer>
+            <div class="footer-logo">MoneyPole</div>
             주의: 위 정보는 실제 금리와 차이가 있을 수 있으므로 가입 전 해당 금융기관에 반드시 확인하시기 바랍니다.<br>
             투자 시 원금 손실이 발생할 수 있으며, 모든 투자의 책임은 투자자 본인에게 있습니다.
         </footer>
@@ -80,21 +82,34 @@
 
     <script>
         let fullData = [];
+        const typeMap = {
+            'parking': '파킹통장',
+            'deposit': '예금',
+            'savings': '적금',
+            'cma': 'CMA',
+            'bill': '발행어음',
+            'els': 'ELS/ELB'
+        };
 
         fetch('data.json').then(res => res.json()).then(data => {
             fullData = data;
-            renderView('home');
+            renderView('home'); // 초기 진입 시 홈 노출
         });
 
         function renderView(type) {
             const content = document.getElementById('contentArea');
             const filterArea = document.getElementById('filterArea');
-            content.innerHTML = '';
-
+            const btns = document.querySelectorAll('.tab-btn');
+            
+            // 모든 버튼 활성화 해제 (홈 이동 시 메뉴 포커스 해제)
+            btns.forEach(b => b.classList.remove('active'));
+            
             if (type === 'home') {
                 filterArea.style.display = 'none';
                 renderHome();
             } else {
+                const targetBtn = Array.from(btns).find(b => b.dataset.type === type);
+                if(targetBtn) targetBtn.classList.add('active');
                 filterArea.style.display = 'block';
                 renderCategory(type);
             }
@@ -102,6 +117,8 @@
 
         function renderHome() {
             const content = document.getElementById('contentArea');
+            content.innerHTML = '';
+            
             const topDeposits = fullData.filter(d => d.type === 'deposit').sort((a,b) => b.max - a.max).slice(0, 10);
             const topSavings = fullData.filter(d => d.type === 'savings').sort((a,b) => b.max - a.max).slice(0, 10);
 
@@ -118,18 +135,15 @@
             const selectedTerm = document.getElementById('termFilter').value;
 
             let filtered = fullData.filter(d => d.type === type);
-
-            // 검색 및 필터 로직
             if (keyword) filtered = filtered.filter(d => d.bank.toLowerCase().includes(keyword));
             if (selectedTerm !== 'all') filtered = filtered.filter(d => String(d.term) === selectedTerm);
 
-            // 정렬 (최고금리 순)
-            filtered.sort((a, b) => isBaseOnly ? b.base - a.base : b.max - a.max);
+            filtered.sort((a, b) => isBaseOnly ? (b.base || b.max) - (a.base || a.max) : b.max - a.max);
 
-            // Top 100만 노출
             const listToRender = filtered.slice(0, 100);
             const content = document.getElementById('contentArea');
-            content.innerHTML = `<div class="section-title">${type.toUpperCase()} 상품 리스트 (Top 100)</div>`;
+            const korTitle = typeMap[type] || type.toUpperCase();
+            content.innerHTML = `<div class="section-title">${korTitle} 상품 리스트 (Top 100)</div>`;
             
             if (listToRender.length === 0) {
                 content.innerHTML += `<p style="text-align:center; padding:40px; color:#999;">조건에 맞는 상품이 없습니다.</p>`;
@@ -154,26 +168,19 @@
             `;
         }
 
-        // 이벤트 바인딩
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                if(btn.classList.contains('disabled')) return;
                 renderView(btn.dataset.type);
             });
         });
 
         ['searchInput', 'baseRateOnly', 'termFilter'].forEach(id => {
-            document.getElementById(id).addEventListener('change', () => {
-                const activeTab = document.querySelector('.tab-btn.active').dataset.type;
-                if(activeTab !== 'home') renderCategory(activeTab);
+            const el = document.getElementById(id);
+            el.addEventListener(id === 'searchInput' ? 'keyup' : 'change', () => {
+                const activeTab = document.querySelector('.tab-btn.active')?.dataset.type;
+                if(activeTab) renderCategory(activeTab);
             });
-            if(id === 'searchInput') {
-                document.getElementById(id).addEventListener('keyup', () => {
-                    const activeTab = document.querySelector('.tab-btn.active').dataset.type;
-                    if(activeTab !== 'home') renderCategory(activeTab);
-                });
-            }
         });
     </script>
 </body>
