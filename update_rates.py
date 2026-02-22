@@ -108,7 +108,7 @@ def crawl_parking_accounts():
                 })
     except Exception as e: # 크롤링 중 구조가 바뀌거나 에러가 나면 콘솔에 출력합니다.
         print(f"⚠️ 파킹통장 크롤링 실패: {e}")
-        
+    print(f"🔎 파킹통장 크롤링 결과: {len(parking_products)}건 수집됨")
     return parking_products # 수집된 파킹통장 리스트를 반환합니다.
 
 # 5. 메인 실행 로직 (API + 크롤링 병합 및 히스토리 업데이트)
@@ -122,11 +122,11 @@ def main():
     
     print("🚀 API(예/적금) 및 크롤링(파킹통장) 데이터 수집 시작...")
     api_deposits = fetch_all_products("deposit") # API로 예금을 가져옵니다.
-    api_savings = fetch_all_products("savings") # API로 적금을 가져옵니다.
+    ##api_savings = fetch_all_products("savings") # API로 적금을 가져옵니다.
     crawled_parking = crawl_parking_accounts() # 크롤링으로 파킹통장을 가져옵니다.
     
     # 수집한 3가지 종류의 데이터를 하나의 큰 리스트로 합칩니다.
-    all_new_data = api_deposits + api_savings + crawled_parking
+    all_new_data =  crawled_parking #+ api_deposits + api_savings
     updated_items = [] # 최종 업데이트 될 아이템들을 담을 리스트입니다.
     
     # 금리 변동 추이(Graph) 로직을 적용합니다.
