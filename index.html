@@ -6,7 +6,6 @@
     <title>MoneyPole - 스마트 금리 비교</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* 기존 스타일 유지 */
         :root { --primary: #2b6cb0; --accent: #e53e3e; --bg: #f4f7f8; --base-color: #718096; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
         body.modal-open { overflow: hidden; height: 100vh; }
@@ -135,7 +134,6 @@
             const termFilter = document.getElementById('termSelect').value; 
             
             listArea.innerHTML = '';
-            
             if (!allData || allData.length === 0) return;
 
             let filtered = allData.filter(d => d.type === currentType);
@@ -165,7 +163,6 @@
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                
                 let displayMax = item.max || 0;
                 let displayBase = item.base || 0;
                 let displayTrm = item.save_trm || 0;
@@ -208,26 +205,19 @@
             const calcInput = document.getElementById('calcInput');
             const calcTermSelect = document.getElementById('calcTermSelect');
             
-            // [수정] 중복 제거 및 기본/최고 금리 동시 노출 로직 반영
             calcTermSelect.innerHTML = '';
             if (item.options && item.options.length > 0) {
                 calcTermSelect.style.display = 'block';
                 
-                // 개월수와 최고금리가 같은 중복 옵션 제거
-                const uniqueOpts = item.options.filter((opt, index, self) =>
-                    index === self.findIndex((t) => (
-                        t.save_trm === opt.save_trm && t.intr_rate2 === opt.intr_rate2
-                    ))
-                );
-
-                uniqueOpts.sort((a,b) => a.save_trm - b.save_trm);
-
-                uniqueOpts.forEach(opt => {
+                // [수정] 옵션 텍스트에서 '기본'과 '최고'를 명확히 구분
+                item.options.forEach((opt, idx) => {
                     const optionEl = document.createElement('option');
-                    optionEl.value = opt.save_trm;
-                    // 기본 금리와 최고 금리를 모두 표시
+                    // value에 index를 저장하여 나중에 정확한 객체를 참조하도록 함
+                    optionEl.value = idx; 
                     optionEl.innerText = `${opt.save_trm}개월 (기본 ${opt.intr_rate.toFixed(2)}% / 최고 ${opt.intr_rate2.toFixed(2)}%)`;
-                    if (opt.save_trm === item.save_trm) optionEl.selected = true; 
+                    
+                    // 현재 리스트에서 보고 들어온 기간과 일치하면 선택 상태로 만듦
+                    if (opt.save_trm === item.save_trm && opt.intr_rate2 === item.max) optionEl.selected = true; 
                     calcTermSelect.appendChild(optionEl);
                 });
             } else {
@@ -273,11 +263,11 @@
             let applyMaxRate = currentItem.max || 0;
 
             const calcTermSelect = document.getElementById('calcTermSelect');
-            if (currentItem.options && currentItem.options.length > 0 && calcTermSelect.value) {
-                months = parseInt(calcTermSelect.value);
-                // 선택된 기간의 옵션을 찾되, 셀렉트 박스 텍스트와 일치시키기 위해 정교하게 검색
-                const selectedOpt = currentItem.options.find(o => String(o.save_trm) === String(months));
+            if (currentItem.options && currentItem.options.length > 0 && calcTermSelect.value !== "") {
+                // [수정] 인덱스를 통해 선택된 옵션 데이터에 직접 접근
+                const selectedOpt = currentItem.options[calcTermSelect.value];
                 if (selectedOpt) {
+                    months = parseInt(selectedOpt.save_trm);
                     applyBaseRate = selectedOpt.intr_rate;
                     applyMaxRate = selectedOpt.intr_rate2;
                 }
