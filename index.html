@@ -1,117 +1,53 @@
-<!DOCTYPE html> <html lang="ko"> <head>
-    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>MoneyPole - 통합 금리 비교</title> <style>
-        /* 기본 스타일 설정 시작 */
-        body { 
-            font-family: 'Pretendard', -apple-system, sans-serif; /* 가독성 좋은 'Pretendard' 폰트를 우선 적용하고 안되면 시스템 폰트 사용 */
-            background-color: #f4f7f8; /* 배경을 눈이 편안한 밝은 회색 계열로 설정 */
-            margin: 0; /* 브라우저 기본 여백을 제거하여 화면을 꽉 채움 */
-            color: #333; /* 기본 텍스트 색상을 진한 회색으로 설정 */
-        }
-        .container { 
-            max-width: 600px; /* 모바일 전용 앱처럼 보이기 위해 가로폭을 최대 600px로 제한 */
-            margin: 0 auto; /* 좌우 여백을 자동으로 설정하여 중앙에 배치 */
-            padding: 20px; /* 콘텐츠가 화면 끝에 붙지 않도록 안쪽 여백 추가 */
-        }
-        
-        h1 { 
-            text-align: left; /* 제목을 왼쪽으로 정렬 */
-            color: #111; /* 제목을 강조하기 위해 아주 진한 검은색 사용 */
-            font-size: 24px; /* 제목 크기를 적당히 크게 설정 */
-            margin-bottom: 20px; /* 제목과 아래 메뉴 사이의 간격 확보 */
-            padding-left: 5px; /* 전체적인 정렬을 맞추기 위해 왼쪽 미세 여백 추가 */
-        }
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneyPole - 스마트한 금리 비교</title>
+    <style>
+        :root { --primary-color: #2b6cb0; --accent-color: #e53e3e; --bg-color: #f4f7f8; }
+        body { font-family: 'Pretendard', -apple-system, sans-serif; background-color: var(--bg-color); margin: 0; color: #333; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
 
-        /* 모바일 최적화: 가로 스와이프 메뉴 스타일 */
-        .scroll-menu {
-            display: flex; /* 버튼들을 가로로 한 줄 배치 */
-            overflow-x: auto; /* 핵심: 가로폭이 넘칠 경우 스크롤이 생기도록 설정 */
-            white-space: nowrap; /* 버튼들이 아래 줄로 내려가지 않고 한 줄로 유지되게 함 */
-            gap: 10px; /* 버튼 사이의 간격을 10px로 설정 */
-            padding-bottom: 15px; /* 스크롤 시 하단 그림자가 잘리지 않도록 여백 추가 */
-            margin-bottom: 10px; /* 메뉴와 아래 리스트 사이의 간격 확보 */
-            -webkit-overflow-scrolling: touch; /* 아이폰 등 모바일에서 부드러운 스크롤 감각 제공 */
-        }
-        
-        /* 스크롤바 숨기기 (디자인의 깔끔함을 위해) */
-        .scroll-menu::-webkit-scrollbar { 
-            display: none; /* 크롬, 사파리 브라우저에서 스크롤바가 보이지 않게 처리 */
-        }
-        
-        .tab-btn {
-            background-color: #fff; /* 버튼 배경을 흰색으로 설정 */
-            border: 1px solid #ddd; /* 버튼 경계선을 연하게 표시 */
-            padding: 10px 18px; /* 버튼 내부 여백을 줘서 누르기 편하게 만듦 */
-            border-radius: 20px; /* 버튼 양 끝을 둥글게 만들어 캡슐 모양으로 디자인 */
-            font-size: 15px; /* 글자 크기 설정 */
-            font-weight: 600; /* 글자를 약간 두껍게 설정 */
-            color: #666; /* 비활성화된 버튼의 글자 색상을 회색으로 설정 */
-            cursor: pointer; /* 마우스를 올렸을 때 클릭 가능하다는 표시(포인터) 제공 */
-            transition: 0.2s; /* 색상이 바뀔 때 0.2초 동안 부드럽게 변경되도록 효과 추가 */
-            flex-shrink: 0; /* 메뉴가 많아도 버튼의 크기가 줄어들지 않고 원본 유지 */
-        }
-        
-        /* 선택된 메뉴(활성화 탭) 스타일 */
-        .tab-btn.active { 
-            background-color: #2b6cb0; /* 강조색인 파란색 배경 적용 */
-            color: #fff; /* 글자색을 흰색으로 바꿔 대비 강화 */
-            border-color: #2b6cb0; /* 경계선 색상도 배경색과 맞춤 */
-        }
+        /* 로고 및 헤더 */
+        header { display: flex; align-items: center; padding: 10px 5px; margin-bottom: 10px; }
+        .logo { font-size: 26px; font-weight: 900; color: var(--primary-color); letter-spacing: -1px; }
+        .logo span { color: #111; }
 
-        /* 카드형 리스트 디자인 설정 */
-        .product-list { 
-            display: flex; /* 리스트 항목들을 배치하기 위해 flex 사용 */
-            flex-direction: column; /* 상품 카드들을 위에서 아래로 세로 배치 */
-            gap: 12px; /* 카드와 카드 사이의 세로 간격 설정 */
-        }
-        
-        .card {
-            background: #fff; /* 카드 배경을 흰색으로 설정 */
-            padding: 20px; /* 카드 내부 여백 확보 */
-            border-radius: 16px; /* 모서리를 둥글게 하여 세련된 카드 느낌 제공 */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04); /* 아주 은은한 그림자를 넣어 입체감 부여 */
-            display: flex; /* 카드 내부의 은행 정보와 금리를 양옆으로 배치 */
-            justify-content: space-between; /* 정보는 왼쪽, 금리는 오른쪽 끝으로 정렬 */
-            align-items: center; /* 정보와 금리의 높이를 중앙으로 맞춤 */
-        }
-        
-        .info-area .bank { 
-            font-size: 13px; /* 은행 이름은 작게 설정 */
-            color: #888; /* 은행 이름 색상을 연하게 하여 상품명을 강조함 */
-            margin-bottom: 4px; /* 은행명과 상품명 사이의 간격 */
-        }
-        
-        .info-area .name { 
-            font-size: 17px; /* 상품명을 눈에 띄게 크게 설정 */
-            font-weight: bold; /* 상품명을 두껍게 처리 */
-            color: #222; /* 상품명을 진한 색으로 설정 */
-        }
-        
-        .rate-area { 
-            text-align: right; /* 금리 수치를 오른쪽 정렬 */
-        }
-        
-        .rate-area .label { 
-            font-size: 12px; /* '최고 금리' 라벨을 작게 설정 */
-            color: #888; /* 라벨 색상을 연하게 처리 */
-        }
-        
-        .rate-area .value { 
-            font-size: 24px; /* 금리 숫자를 가장 크게 강조 */
-            font-weight: 900; /* 금리 숫자를 아주 두껍게 설정 */
-            color: #e53e3e; /* 금리를 눈에 확 띄는 붉은색 계열로 설정 */
-        }
+        /* 가로 스크롤 메뉴 */
+        .scroll-menu { display: flex; overflow-x: auto; white-space: nowrap; gap: 10px; padding: 10px 0; -webkit-overflow-scrolling: touch; }
+        .scroll-menu::-webkit-scrollbar { display: none; }
+        .tab-btn { background: #fff; border: 1px solid #ddd; padding: 10px 18px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+        .tab-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
 
-        /* 미디어 쿼리: 구형 아이폰 등 아주 작은 폰을 위한 대응 */
-        @media (max-width: 380px) {
-            .info-area .name { font-size: 15px; } /* 화면이 너무 작으면 상품명 크기를 줄임 */
-            .rate-area .value { font-size: 20px; } /* 화면이 너무 작으면 금리 숫자 크기를 줄임 */
-        }
+        /* 검색 및 필터 영역 */
+        .filter-section { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .search-input { width: 100%; padding: 10px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
+        .filter-controls { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #666; }
+        select { padding: 5px; border-radius: 5px; border: 1px solid #ddd; }
+
+        /* 카드 리스트 */
+        .section-title { font-size: 18px; font-weight: bold; margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; }
+        .top-badge { background: #fff1f1; color: var(--accent-color); font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+        .card { background: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
+        .bank-name { font-size: 12px; color: #888; }
+        .prod-name { font-size: 16px; font-weight: bold; margin-top: 2px; }
+        .rate-val { font-size: 22px; font-weight: 800; color: var(--accent-color); text-align: right; }
+        .term-info { font-size: 11px; color: #999; }
+
+        /* 하단 푸터 */
+        footer { font-size: 11px; color: #999; text-align: center; padding: 20px; border-top: 1px solid #eee; margin-top: 30px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>MoneyPole 통합 금리</h1> <div class="scroll-menu" id="tabMenu">
-            <button class="tab-btn active" data-type="parking">파킹통장</button>
+        <header>
+            <div class="logo">Money<span>Pole</span></div>
+        </header>
+
+        <div class="scroll-menu" id="tabMenu">
+            <button class="tab-btn active" data-type="home">홈(Top 10)</button>
+            <button class="tab-btn" data-type="parking">파킹통장</button>
             <button class="tab-btn" data-type="deposit">예금</button>
             <button class="tab-btn" data-type="savings">적금</button>
             <button class="tab-btn" data-type="cma">CMA</button>
@@ -120,65 +56,124 @@
             <button class="tab-btn" data-type="els">ELS/ELB</button>
         </div>
 
-        <div class="product-list" id="productList">
-            <p style="text-align:center; color:#999; margin-top:40px;">데이터를 불러오는 중입니다...</p>
+        <div id="filterArea" class="filter-section" style="display:none;">
+            <input type="text" id="searchInput" class="search-input" placeholder="은행명을 입력하세요...">
+            <div class="filter-controls">
+                <label><input type="checkbox" id="baseRateOnly"> 우대금리 제외</label>
+                <select id="termFilter">
+                    <option value="all">전체 기간</option>
+                    <option value="6">6개월</option>
+                    <option value="12">12개월</option>
+                    <option value="24">24개월</option>
+                    <option value="36">36개월</option>
+                </select>
+            </div>
         </div>
+
+        <div id="contentArea"></div>
+
+        <footer>
+            주의: 위 정보는 실제 금리와 차이가 있을 수 있으므로 가입 전 해당 금융기관에 반드시 확인하시기 바랍니다.<br>
+            투자 시 원금 손실이 발생할 수 있으며, 모든 투자의 책임은 투자자 본인에게 있습니다.
+        </footer>
     </div>
 
     <script>
-        let globalData = []; // 서버의 data.json 파일을 비동기적으로 가져옴
-        fetch('data.json')
-            .then(res => res.json()) // 응답 데이터를 JSON 형식으로 변환
-            .then(data => {
-                globalData = data; // 가져온 데이터를 전역 변수에 저장
-                renderList('parking'); // 웹사이트 접속 시 가장 먼저 '파킹통장' 리스트를 보여줌
-            })
-            .catch(err => {
-                // 데이터를 가져오는 데 실패했을 경우 에러 메시지 표시
-                document.getElementById('productList').innerHTML = '<p style="text-align:center;">데이터를 연결할 수 없습니다.</p>';
-            });
+        let fullData = [];
 
-        // 특정 카테고리의 상품들만 화면에 그리는 함수
-        function renderList(type) {
-            const list = document.getElementById('productList'); // 상품 리스트 구역 선택
-            list.innerHTML = ''; // 기존에 그려져 있던 내용들을 깨끗이 비움
+        fetch('data.json').then(res => res.json()).then(data => {
+            fullData = data;
+            renderView('home');
+        });
 
-            // 전체 데이터 중 현재 선택된 타입(예: 예금, 적금 등)만 골라냄
-            const filtered = globalData.filter(item => item.type === type);
+        function renderView(type) {
+            const content = document.getElementById('contentArea');
+            const filterArea = document.getElementById('filterArea');
+            content.innerHTML = '';
 
-            // 해당 카테고리에 데이터가 하나도 없을 경우 안내 문구 표시
-            if (filtered.length === 0) {
-                list.innerHTML = `<p style="text-align:center; color:#999; margin-top:40px;">현재 등록된 상품이 없습니다.</p>`;
-                return;
+            if (type === 'home') {
+                filterArea.style.display = 'none';
+                renderHome();
+            } else {
+                filterArea.style.display = 'block';
+                renderCategory(type);
             }
-
-            // 금리가 높은 상품이 위로 오도록 내림차순 정렬
-            filtered.sort((a, b) => b.max - a.max);
-
-            // 걸러진 상품 데이터를 하나씩 순회하며 HTML 카드 생성
-            filtered.forEach(item => {
-                const div = document.createElement('div'); // 새로운 카드 div 생성
-                div.className = 'card'; // 디자인 적용을 위해 클래스명 부여
-                div.innerHTML = `
-                    <div class="info-area">
-                        <div class="bank">${item.bank}</div> <div class="name">${item.name}</div> </div>
-                    <div class="rate-area">
-                        <div class="label">최고 금리</div> <div class="value">${item.max.toFixed(2)}%</div> </div>
-                `;
-                list.appendChild(div); // 생성된 카드를 리스트 구역에 추가
-            });
         }
 
-        // 상단 탭 메뉴 버튼들에 클릭 이벤트 연결
+        function renderHome() {
+            const content = document.getElementById('contentArea');
+            const topDeposits = fullData.filter(d => d.type === 'deposit').sort((a,b) => b.max - a.max).slice(0, 10);
+            const topSavings = fullData.filter(d => d.type === 'savings').sort((a,b) => b.max - a.max).slice(0, 10);
+
+            content.innerHTML += `<div class="section-title">예금 금리 Top 10 <span class="top-badge">Best</span></div>`;
+            topDeposits.forEach(item => content.innerHTML += createCard(item));
+
+            content.innerHTML += `<div class="section-title">적금 금리 Top 10 <span class="top-badge">Best</span></div>`;
+            topSavings.forEach(item => content.innerHTML += createCard(item));
+        }
+
+        function renderCategory(type) {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const isBaseOnly = document.getElementById('baseRateOnly').checked;
+            const selectedTerm = document.getElementById('termFilter').value;
+
+            let filtered = fullData.filter(d => d.type === type);
+
+            // 검색 및 필터 로직
+            if (keyword) filtered = filtered.filter(d => d.bank.toLowerCase().includes(keyword));
+            if (selectedTerm !== 'all') filtered = filtered.filter(d => String(d.term) === selectedTerm);
+
+            // 정렬 (최고금리 순)
+            filtered.sort((a, b) => isBaseOnly ? b.base - a.base : b.max - a.max);
+
+            // Top 100만 노출
+            const listToRender = filtered.slice(0, 100);
+            const content = document.getElementById('contentArea');
+            content.innerHTML = `<div class="section-title">${type.toUpperCase()} 상품 리스트 (Top 100)</div>`;
+            
+            if (listToRender.length === 0) {
+                content.innerHTML += `<p style="text-align:center; padding:40px; color:#999;">조건에 맞는 상품이 없습니다.</p>`;
+            } else {
+                listToRender.forEach(item => content.innerHTML += createCard(item, isBaseOnly));
+            }
+        }
+
+        function createCard(item, isBaseOnly = false) {
+            const rate = isBaseOnly ? (item.base || item.max) : item.max;
+            return `
+                <div class="card">
+                    <div>
+                        <div class="bank-name">${item.bank}</div>
+                        <div class="prod-name">${item.name}</div>
+                        <div class="term-info">${item.term ? item.term + '개월 기준' : '수시입출금'}</div>
+                    </div>
+                    <div>
+                        <div class="rate-val">${rate.toFixed(2)}%</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 이벤트 바인딩
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                // 모든 버튼에서 active 클래스를 제거 (색상 초기화)
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                // 방금 클릭한 버튼에만 active 클래스 추가 (색상 강조)
-                e.target.classList.add('active');
-                // 클릭한 버튼의 data-type 값에 맞춰 리스트를 다시 그림
-                renderList(e.target.getAttribute('data-type'));
+                btn.classList.add('active');
+                renderView(btn.dataset.type);
             });
+        });
+
+        ['searchInput', 'baseRateOnly', 'termFilter'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                const activeTab = document.querySelector('.tab-btn.active').dataset.type;
+                if(activeTab !== 'home') renderCategory(activeTab);
+            });
+            if(id === 'searchInput') {
+                document.getElementById(id).addEventListener('keyup', () => {
+                    const activeTab = document.querySelector('.tab-btn.active').dataset.type;
+                    if(activeTab !== 'home') renderCategory(activeTab);
+                });
+            }
         });
     </script>
 </body>
