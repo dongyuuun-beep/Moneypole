@@ -40,7 +40,6 @@ def fetch_all_products(p_type):
                 opt_list = data.get('optionList', [])
                 
                 # --- [변경 시작] 기간별 우선순위 추출 로직 ---
-                # 상품 코드별로 모든 옵션을 먼저 그룹화합니다.
                 product_options = {}
                 for opt in opt_list:
                     code = opt['fin_prdt_cd']
@@ -50,25 +49,23 @@ def fetch_all_products(p_type):
 
                 rate_map = {}
                 for code, opts in product_options.items():
-                    # 우선순위: 12개월 -> 24개월 -> 6개월 -> 그 외(가장 긴 기간)
                     selected_opt = None
-                    
-                    # 1. 12, 24, 6개월 순서대로 찾기
+                    # 우선순위: 12개월 -> 24개월 -> 6개월 순서대로 찾기
                     for target_trm in ["12", "24", "6"]:
                         found = next((o for o in opts if str(o['save_trm']) == target_trm), None)
                         if found:
                             selected_opt = found
                             break
                     
-                    # 2. 위 기간이 하나도 없으면 가장 긴 기간(max) 선택
                     if not selected_opt:
                         selected_opt = max(opts, key=lambda x: int(x['save_trm']))
 
+                    # [수정] save_trm을 반드시 정수(int)로 저장하여 JS의 숫자 필터와 호환성을 맞춥니다.
                     rate_map[code] = {
                         "max": float(selected_opt['intr_rate2'] or 0),
                         "base": float(selected_opt['intr_rate'] or 0),
                         "intr_type": selected_opt['intr_rate_type_nm'],
-                        "save_trm": selected_opt['save_trm'] # 기간 정보 추가
+                        "save_trm": int(selected_opt['save_trm']) 
                     }
                 # --- [변경 종료] ---
                 
@@ -102,7 +99,14 @@ def main():
     today = datetime.now().strftime('%Y-%m-%d')
     
     manual_types = ['parking', 'cma', 'bill', 'els', 'bond']
-    preserved_data = [item for item in master_data if item.get('type') in manual_types]
+    # [수정] 기존 데이터 중 수동 카테고리(파킹 등)에 기간(save_trm)이 없으면 0으로 채워줍니다.
+    # 이렇게 해야 웹의 JS 필터에서 "12개월" 등을 선택했을 때 에러로 리스트가 사라지지 않습니다.
+    preserved_data = []
+    for item in master_data:
+        if item.get('type') in manual_types:
+            if 'save_trm' not in item:
+                item['save_trm'] = 0 # 파킹통장 등은 기간이 없으므로 0으로 설정
+            preserved_data.append(item)
     
     print("🚀 API(예/적금) 데이터 수집 및 기간 최적화 시작...")
     api_deposits = fetch_all_products("deposit")
@@ -115,10 +119,8 @@ def main():
         existing = next((item for item in master_data if item.get('id') == new_item['id']), None)
         
         history = []
-        # --- [기존 로직 유지] 히스토리 업데이트 ---
         if existing and 'history' in existing:
             history = existing['history']
-            # 금리가 변했거나, 데이터 기간이 달라진 경우에도 기록하고 싶다면 조건 추가 가능
             if history and history[-1]['rate'] != new_item['max']:
                 history.append({"date": today, "rate": new_item['max']})
         else:
@@ -134,9 +136,11 @@ def main():
         return
 
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
+        # [수정] indent=2를 유지하여 사람이 읽기 좋게 저장하고, 
+        # 파일이 완전히 새로 쓰여지도록 보장합니다.
         json.dump(final_output, f, ensure_ascii=False, indent=2)
         
-    print(f"✅ 업데이트 완료! (기간 우선순위 적용됨)")
+    print(f"✅ 업데이트 완료! (데이터 수 {len(final_output)}개)")
 
 if __name__ == "__main__":
     main()
