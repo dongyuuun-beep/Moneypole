@@ -64,52 +64,61 @@ def fetch_all_products(p_type):
             page_no += 1 # 다음 페이지 조회를 위해 페이지 번호를 올립니다.
             
     return all_products # 수집된 전체 API 상품 리스트를 반환합니다.
-
 # 4. [크롤링] 파킹통장(입출금자유예금) 데이터 수집 함수
 def crawl_parking_accounts():
     parking_products = [] # 파킹통장 데이터를 담을 리스트입니다.
-    # 크롤링할 입출금자유예금 웹페이지 URL입니다. (실제 서비스 URL로 조정 필요)
+    # 금융감독원 '입출금자유예금' 목록 페이지 URL입니다.
     url = "https://finlife.fss.or.kr/finlife/svings/fdrmDpst/list.do?menuNo=700002"
     
     try:
-        # 크롤링 봇 차단을 피하기 위해 일반 브라우저인 것처럼 User-Agent 헤더를 넣습니다.
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
-        res = requests.get(url, headers=headers) # 해당 웹페이지의 HTML 문서를 요청합니다.
-        res.raise_for_status() # 접속 실패 시 예외(에러)를 발생시킵니다.
+        # 크롤링 봇 차단을 피하기 위해 User-Agent 헤더를 설정합니다.
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+        res = requests.get(url, headers=headers)
+        res.raise_for_status()
         
-        # BeautifulSoup을 이용해 HTML 문서를 분석하기 쉽게 만듭니다.
+        # BeautifulSoup으로 HTML을 분석합니다.
         soup = BeautifulSoup(res.text, 'html.parser')
         
-        # [주의] 아래 CSS 선택자('table tbody tr')는 임시 예시입니다. 
-        # 실제 브라우저 개발자도구(F12)를 열어 태그와 클래스명을 확인 후 수정해야 합니다!
-        items = soup.select('table tbody tr') 
+        # 금감원 페이지의 실제 테이블 행(tr)을 선택합니다. (보통 #resultList 내의 tr)
+        # 테이블 구조에 따라 'table tbody tr' 또는 구체적인 ID를 사용합니다.
+        items = soup.select('#resultList tr') 
         
-        for index, item in enumerate(items): # 표(테이블)의 각 줄을 하나씩 확인합니다.
-            # 각 데이터가 들어있는 HTML 태그를 찾습니다. (클래스명 수정 필요)
-            bank_td = item.select_one('td:nth-child(1)') # 예: 첫 번째 칸이 은행명이라고 가정
-            prod_td = item.select_one('td:nth-child(2)') # 예: 두 번째 칸이 상품명이라고 가정
-            rate_td = item.select_one('td:nth-child(3)') # 예: 세 번째 칸이 금리라고 가정
+        if not items: # 만약 ID로 못 찾을 경우 일반적인 테이블 구조로 시도합니다.
+            items = soup.select('table.as_table tbody tr')
+
+        for index, item in enumerate(items):
+            tds = item.select('td')
+            if len(tds) < 4: continue # 필요한 열이 부족하면 건너뜁니다.
+
+            # 1. strip()을 사용하여 \r\n\t 등 불필요한 공백을 완전히 제거합니다.
+            bank_name = tds[1].text.strip() # 금융회사명
+            prod_name = tds[2].text.strip() # 상품명
             
-            if bank_td and prod_td and rate_td: # 세 가지 정보가 모두 존재하는 경우에만 처리합니다.
-                # 금리 텍스트에서 '%' 기호 등을 제거하고 숫자(float)로 변환합니다.
-                rate_str = rate_td.text.strip().replace('%', '')
-                try: rate_val = float(rate_str)
-                except ValueError: rate_val = 0.0 # 숫자로 변환할 수 없으면 0.0으로 처리합니다.
-                
+            # 2. 정규식을 사용하여 텍스트 내에서 숫자(금리)만 추출합니다.
+            import re
+            rate_text = tds[3].text.strip() # 세전 금리 칸
+            rate_match = re.search(r"(\d+\.?\d*)", rate_text)
+            rate_val = float(rate_match.group(1)) if rate_match else 0.0
+
+            # 금리가 정상적으로 추출된 경우에만 추가합니다.
+            if rate_val > 0:
                 parking_products.append({
-                    "id": f"parking_{index}", # 임의의 고유 ID를 부여합니다.
-                    "bank": bank_td.text.strip(), # 은행명의 공백을 제거하고 저장합니다.
-                    "name": prod_td.text.strip(), # 상품명의 공백을 제거하고 저장합니다.
-                    "spcl_cnd": "입출금이 자유로운 파킹통장입니다.", # 우대조건을 임의로 넣습니다.
-                    "max": rate_val, # 파킹통장 최고 금리를 넣습니다.
-                    "base": rate_val, # 기본 금리도 동일하게 세팅합니다.
-                    "intr_type": "S", # 기본적으로 단리(S)로 표기합니다.
-                    "type": "parking" # 카테고리를 파킹통장(parking)으로 분류합니다.
+                    "id": f"parking_{index}",
+                    "bank": bank_name,
+                    "name": prod_name,
+                    "spcl_cnd": "입출금이 자유로운 파킹통장입니다.",
+                    "max": rate_val,
+                    "base": rate_val,
+                    "intr_type": "S",
+                    "type": "parking"
                 })
-    except Exception as e: # 크롤링 중 구조가 바뀌거나 에러가 나면 콘솔에 출력합니다.
-        print(f"⚠️ 파킹통장 크롤링 실패: {e}")
-    print(f"🔎 파킹통장 크롤링 결과: {len(parking_products)}건 수집됨")
-    return parking_products # 수집된 파킹통장 리스트를 반환합니다.
+                
+        print(f"🔎 파킹통장 크롤링 결과: {len(parking_products)}건 수집됨")
+
+    except Exception as e:
+        print(f"⚠️ 파킹통장 크롤링 중 에러 발생: {e}")
+        
+    return parking_products
 
 # 5. 메인 실행 로직 (API + 크롤링 병합 및 히스토리 업데이트)
 def main():
