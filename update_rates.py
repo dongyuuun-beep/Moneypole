@@ -1,16 +1,16 @@
-import requests # 웹페이지 통신 및 API 호출을 위한 라이브러리입니다.
-import json # JSON 데이터를 다루기 위한 라이브러리입니다.
-import os # 시스템 환경변수(API 키 등)를 불러오기 위한 라이브러리입니다.
-from datetime import datetime # 금리 변동 이력에 날짜를 기록하기 위한 라이브러리입니다.
+import requests
+import json
+import os
+from datetime import datetime
 
 # 1. 환경 설정 및 기본 변수 정의
-API_KEY = os.environ.get('FSS_API_KEY') # GitHub Secrets에서 API 키를 가져옵니다.
-DATA_FILE = 'data.json' # 데이터가 누적되어 저장될 파일명입니다.
-FIN_GROUPS = ["020000", "030300"] # 020000: 시중은행, 030300: 저축은행 코드입니다.
+API_KEY = os.environ.get('FSS_API_KEY')
+DATA_FILE = 'data.json'
+FIN_GROUPS = ["020000", "030300"]
 
-# 2. 기존 데이터 로드 함수 (히스토리 유지를 위해 필수)
+# 2. 기존 데이터 로드 함수
 def load_existing_data():
-    if os.path.exists(DATA_FILE): # 데이터 파일이 이미 존재하는지 확인합니다.
+    if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r', encoding='utf-8') as f:
             try:
                 return json.load(f)
@@ -39,15 +39,38 @@ def fetch_all_products(p_type):
                 base_list = data.get('baseList', [])
                 opt_list = data.get('optionList', [])
                 
-                rate_map = {}
+                # --- [변경 시작] 기간별 우선순위 추출 로직 ---
+                # 상품 코드별로 모든 옵션을 먼저 그룹화합니다.
+                product_options = {}
                 for opt in opt_list:
                     code = opt['fin_prdt_cd']
-                    if str(opt['save_trm']) == "12":
-                        rate_map[code] = {
-                            "max": float(opt['intr_rate2'] or 0),
-                            "base": float(opt['intr_rate'] or 0),
-                            "intr_type": opt['intr_rate_type']
-                        }
+                    if code not in product_options:
+                        product_options[code] = []
+                    product_options[code].append(opt)
+
+                rate_map = {}
+                for code, opts in product_options.items():
+                    # 우선순위: 12개월 -> 24개월 -> 6개월 -> 그 외(가장 긴 기간)
+                    selected_opt = None
+                    
+                    # 1. 12, 24, 6개월 순서대로 찾기
+                    for target_trm in ["12", "24", "6"]:
+                        found = next((o for o in opts if str(o['save_trm']) == target_trm), None)
+                        if found:
+                            selected_opt = found
+                            break
+                    
+                    # 2. 위 기간이 하나도 없으면 가장 긴 기간(max) 선택
+                    if not selected_opt:
+                        selected_opt = max(opts, key=lambda x: int(x['save_trm']))
+
+                    rate_map[code] = {
+                        "max": float(selected_opt['intr_rate2'] or 0),
+                        "base": float(selected_opt['intr_rate'] or 0),
+                        "intr_type": selected_opt['intr_rate_type_nm'],
+                        "save_trm": selected_opt['save_trm'] # 기간 정보 추가
+                    }
+                # --- [변경 종료] ---
                 
                 for base in base_list:
                     code = base['fin_prdt_cd']
@@ -60,6 +83,7 @@ def fetch_all_products(p_type):
                             "max": rate_map[code]['max'],
                             "base": rate_map[code]['base'],
                             "intr_type": rate_map[code]['intr_type'],
+                            "save_trm": rate_map[code]['save_trm'], # 필드 반영
                             "type": p_type
                         })
                 
@@ -72,21 +96,18 @@ def fetch_all_products(p_type):
             
     return all_products
 
-# 5. 메인 실행 로직 (API 수집 및 히스토리 업데이트)
+# 5. 메인 실행 로직
 def main():
     master_data = load_existing_data()
     today = datetime.now().strftime('%Y-%m-%d')
     
-    # [수동 관리 품목 보존] 파킹통장(parking)을 포함하여 직접 관리하는 유형들을 보존합니다.
     manual_types = ['parking', 'cma', 'bill', 'els', 'bond']
     preserved_data = [item for item in master_data if item.get('type') in manual_types]
     
-    print("🚀 API(예/적금) 데이터 수집 시작...")
-    # 주석을 해제하여 정식 API로부터 데이터를 가져옵니다.
+    print("🚀 API(예/적금) 데이터 수집 및 기간 최적화 시작...")
     api_deposits = fetch_all_products("deposit")
     api_savings = fetch_all_products("savings")
     
-    # 크롤링 없이 API로 가져온 데이터만 사용합니다.
     all_new_data = api_deposits + api_savings
     updated_items = []
     
@@ -94,8 +115,10 @@ def main():
         existing = next((item for item in master_data if item.get('id') == new_item['id']), None)
         
         history = []
+        # --- [기존 로직 유지] 히스토리 업데이트 ---
         if existing and 'history' in existing:
             history = existing['history']
+            # 금리가 변했거나, 데이터 기간이 달라진 경우에도 기록하고 싶다면 조건 추가 가능
             if history and history[-1]['rate'] != new_item['max']:
                 history.append({"date": today, "rate": new_item['max']})
         else:
@@ -106,15 +129,14 @@ def main():
         
     final_output = preserved_data + updated_items
 
-    # [방어 로직] API 데이터 수집이 실패하여 건수가 너무 적으면 덮어쓰지 않습니다.
     if len(all_new_data) < 10:
-        print(f"❌ 수집된 API 데이터가 너무 적습니다 ({len(all_new_data)}건). 파일을 업데이트하지 않습니다.")
+        print(f"❌ 수집 데이터 부족으로 업데이트 중단")
         return
 
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(final_output, f, ensure_ascii=False, indent=2)
         
-    print(f"✅ 업데이트 완료! (수동 보존: {len(preserved_data)}건, API 갱신: {len(updated_items)}건)")
+    print(f"✅ 업데이트 완료! (기간 우선순위 적용됨)")
 
 if __name__ == "__main__":
     main()
