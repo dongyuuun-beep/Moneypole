@@ -2,13 +2,17 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MoneyPole - 스마트 금리 비교</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* 기본 테마 및 색상 변수를 설정합니다. */
+        /* 기본 테마 및 색상 변수 */
         :root { --primary: #2b6cb0; --accent: #e53e3e; --bg: #f4f7f8; }
         body { font-family: 'Pretendard', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
+        
+        /* [수정] 상세페이지 오픈 시 메인 스크롤 방지용 */
+        body.modal-open { overflow: hidden; height: 100vh; }
+
         .container { max-width: 600px; margin: 0 auto; padding: 20px; }
 
         /* 로고 영역 스타일 */
@@ -28,11 +32,21 @@
         .bank-tag { font-size: 11px; color: #888; margin-bottom: 4px; }
         .rate-main { color: var(--accent); font-size: 20px; font-weight: 800; }
 
-        /* 상세 페이지 레이아웃 */
-        #detailView { display: none; background: #fff; min-height: 100vh; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; overflow-y: auto; }
-        .detail-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; background: #fff; position: sticky; top: 0; }
-        .back-btn { font-size: 24px; cursor: pointer; margin-right: 15px; }
-        .detail-body { padding: 20px; }
+        /* [핵심 수정] 상세 페이지 레이아웃 - 스크롤 잘림 완벽 방지 */
+        #detailView { 
+            display: none; 
+            background: #fff; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; 
+            height: 100%;
+            z-index: 1000; 
+            overflow-y: auto; /* 자체 스크롤 */
+            -webkit-overflow-scrolling: touch; 
+        }
+        .detail-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; background: #fff; position: sticky; top: 0; z-index: 1001; }
+        .back-btn { font-size: 24px; cursor: pointer; margin-right: 15px; padding: 5px; }
+        .detail-body { padding: 20px; padding-bottom: 120px; } /* 하단에 아주 넉넉한 여백 추가 */
         
         /* 우대금리 조건 및 차트 박스 */
         .info-box { background: #f0f7ff; padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid var(--primary); }
@@ -40,7 +54,7 @@
         .info-content { font-size: 13px; line-height: 1.5; color: #444; white-space: pre-wrap; }
         .chart-container { margin: 20px 0; height: 200px; }
         
-        /* 계산기 디자인 강화 */
+        /* 계산기 디자인 */
         .calc-box { background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #e2e8f0; }
         .calc-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 18px; margin-top: 10px; box-sizing: border-box; outline-color: var(--primary); }
         .calc-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #666; }
@@ -120,7 +134,6 @@
         let chartInstance = null; 
         let currentType = 'deposit'; 
 
-        // 데이터 로드
         fetch('data.json').then(res => res.json()).then(data => {
             allData = data;
             renderList();
@@ -154,13 +167,18 @@
 
         function openDetail(item) {
             currentItem = item;
-            document.getElementById('detailView').style.display = 'block';
+            const detailView = document.getElementById('detailView');
+            
+            // 1. 상세 뷰 표시 및 메인 바디 스크롤 차단
+            detailView.style.display = 'block';
+            document.body.classList.add('modal-open');
+            detailView.scrollTo(0, 0); 
+
             document.getElementById('detailBank').innerText = item.bank;
             document.getElementById('detailName').innerText = item.name;
             document.getElementById('detailRate').innerText = item.max.toFixed(2) + "%";
             document.getElementById('detailCondition').innerText = item.spcl_cnd || "우대 금리 조건 정보가 없습니다.";
 
-            // 탭 종류에 따라 계산기 가이드 텍스트 변경
             const calcInput = document.getElementById('calcInput');
             const calcTypeDesc = document.getElementById('calcTypeDesc');
             if (currentType === 'savings') {
@@ -171,7 +189,6 @@
                 calcTypeDesc.innerText = "기준: 12개월 거치 예금 (단리)";
             }
 
-            // 차트 렌더링
             const history = item.history || [{date: '현재', rate: item.max}];
             if(chartInstance) chartInstance.destroy();
             const ctx = document.getElementById('rateChart').getContext('2d');
@@ -194,9 +211,11 @@
             document.getElementById('calcResult').innerHTML = '';
         }
 
-        function closeDetail() { document.getElementById('detailView').style.display = 'none'; }
+        function closeDetail() { 
+            document.getElementById('detailView').style.display = 'none'; 
+            document.body.classList.remove('modal-open'); // 메인 스크롤 복구
+        }
 
-        // [핵심] 이자 및 만기 수령액 계산 로직
         function doCalc() {
             const val = parseFloat(document.getElementById('calcInput').value);
             if(!val || isNaN(val)) {
@@ -205,25 +224,22 @@
             }
 
             const rate = currentItem.max / 100;
-            const months = 12; // 기본 1년 기준
-            let totalPrincipal = 0; // 총 원금
-            let totalInterest = 0;  // 총 세전 이자
+            const months = 12; 
+            let totalPrincipal = 0; 
+            let totalInterest = 0; 
 
             if (currentType === 'savings') {
-                // 적금 공식: 매월 입금액에 대해 남은 개월수만큼 이자 계산 (회차별 단리)
                 totalPrincipal = val * months;
                 totalInterest = val * rate * (months * (months + 1) / 2 / 12);
             } else {
-                // 예금/CMA/파킹 공식: 전체 원금에 대해 전체 기간 이자 계산
                 totalPrincipal = val;
                 totalInterest = val * rate * (months / 12);
             }
 
-            const tax = totalInterest * 0.154; // 이자소득세 15.4%
+            const tax = totalInterest * 0.154; 
             const afterTaxInterest = totalInterest - tax;
             const finalAmount = totalPrincipal + afterTaxInterest;
 
-            // 결과 화면 렌더링
             document.getElementById('calcResult').innerHTML = `
                 <div class="calc-row">
                     <span>원금 합계</span>
