@@ -1,161 +1,197 @@
-<div class="filter-section">
-    <input type="text" id="searchInput" class="search-input" placeholder="은행명 또는 상품명 검색...">
-    <div style="display:flex; justify-content:space-between; font-size:13px; color:#666;">
-        <label><input type="checkbox" id="baseOnly"> 우대금리 제외</label>
-        <div id="termFilterContainer">
-            <select id="termSelect" style="border:none; background:none; font-weight: bold; color: var(--primary);" onchange="renderList()">
-                <option value="all">전체 기간</option>
-                <option value="6">6개월</option>
-                <option value="12" selected>12개월</option>
-                <option value="24">24개월</option>
-                <option value="36">36개월</option>
-            </select>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MoneyPole - 스마트 금리 비교</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --primary: #2b6cb0; --accent: #e53e3e; --bg: #f4f7f8; }
+        body { font-family: 'Pretendard', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
+        body.modal-open { overflow: hidden; height: 100vh; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 20px 0; cursor: pointer; }
+        .logo-container { width: 100%; max-width: 280px; height: 60px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+        header img { max-width: 100%; height: auto; object-fit: contain; transform: scale(1.15); }
+        .scroll-menu { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; scrollbar-width: none; }
+        .tab-btn { background: #fff; border: 1px solid #ddd; padding: 8px 18px; border-radius: 20px; white-space: nowrap; font-weight: 600; cursor: pointer; }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .filter-section { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .search-input { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
+        .card { background: #fff; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
+        .bank-tag { font-size: 11px; color: #888; margin-bottom: 4px; }
+        .rate-main { color: var(--accent); font-size: 20px; font-weight: 800; }
+        #detailView { display: none; background: #fff; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 1000; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .detail-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; background: #fff; position: sticky; top: 0; z-index: 1001; }
+        .back-btn { font-size: 24px; cursor: pointer; margin-right: 15px; }
+        .detail-body { padding: 20px; padding-bottom: 120px; }
+        .info-box { background: #f0f7ff; padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid var(--primary); }
+        .info-title { font-size: 14px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
+        .info-content { font-size: 13px; line-height: 1.5; color: #444; white-space: pre-wrap; }
+        .calc-box { background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #e2e8f0; }
+        .calc-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 18px; margin-top: 10px; box-sizing: border-box; }
+        .calc-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #666; }
+        .calc-total { border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainView">
+        <header onclick="location.reload()">
+            <div class="logo-container"><img src="logo.png" alt="MoneyPole"></div>
+        </header>
+
+        <div class="scroll-menu" id="tabMenu">
+            <button class="tab-btn" data-type="parking">파킹통장</button>
+            <button class="tab-btn active" data-type="deposit">예금</button>
+            <button class="tab-btn" data-type="savings">적금</button>
+            <button class="tab-btn" data-type="cma">CMA</button>
+        </div>
+
+        <div class="filter-section">
+            <input type="text" id="searchInput" class="search-input" placeholder="은행명 또는 상품명 검색...">
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#666;">
+                <label><input type="checkbox" id="baseOnly"> 우대금리 제외</label>
+                <div id="termFilterArea">
+                    <select id="termSelect" style="border:none; background:none; font-weight:bold; color:var(--primary);" onchange="renderList()">
+                        <option value="all">전체 기간</option>
+                        <option value="6">6개월</option>
+                        <option value="12" selected>12개월</option>
+                        <option value="24">24개월</option>
+                        <option value="36">36개월</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="listArea"></div>
+    </div>
+
+    <div id="detailView">
+        <div class="detail-header"><span class="back-btn" onclick="closeDetail()">←</span><div id="detailTitle" style="font-weight:bold;">상세 정보</div></div>
+        <div class="detail-body">
+            <div id="detailBank" style="color:#888; font-size:13px;">금융기관</div>
+            <div id="detailName" style="font-size:22px; font-weight:bold; margin:5px 0;">상품명</div>
+            <div id="detailRateArea"></div>
+
+            <div id="detailTermArea" style="margin-top:15px;"></div>
+
+            <div class="info-box">
+                <div class="info-title">💡 우대금리 조건</div>
+                <div id="detailCondition" class="info-content">내용</div>
+            </div>
+
+            <div class="calc-box">
+                <div style="font-weight:bold; font-size: 15px; margin-bottom: 10px;">세후 수령액 계산기</div>
+                <input type="number" id="calcInput" class="calc-input" placeholder="금액 입력" oninput="doCalc()">
+                <div id="calcResult" style="margin-top:15px;"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    let allData = []; 
-    let currentItem = null; 
-    let currentType = 'deposit'; 
+    <script>
+        let allData = []; 
+        let currentItem = null; 
+        let currentType = 'deposit'; 
 
-    // 데이터 로드
-    fetch('data.json').then(res => res.json()).then(data => {
-        allData = data;
-        renderList();
-    }).catch(err => console.error("데이터 로드 실패:", err));
+        // 데이터 로드
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                allData = data;
+                renderList();
+            })
+            .catch(err => console.error("데이터 로드 에러:", err));
 
-    function renderList() {
-        const listArea = document.getElementById('listArea');
-        const keyword = document.getElementById('searchInput').value.toLowerCase();
-        const isBaseOnly = document.getElementById('baseOnly').checked;
-        const termFilter = document.getElementById('termSelect').value; 
-        
-        // [수정] 1. CMA/파킹통장 탭일 때 기간 필터 UI 삭제(숨김)
-        const filterWrap = document.getElementById('termFilterContainer');
-        if (currentType === 'cma' || currentType === 'parking') {
-            filterWrap.style.display = 'none';
-        } else {
-            filterWrap.style.display = 'block';
-        }
+        function renderList() {
+            const listArea = document.getElementById('listArea');
+            const termFilterArea = document.getElementById('termFilterArea');
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const isBaseOnly = document.getElementById('baseOnly').checked;
+            const termFilter = document.getElementById('termSelect').value;
 
-        listArea.innerHTML = '';
-        if (!allData || allData.length === 0) return;
-
-        // 2. 현재 탭 유형(예/적금 등)에 맞는 데이터만 필터링
-        let filtered = allData.filter(d => d.type === currentType);
-
-        // [수정] 3. 중복 노출 방지: 같은 은행/상품명 중 금리가 가장 높은 하나만 남김
-        const uniqueProducts = {};
-        filtered.forEach(item => {
-            const key = item.bank + item.name;
-            if (!uniqueProducts[key] || uniqueProducts[key].max < item.max) {
-                uniqueProducts[key] = item;
+            // [수정] 파킹통장/CMA일 때 상단 필터 숨기기
+            if (currentType === 'parking' || currentType === 'cma') {
+                termFilterArea.style.display = 'none';
+            } else {
+                termFilterArea.style.display = 'block';
             }
-        });
-        filtered = Object.values(uniqueProducts);
 
-        // 4. 기간 필터링 (예적금만 해당)
-        if (termFilter !== 'all' && currentType !== 'cma' && currentType !== 'parking') {
-            filtered = filtered.filter(d => {
-                if (d.options) return d.options.some(o => String(o.save_trm) === termFilter);
-                return String(d.save_trm) === termFilter;
+            listArea.innerHTML = '';
+            let filtered = allData.filter(d => d.type === currentType);
+
+            // 기간 필터링 (예적금만)
+            if (termFilter !== 'all' && currentType !== 'parking' && currentType !== 'cma') {
+                filtered = filtered.filter(d => {
+                    if (d.options) return d.options.some(o => String(o.save_trm) === termFilter);
+                    return String(d.save_trm) === termFilter;
+                });
+            }
+
+            // 검색어 필터링
+            if (keyword) {
+                filtered = filtered.filter(d => d.bank.includes(keyword) || d.name.includes(keyword));
+            }
+
+            // 중복 제거 및 정렬
+            const unique = {};
+            filtered.forEach(item => {
+                const key = item.bank + item.name;
+                if (!unique[key] || unique[key].max < item.max) unique[key] = item;
+            });
+            filtered = Object.values(unique).sort((a,b) => (isBaseOnly ? b.base : b.max) - (isBaseOnly ? a.base : a.max));
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const rate = isBaseOnly ? item.base : item.max;
+                card.innerHTML = `
+                    <div class="bank-tag">${item.bank} ${currentType !== 'parking' && currentType !== 'cma' ? '| ' + item.save_trm + '개월' : ''}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div style="font-weight:600;">${item.name}</div>
+                        <div class="rate-main">${rate.toFixed(2)}%</div>
+                    </div>
+                `;
+                card.onclick = () => openDetail(item);
+                listArea.appendChild(card);
             });
         }
 
-        // 5. 검색어 및 정렬
-        if (keyword) {
-            filtered = filtered.filter(d => d.bank.includes(keyword) || d.name.includes(keyword));
-        }
-        filtered.sort((a,b) => (isBaseOnly ? b.base : b.max) - (isBaseOnly ? a.base : a.max));
+        function openDetail(item) {
+            currentItem = JSON.parse(JSON.stringify(item));
+            const detailView = document.getElementById('detailView');
+            const termArea = document.getElementById('detailTermArea');
+            detailView.style.display = 'block';
+            document.body.classList.add('modal-open');
 
-        // 카드 렌더링
-        filtered.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="bank-tag">${item.bank} | ${item.save_trm}개월</div>
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="font-weight:600;">${item.name}</div>
-                    <div class="rate-main">${(isBaseOnly ? item.base : item.max).toFixed(2)}%</div>
-                </div>
-            `;
-            card.onclick = () => openDetail(item);
-            listArea.appendChild(card);
-        });
-    }
+            document.getElementById('detailBank').innerText = item.bank;
+            document.getElementById('detailName').innerText = item.name;
+            document.getElementById('detailCondition').innerText = item.spcl_cnd || "우대 조건 정보가 없습니다.";
 
-    function openDetail(item) {
-        currentItem = item;
-        const detailView = document.getElementById('detailView');
-        detailView.style.display = 'block';
-        document.body.classList.add('modal-open');
-        
-        document.getElementById('detailBank').innerText = item.bank;
-        document.getElementById('detailName').innerText = item.name;
+            // [수정] 상세창 기간 중복 제거 (이미지 3번 이슈 해결)
+            termArea.innerHTML = '';
+            if (item.options && item.options.length > 0 && currentType !== 'parking' && currentType !== 'cma') {
+                const seen = new Set();
+                const uniqueOpts = item.options.filter(o => {
+                    if (seen.has(o.save_trm)) return false;
+                    seen.add(o.save_trm);
+                    return true;
+                }).sort((a,b) => a.save_trm - b.save_trm);
 
-        // [수정] 상세창 기간 드롭다운 중복 제거 (12개월이 두 번 나오던 문제 해결)
-        const calcTermSelect = document.getElementById('calcTermSelect');
-        calcTermSelect.innerHTML = '';
-        
-        if (item.options && item.options.length > 0 && currentType !== 'cma' && currentType !== 'parking') {
-            calcTermSelect.style.display = 'block';
-            const seen = new Set();
-            const uniqueOptions = item.options.filter(opt => {
-                const isDuplicate = seen.has(opt.save_trm);
-                seen.add(opt.save_trm);
-                return !isDuplicate;
-            }).sort((a,b) => a.save_trm - b.save_trm);
+                let selectHtml = `<div style="padding:10px; background:#f1f5f9; border-radius:8px; border:1px solid #e2e8f0;">
+                    <label style="font-size:12px; color:#666;">기간 선택</label>
+                    <select id="detailTermSelect" onchange="changeDetailTerm(this.value)" style="width:100%; border:none; background:none; font-size:16px; font-weight:bold; margin-top:5px;">`;
+                
+                uniqueOpts.forEach(opt => {
+                    selectHtml += `<option value='${JSON.stringify(opt)}' ${opt.save_trm == item.save_trm ? 'selected' : ''}>${opt.save_trm}개월</option>`;
+                });
+                selectHtml += `</select></div>`;
+                termArea.innerHTML = selectHtml;
+            }
 
-            uniqueOptions.forEach(opt => {
-                const optionEl = document.createElement('option');
-                optionEl.value = JSON.stringify(opt);
-                optionEl.innerText = `${opt.save_trm}개월 (최고 연 ${opt.intr_rate2.toFixed(2)}%)`;
-                if (opt.save_trm === item.save_trm) optionEl.selected = true;
-                calcTermSelect.appendChild(optionEl);
-            });
-        } else {
-            calcTermSelect.style.display = 'none';
+            updateRateDisplay(item.base, item.max);
+            document.getElementById('calcInput').value = '';
+            document.getElementById('calcResult').innerHTML = '';
         }
 
-        // 초기 금리 표시 및 계산 실행
-        updateDetailDisplay(item.base, item.max, item.save_trm);
-        doCalc();
-    }
-
-    function updateDetailDisplay(base, max, term) {
-        document.getElementById('detailBaseRate').innerText = `기본 연 ${base.toFixed(2)}%`;
-        document.getElementById('detailRate').innerText = `최고 연 ${max.toFixed(2)}%`;
-        document.getElementById('detailTermTag').innerText = `${term}개월 기준`;
-    }
-
-    function doCalc() {
-        const val = parseFloat(document.getElementById('calcInput').value);
-        const calcTermSelect = document.getElementById('calcTermSelect');
-        
-        let months = currentItem.save_trm;
-        let baseR = currentItem.base;
-        let maxR = currentItem.max;
-
-        if (calcTermSelect && calcTermSelect.style.display !== 'none' && calcTermSelect.value) {
-            const opt = JSON.parse(calcTermSelect.value);
-            months = opt.save_trm;
-            baseR = opt.intr_rate;
-            maxR = opt.intr_rate2;
-            updateDetailDisplay(baseR, maxR, months);
-        }
-
-        if(!val || isNaN(val)) return;
-        // ... (이후 계산 로직은 기존과 동일) ...
-    }
-
-    // 탭 클릭 이벤트
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.onclick = () => {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentType = btn.dataset.type;
-            renderList();
-        };
-    });
-</script>
+        function changeDetailTerm(optStr) {
+            const opt = JSON.parse(optStr);
