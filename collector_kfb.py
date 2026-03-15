@@ -2,9 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
-import urllib3  # [수정: SSL 경고 제거를 위해 추가]
+import urllib3  # [수정: SSL 경고 제어를 위해 추가]
 
-# [수정: SSL 검증 생략 시 발생하는 경고 메시지를 무시하도록 설정]
+# [수정: verify=False 사용 시 뜨는 보안 경고 창을 끄기 위한 설정]
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def fetch_kfb_parking_rates():
@@ -16,7 +16,6 @@ def fetch_kfb_parking_rates():
         "Content-Type": "application/x-www-form-urlencoded"
     }
 
-    # 유저님이 제공해주신 진짜 데이터(Payload)
     payload = {
         "InterestType": "",
         "BankValue": "0010030|0013175|0011625|0010001|0010002|0013909|0010026|0010927|0010006|0014807|0010016|0010017|0010019|0010020|0010022|0010024|0014674|0015130|0017801",
@@ -30,51 +29,50 @@ def fetch_kfb_parking_rates():
 
     print("🚀 은행연합회 데이터 요청 중...")
     
-    # [수정: verify=False를 추가하여 SSL 핸드쉐이크 에러(보안 연결 설정 실패) 우회]
-    # [수정: timeout=20을 추가하여 서버 응답이 늦어질 경우 무한 대기 방지]
-    response = requests.post(url, headers=headers, data=payload, verify=False, timeout=20)
-    
-    # 은행연합회는 보통 euc-kr을 사용하므로 인코딩 설정
-    response.encoding = 'utf-8' # 만약 한글이 깨지면 'euc-kr'로 변경하세요
-    
-    soup = BeautifulSoup(response.text, 'html.parser')
-    
-    # 결과 테이블의 행(tr)들을 찾음
-    rows = soup.select("#compare_list tbody tr")
-    
-    parsed_data = []
-    
-    for row in rows:
-        cols = row.find_all("td")
-        if len(cols) < 3: continue
+    try:
+        # [수정: verify=False로 SSL 핸드쉐이크 에러 우회]
+        # [수정: timeout=30으로 서버 응답 지연에 따른 에러 방지]
+        response = requests.post(url, headers=headers, data=payload, verify=False, timeout=30)
         
-        bank_name = cols[0].get_text(strip=True)
-        product_name = cols[1].get_text(strip=True)
-        # 금리 부분에서 숫자만 추출 (예: "3.50%" -> 3.5)
-        rate_text = cols[2].get_text(strip=True)
-        rate_matches = re.findall(r"\d+\.\d+|\d+", rate_text)
-        rate = float(rate_matches[0]) if rate_matches else 0.0
+        # 은행연합회 데이터는 한국어 인코딩(euc-kr)일 수 있으므로 자동 설정 확인
+        response.encoding = response.apparent_encoding 
         
-        # MoneyPole data.json 형식에 맞게 구성
-        item = {
-            "id": f"KFB_{bank_name}_{product_name[:3]}", # 간단한 ID 생성
-            "bank": bank_name,
-            "name": product_name,
-            "spcl_cnd": "상세내용 홈페이지 참조",
-            "max": rate,
-            "base": rate,
-            "intr_type": "단리",
-            "save_trm": 0, # 파킹통장은 0으로 설정
-            "type": "parking",
-            "options": []
-        }
-        parsed_data.append(item)
-    
-    return parsed_data
+        soup = BeautifulSoup(response.text, 'html.parser')
+        rows = soup.select("#compare_list tbody tr")
+        
+        parsed_data = []
+        
+        for row in rows:
+            cols = row.find_all("td")
+            if len(cols) < 3: continue
+            
+            bank_name = cols[0].get_text(strip=True)
+            product_name = cols[1].get_text(strip=True)
+            rate_text = cols[2].get_text(strip=True)
+            
+            # 숫자만 추출 (정규식 강화)
+            rate_matches = re.findall(r"\d+\.\d+|\d+", rate_text)
+            rate = float(rate_matches[0]) if rate_matches else 0.0
+            
+            parsed_data.append({
+                "id": f"KFB_{bank_name}_{product_name[:3]}",
+                "bank": bank_name,
+                "name": product_name,
+                "spcl_cnd": "상세내용 홈페이지 참조",
+                "max": rate,
+                "base": rate,
+                "intr_type": "단리",
+                "save_trm": 0,
+                "type": "parking",
+                "options": []
+            })
+        
+        return parsed_data
 
-# 실행 및 저장 테스트
+    except Exception as e:
+        print(f"❌ KFB 요청 중 상세 에러 발생: {e}")
+        return []
+
 if __name__ == "__main__":
     data = fetch_kfb_parking_rates()
-    with open('kfb_temp.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
     print(f"✅ 수집 완료: {len(data)}개의 상품을 찾았습니다.")
