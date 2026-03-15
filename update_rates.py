@@ -2,6 +2,7 @@ import requests
 import json
 import os
 from datetime import datetime
+from collector_kfb import fetch_kfb_parking_rates # [수정: KFB 파킹통장 병합 추가] 불러오기
 
 # 1. 환경 설정 및 기본 변수 정의
 API_KEY = os.environ.get('FSS_API_KEY')
@@ -26,7 +27,6 @@ def fetch_all_products(p_type):
     if not API_KEY:
         print(f"⚠️ API_KEY가 설정되지 않아 {p_type} 수집을 건너뜜")
         return []
-
     for group in FIN_GROUPS:
         page_no = 1
         while True:
@@ -108,7 +108,9 @@ def main():
     master_data = load_existing_data()
     today = datetime.now().strftime('%Y-%m-%d')
     
-    manual_types = ['parking', 'cma', 'bill', 'els', 'bond']
+    # [수정: KFB 파킹통장 병합 추가] 'parking'은 자동으로 업데이트할 것이므로 수동 보존 리스트에서 제거합니다.
+    manual_types = ['cma', 'bill', 'els', 'bond'] 
+    
     preserved_data = []
     for item in master_data:
         if item.get('type') in manual_types:
@@ -120,7 +122,16 @@ def main():
     api_deposits = fetch_all_products("deposit")
     api_savings = fetch_all_products("savings")
     
-    all_new_data = api_deposits + api_savings
+    # [수정: KFB 파킹통장 병합 추가] 은행연합회 파킹통장 데이터 수집
+    print("🚀 은행연합회 파킹통장 데이터 수집 시작...")
+    try:
+        api_parking = fetch_kfb_parking_rates()
+    except Exception as e:
+        print(f"⚠️ 파킹통장 수집 실패: {e}")
+        api_parking = []
+
+    # [수정: KFB 파킹통장 병합 추가] 수집한 3가지 데이터 합치기
+    all_new_data = api_deposits + api_savings + api_parking
     updated_items = []
     
     for new_item in all_new_data:
