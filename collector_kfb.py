@@ -2,6 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import urllib3  # [수정: SSL 경고 제거를 위해 추가]
+
+# [수정: SSL 검증 생략 시 발생하는 경고 메시지를 무시하도록 설정]
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def fetch_kfb_parking_rates():
     url = "https://portal.kfb.or.kr/compare/free_deposit_search_result_sort.php"
@@ -25,7 +29,10 @@ def fetch_kfb_parking_rates():
     }
 
     print("🚀 은행연합회 데이터 요청 중...")
-    response = requests.post(url, headers=headers, data=payload)
+    
+    # [수정: verify=False를 추가하여 SSL 핸드쉐이크 에러(보안 연결 설정 실패) 우회]
+    # [수정: timeout=20을 추가하여 서버 응답이 늦어질 경우 무한 대기 방지]
+    response = requests.post(url, headers=headers, data=payload, verify=False, timeout=20)
     
     # 은행연합회는 보통 euc-kr을 사용하므로 인코딩 설정
     response.encoding = 'utf-8' # 만약 한글이 깨지면 'euc-kr'로 변경하세요
@@ -45,7 +52,8 @@ def fetch_kfb_parking_rates():
         product_name = cols[1].get_text(strip=True)
         # 금리 부분에서 숫자만 추출 (예: "3.50%" -> 3.5)
         rate_text = cols[2].get_text(strip=True)
-        rate = float(re.findall(r"\d+\.\d+|\d+", rate_text)[0]) if rate_text else 0.0
+        rate_matches = re.findall(r"\d+\.\d+|\d+", rate_text)
+        rate = float(rate_matches[0]) if rate_matches else 0.0
         
         # MoneyPole data.json 형식에 맞게 구성
         item = {
