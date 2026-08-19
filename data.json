@@ -408,8 +408,8 @@
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.19,
-        "intr_rate2": 3.39,
+        "intr_rate": 3.2,
+        "intr_rate2": 3.4,
         "intr_type": "복리"
       },
       {
@@ -799,8 +799,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 2.85,
-        "intr_rate2": 2.95,
+        "intr_rate": 2.86,
+        "intr_rate2": 2.96,
         "intr_type": "단리"
       },
       {
@@ -811,8 +811,8 @@
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.09,
-        "intr_rate2": 3.29,
+        "intr_rate": 3.1,
+        "intr_rate2": 3.3,
         "intr_type": "단리"
       },
       {
@@ -2116,8 +2116,8 @@
     "options": [
       {
         "save_trm": 6,
-        "intr_rate": 2.95,
-        "intr_rate2": 2.95,
+        "intr_rate": 2.96,
+        "intr_rate2": 2.96,
         "intr_type": "단리"
       },
       {
@@ -2128,14 +2128,14 @@
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.24,
-        "intr_rate2": 3.24,
+        "intr_rate": 3.28,
+        "intr_rate2": 3.28,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.32,
-        "intr_rate2": 3.32,
+        "intr_rate": 3.36,
+        "intr_rate2": 3.36,
         "intr_type": "단리"
       }
     ],
@@ -3678,8 +3678,8 @@
     "bank": "애큐온저축은행",
     "name": "정기예금",
     "spcl_cnd": "없음",
-    "max": 3.8,
-    "base": 3.8,
+    "max": 3.7,
+    "base": 3.7,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -3703,20 +3703,20 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -3739,20 +3739,20 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       }
     ],
@@ -3793,6 +3793,10 @@
       {
         "date": "2026-08-03",
         "rate": 3.8
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.7
       }
     ]
   },
@@ -3801,45 +3805,45 @@
     "bank": "애큐온저축은행",
     "name": "플러스회전식정기예금(영업점)",
     "spcl_cnd": "없음",
-    "max": 3.9,
-    "base": 3.9,
+    "max": 3.8,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       }
     ],
@@ -3880,6 +3884,10 @@
       {
         "date": "2026-08-03",
         "rate": 3.9
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.8
       }
     ]
   },
@@ -3888,21 +3896,21 @@
     "bank": "애큐온저축은행",
     "name": "애큐온모바일예금",
     "spcl_cnd": "모바일 가입 : 연 0.10%\n(고시금리 포함)\n\n멤버십 동의 : 연 0.050%\n(고시금리 미포함)",
-    "max": 3.85,
-    "base": 3.7,
+    "max": 3.75,
+    "base": 3.6,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.7,
-        "intr_rate2": 3.85,
+        "intr_rate": 3.6,
+        "intr_rate2": 3.75,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.7,
-        "intr_rate2": 3.85,
+        "intr_rate": 3.6,
+        "intr_rate2": 3.75,
         "intr_type": "복리"
       }
     ],
@@ -3943,6 +3951,10 @@
       {
         "date": "2026-08-03",
         "rate": 3.85
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.75
       }
     ]
   },
@@ -3951,45 +3963,45 @@
     "bank": "애큐온저축은행",
     "name": "플러스회전식정기예금(모바일)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.9,
+    "base": 3.9,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       }
     ],
@@ -4030,6 +4042,10 @@
       {
         "date": "2026-08-03",
         "rate": 4.0
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.9
       }
     ]
   },
@@ -4038,21 +4054,21 @@
     "bank": "애큐온저축은행",
     "name": "3-UP정기예금",
     "spcl_cnd": "없음",
-    "max": 3.85,
-    "base": 3.85,
+    "max": 3.75,
+    "base": 3.75,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.85,
-        "intr_rate2": 3.85,
+        "intr_rate": 3.75,
+        "intr_rate2": 3.75,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.85,
-        "intr_rate2": 3.85,
+        "intr_rate": 3.75,
+        "intr_rate2": 3.75,
         "intr_type": "복리"
       }
     ],
@@ -4093,6 +4109,10 @@
       {
         "date": "2026-08-03",
         "rate": 3.85
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.75
       }
     ]
   },
@@ -4101,21 +4121,21 @@
     "bank": "애큐온저축은행",
     "name": "3-UP정기예금(모바일)",
     "spcl_cnd": "없음",
-    "max": 3.85,
-    "base": 3.85,
+    "max": 3.75,
+    "base": 3.75,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.85,
-        "intr_rate2": 3.85,
+        "intr_rate": 3.75,
+        "intr_rate2": 3.75,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.85,
-        "intr_rate2": 3.85,
+        "intr_rate": 3.75,
+        "intr_rate2": 3.75,
         "intr_type": "복리"
       }
     ],
@@ -4156,6 +4176,10 @@
       {
         "date": "2026-08-03",
         "rate": 3.85
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.75
       }
     ]
   },
@@ -4164,15 +4188,15 @@
     "bank": "애큐온저축은행",
     "name": "처음만난예금(모바일전용)",
     "spcl_cnd": "최고우대금리 : 0.4%\n- 당행 정기예금 첫거래 고객 우대 : 0.3%\n(고시금리 포함)\n- 개인(신용)정보 마케팅(SMS)동의 유지 : 0.1%\n(고시금리 미포함)",
-    "max": 4.1,
-    "base": 4.0,
+    "max": 4.0,
+    "base": 3.6,
     "intr_type": "복리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.1,
+        "intr_rate": 3.6,
+        "intr_rate2": 4.0,
         "intr_type": "복리"
       }
     ],
@@ -4197,6 +4221,10 @@
       {
         "date": "2026-08-03",
         "rate": 4.1
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 4.0
       }
     ]
   },
@@ -4205,33 +4233,33 @@
     "bank": "애큐온저축은행",
     "name": "다시만난예금(모바일전용)",
     "spcl_cnd": "최고우대금리 : 0.35%\n- 다시 거래하는 고객 우대(6개월 이상 정기예금 미보유 : 0.25%\n(고시금리 미포함)\n- 다시 거래하는 고객 우대(12개월 이상 정기예금 미보유 : 0.35%\n(고시금리 미포함)",
-    "max": 4.05,
-    "base": 3.7,
+    "max": 3.95,
+    "base": 3.6,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.7,
-        "intr_rate2": 4.05,
+        "intr_rate": 3.6,
+        "intr_rate2": 3.95,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.4,
-        "intr_rate2": 3.75,
+        "intr_rate": 3.3,
+        "intr_rate2": 3.65,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.7,
-        "intr_rate2": 4.05,
+        "intr_rate": 3.6,
+        "intr_rate2": 3.95,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.4,
-        "intr_rate2": 3.75,
+        "intr_rate": 3.3,
+        "intr_rate2": 3.65,
         "intr_type": "복리"
       }
     ],
@@ -4252,6 +4280,10 @@
       {
         "date": "2026-08-03",
         "rate": 4.05
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.95
       }
     ]
   },
@@ -4260,21 +4292,21 @@
     "bank": "애큐온저축은행",
     "name": "플러스회전식(6M)정기예금(영업점)",
     "spcl_cnd": "없음",
-    "max": 3.9,
-    "base": 3.9,
+    "max": 3.8,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 6,
     "options": [
       {
         "save_trm": 6,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
         "save_trm": 6,
-        "intr_rate": 3.9,
-        "intr_rate2": 3.9,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       }
     ],
@@ -4315,6 +4347,10 @@
       {
         "date": "2026-08-03",
         "rate": 3.9
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.8
       }
     ]
   },
@@ -4323,21 +4359,21 @@
     "bank": "애큐온저축은행",
     "name": "플러스회전식(6M)정기예금(모바일)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.9,
+    "base": 3.9,
     "intr_type": "단리",
     "save_trm": 6,
     "options": [
       {
         "save_trm": 6,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       }
     ],
@@ -4378,6 +4414,10 @@
       {
         "date": "2026-08-03",
         "rate": 4.0
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.9
       }
     ]
   },
@@ -15493,8 +15533,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -15517,8 +15557,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -16019,7 +16059,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.85
       }
     ]
@@ -16541,7 +16581,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -16628,7 +16668,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.1
       }
     ]
@@ -16729,8 +16769,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -16753,8 +16793,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -16861,8 +16901,8 @@
     "bank": "유니온저축은행",
     "name": "e-정기예금",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.8,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -16880,8 +16920,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -16904,8 +16944,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -17146,8 +17186,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.8
       }
     ]
   },
@@ -17539,7 +17579,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.81
       }
     ]
@@ -18852,7 +18892,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.81
       }
     ]
@@ -18862,8 +18902,8 @@
     "bank": "부림저축은행",
     "name": "톡톡정기예금(비대면)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.8,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -18881,8 +18921,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -18905,8 +18945,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -19147,8 +19187,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.8
       }
     ]
   },
@@ -19426,7 +19466,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.81
       }
     ]
@@ -19605,7 +19645,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -19720,7 +19760,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -19779,7 +19819,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -19897,6 +19937,10 @@
       },
       {
         "date": "2026-08-18",
+        "rate": 3.1
+      },
+      {
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -20014,7 +20058,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -20356,7 +20400,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -20366,8 +20410,8 @@
     "bank": "삼정저축은행",
     "name": "s-정기예금",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.8,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -20385,8 +20429,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -20409,8 +20453,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -20651,8 +20695,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.8
       }
     ]
   },
@@ -20830,7 +20874,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -20949,7 +20993,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.75
       }
     ]
@@ -21616,7 +21660,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -21892,8 +21936,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -21916,8 +21960,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -22024,8 +22068,8 @@
     "bank": "영진저축은행",
     "name": "SB톡톡-정기예금",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.8,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -22043,8 +22087,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
@@ -22067,8 +22111,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
@@ -22309,8 +22353,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.8
       }
     ]
   },
@@ -22492,7 +22536,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -23090,7 +23134,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -23320,7 +23364,7 @@
         "rate": 3.96
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -23391,7 +23435,7 @@
         "rate": 4.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -23462,7 +23506,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -26197,7 +26241,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -27061,7 +27105,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -27416,7 +27460,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -27759,7 +27803,7 @@
         "rate": 3.96
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -27958,7 +28002,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -28052,7 +28096,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -28502,7 +28546,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -28603,14 +28647,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -28639,14 +28683,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -28765,7 +28809,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -28818,14 +28862,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -28854,14 +28898,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -28908,7 +28952,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -29019,7 +29063,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -30839,7 +30883,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -30928,14 +30972,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -30964,14 +31008,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -31062,7 +31106,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -31133,7 +31177,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.5
       }
     ]
@@ -31234,14 +31278,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -31270,14 +31314,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -31396,7 +31440,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -31485,14 +31529,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -31521,14 +31565,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -31619,7 +31663,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -31672,14 +31716,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -31708,14 +31752,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -31762,7 +31806,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -32008,7 +32052,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -32296,8 +32340,8 @@
     "bank": "동양저축은행",
     "name": "정기예금",
     "spcl_cnd": "없음",
-    "max": 3.5,
-    "base": 3.5,
+    "max": 3.96,
+    "base": 3.96,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -32321,8 +32365,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.5,
-        "intr_rate2": 3.5,
+        "intr_rate": 3.96,
+        "intr_rate2": 3.96,
         "intr_type": "단리"
       },
       {
@@ -32357,8 +32401,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.5,
-        "intr_rate2": 3.5,
+        "intr_rate": 3.96,
+        "intr_rate2": 3.96,
         "intr_type": "복리"
       },
       {
@@ -32405,8 +32449,8 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
-        "rate": 3.5
+        "date": "2026-08-19",
+        "rate": 3.96
       }
     ]
   },
@@ -32506,14 +32550,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -32542,14 +32586,14 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -32668,7 +32712,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -33091,7 +33135,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -33342,6 +33386,10 @@
       },
       {
         "date": "2026-08-18",
+        "rate": 3.81
+      },
+      {
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -33500,7 +33548,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -34460,7 +34508,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -34659,7 +34707,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -35148,7 +35196,7 @@
         "rate": 3.81
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -35291,7 +35339,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -35714,7 +35762,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -35873,7 +35921,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -36228,7 +36276,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -36375,7 +36423,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -36498,7 +36546,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.8
       }
     ]
@@ -36853,7 +36901,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -36996,7 +37044,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -37202,7 +37250,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -38460,7 +38508,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -38647,7 +38695,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -38953,7 +39001,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -39171,7 +39219,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -39418,7 +39466,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.0
       }
     ]
@@ -39428,8 +39476,8 @@
     "bank": "에스앤티저축은행",
     "name": "정기예금",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.93,
+    "base": 3.93,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -39447,8 +39495,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "단리"
       },
       {
@@ -39471,8 +39519,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "복리"
       },
       {
@@ -39513,8 +39561,8 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.93
       }
     ]
   },
@@ -39523,8 +39571,8 @@
     "bank": "에스앤티저축은행",
     "name": "정기예금(비대면)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.93,
+    "base": 3.93,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -39542,8 +39590,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "단리"
       },
       {
@@ -39566,8 +39614,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "복리"
       },
       {
@@ -39700,8 +39748,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.93
       }
     ]
   },
@@ -40302,7 +40350,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -40489,7 +40537,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -41055,7 +41103,7 @@
         "rate": 3.81
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.5
       }
     ]
@@ -41065,8 +41113,8 @@
     "bank": "동원제일저축은행",
     "name": "회전정기예금 (변동금리)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.93,
+    "base": 3.93,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -41084,8 +41132,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "단리"
       },
       {
@@ -41108,8 +41156,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "복리"
       },
       {
@@ -41242,8 +41290,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.93
       }
     ]
   },
@@ -41345,7 +41393,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.5
       }
     ]
@@ -42296,7 +42344,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -42538,7 +42586,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -42548,8 +42596,8 @@
     "bank": "진주저축은행",
     "name": "지니뱅크-정기예금(비대면)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.93,
+    "base": 3.93,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
@@ -42567,8 +42615,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "단리"
       },
       {
@@ -42591,8 +42639,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.93,
+        "intr_rate2": 3.93,
         "intr_type": "복리"
       },
       {
@@ -42725,8 +42773,8 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
-        "rate": 4.0
+        "date": "2026-08-19",
+        "rate": 3.93
       }
     ]
   },
@@ -42876,7 +42924,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -42975,7 +43023,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -43054,7 +43102,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -43248,7 +43296,7 @@
         "rate": 3.96
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -43886,7 +43934,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.63
       }
     ]
@@ -44016,7 +44064,7 @@
         "rate": 4.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -44159,7 +44207,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.75
       }
     ]
@@ -44246,7 +44294,7 @@
         "rate": 4.05
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -44324,7 +44372,7 @@
         "rate": 3.3
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -44383,7 +44431,7 @@
         "rate": 3.65
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -44393,21 +44441,21 @@
     "bank": "JT저축은행",
     "name": "회전정기예금_비대면(변동금리상품)",
     "spcl_cnd": "-최초가입일 금리는 1년간 적용되며, 이후 약정한 회전주기(12개월)별로 계약기간 내에서 이자율이 변동되는 상품임.",
-    "max": 3.8,
-    "base": 3.8,
+    "max": 3.96,
+    "base": 3.96,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.96,
+        "intr_rate2": 3.96,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.96,
+        "intr_rate2": 3.96,
         "intr_type": "복리"
       }
     ],
@@ -44432,6 +44480,10 @@
       {
         "date": "2026-07-07",
         "rate": 3.8
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.96
       }
     ]
   },
@@ -44537,7 +44589,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -44547,33 +44599,33 @@
     "bank": "JT저축은행",
     "name": "e-정기예금",
     "spcl_cnd": "없음",
-    "max": 3.8,
-    "base": 3.8,
+    "max": 3.96,
+    "base": 3.96,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 1,
-        "intr_rate": 1.9,
-        "intr_rate2": 1.9,
+        "intr_rate": 2.0,
+        "intr_rate2": 2.0,
         "intr_type": "단리"
       },
       {
         "save_trm": 3,
-        "intr_rate": 1.9,
-        "intr_rate2": 1.9,
+        "intr_rate": 2.0,
+        "intr_rate2": 2.0,
         "intr_type": "단리"
       },
       {
         "save_trm": 6,
-        "intr_rate": 2.3,
-        "intr_rate2": 2.3,
+        "intr_rate": 2.4,
+        "intr_rate2": 2.4,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.96,
+        "intr_rate2": 3.96,
         "intr_type": "단리"
       },
       {
@@ -44584,32 +44636,32 @@
       },
       {
         "save_trm": 36,
-        "intr_rate": 2.3,
-        "intr_rate2": 2.3,
+        "intr_rate": 2.4,
+        "intr_rate2": 2.4,
         "intr_type": "단리"
       },
       {
         "save_trm": 1,
-        "intr_rate": 1.9,
-        "intr_rate2": 1.9,
+        "intr_rate": 2.0,
+        "intr_rate2": 2.0,
         "intr_type": "복리"
       },
       {
         "save_trm": 3,
-        "intr_rate": 1.9,
-        "intr_rate2": 1.9,
+        "intr_rate": 2.0,
+        "intr_rate2": 2.0,
         "intr_type": "복리"
       },
       {
         "save_trm": 6,
-        "intr_rate": 2.3,
-        "intr_rate2": 2.3,
+        "intr_rate": 2.4,
+        "intr_rate2": 2.4,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.8,
-        "intr_rate2": 3.8,
+        "intr_rate": 3.96,
+        "intr_rate2": 3.96,
         "intr_type": "복리"
       },
       {
@@ -44620,8 +44672,8 @@
       },
       {
         "save_trm": 36,
-        "intr_rate": 2.3,
-        "intr_rate2": 2.3,
+        "intr_rate": 2.4,
+        "intr_rate2": 2.4,
         "intr_type": "복리"
       }
     ],
@@ -44666,6 +44718,10 @@
       {
         "date": "2026-08-11",
         "rate": 3.8
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.96
       }
     ]
   },
@@ -44771,7 +44827,7 @@
         "rate": 4.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.75
       }
     ]
@@ -44914,7 +44970,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.75
       }
     ]
@@ -45065,7 +45121,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -45872,7 +45928,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -45961,38 +46017,38 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "복리"
       }
     ],
@@ -46015,7 +46071,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -46098,7 +46154,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -46173,7 +46229,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -46557,7 +46613,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -47111,7 +47167,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -47329,7 +47385,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -47476,7 +47532,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -48178,7 +48234,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.0
       }
     ]
@@ -48313,7 +48369,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -48460,7 +48516,7 @@
         "rate": 3.85
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -48571,7 +48627,7 @@
         "rate": 3.81
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.5
       }
     ]
@@ -48758,7 +48814,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -49031,7 +49087,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -49408,7 +49464,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -49559,7 +49615,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.6
       }
     ]
@@ -50427,57 +50483,57 @@
     "bank": "OK저축은행",
     "name": "OK정기예금",
     "spcl_cnd": "당행 보통예금(활동계좌) 보유 시 +0.1%p",
-    "max": 4.0,
-    "base": 3.9,
+    "max": 3.9,
+    "base": 3.8,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 1,
+        "intr_rate": 3.6,
+        "intr_rate2": 3.7,
+        "intr_type": "단리"
+      },
+      {
+        "save_trm": 3,
         "intr_rate": 3.7,
         "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
-        "save_trm": 3,
+        "save_trm": 6,
         "intr_rate": 3.8,
         "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
-        "save_trm": 6,
-        "intr_rate": 3.9,
-        "intr_rate2": 4.0,
-        "intr_type": "단리"
-      },
-      {
         "save_trm": 12,
-        "intr_rate": 3.9,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 1,
+        "intr_rate": 3.6,
+        "intr_rate2": 3.7,
+        "intr_type": "복리"
+      },
+      {
+        "save_trm": 3,
         "intr_rate": 3.7,
         "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
-        "save_trm": 3,
+        "save_trm": 6,
         "intr_rate": 3.8,
         "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
-        "save_trm": 6,
-        "intr_rate": 3.9,
-        "intr_rate2": 4.0,
-        "intr_type": "복리"
-      },
-      {
         "save_trm": 12,
-        "intr_rate": 3.9,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.8,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       }
     ],
@@ -50493,7 +50549,11 @@
       },
       {
         "date": "2026-08-18",
-        "rate": 4.0
+        "rate": 3.1
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.9
       }
     ]
   },
@@ -50502,57 +50562,57 @@
     "bank": "OK저축은행",
     "name": "OK e-정기예금",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.9,
+    "base": 3.9,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 1,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
+        "intr_type": "단리"
+      },
+      {
+        "save_trm": 3,
         "intr_rate": 3.8,
         "intr_rate2": 3.8,
         "intr_type": "단리"
       },
       {
-        "save_trm": 3,
+        "save_trm": 6,
         "intr_rate": 3.9,
         "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
-        "save_trm": 6,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
-        "intr_type": "단리"
-      },
-      {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 1,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
+        "intr_type": "복리"
+      },
+      {
+        "save_trm": 3,
         "intr_rate": 3.8,
         "intr_rate2": 3.8,
         "intr_type": "복리"
       },
       {
-        "save_trm": 3,
+        "save_trm": 6,
         "intr_rate": 3.9,
         "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
-        "save_trm": 6,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
-        "intr_type": "복리"
-      },
-      {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       }
     ],
@@ -50569,6 +50629,10 @@
       {
         "date": "2026-06-29",
         "rate": 4.0
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.9
       }
     ]
   },
@@ -50577,45 +50641,45 @@
     "bank": "OK저축은행",
     "name": "OK안심정기예금(변동금리)",
     "spcl_cnd": "당행 보통예금(활동계좌) 보유 시 +0.1%p",
-    "max": 4.01,
-    "base": 3.91,
+    "max": 3.81,
+    "base": 3.81,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 12,
-        "intr_rate": 3.91,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.81,
+        "intr_rate2": 3.81,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.91,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.81,
+        "intr_rate2": 3.81,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.91,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.81,
+        "intr_rate2": 3.81,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 3.91,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.81,
+        "intr_rate2": 3.81,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 3.91,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.81,
+        "intr_rate2": 3.81,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 3.91,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.81,
+        "intr_rate2": 3.81,
         "intr_type": "복리"
       }
     ],
@@ -50652,6 +50716,10 @@
       {
         "date": "2026-07-07",
         "rate": 4.01
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.81
       }
     ]
   },
@@ -50739,38 +50807,38 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.01,
-        "intr_rate2": 4.01,
+        "intr_rate": 3.91,
+        "intr_rate2": 3.91,
         "intr_type": "복리"
       }
     ],
@@ -50793,7 +50861,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -50872,7 +50940,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.0
       }
     ]
@@ -50882,57 +50950,57 @@
     "bank": "OK저축은행",
     "name": "OK e-안심앱플러스정기예금6 (변동금리)",
     "spcl_cnd": "없음",
-    "max": 4.0,
-    "base": 4.0,
+    "max": 3.9,
+    "base": 3.9,
     "intr_type": "단리",
     "save_trm": 12,
     "options": [
       {
         "save_trm": 6,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
         "save_trm": 24,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
         "save_trm": 36,
-        "intr_rate": 4.0,
-        "intr_rate2": 4.0,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       }
     ],
@@ -50957,6 +51025,10 @@
       {
         "date": "2026-06-29",
         "rate": 4.0
+      },
+      {
+        "date": "2026-08-19",
+        "rate": 3.9
       }
     ]
   },
@@ -61600,7 +61672,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -61857,7 +61929,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -62072,7 +62144,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -62203,7 +62275,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -62454,7 +62526,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -62711,7 +62783,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -63022,7 +63094,7 @@
         "rate": 3.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.7
       }
     ]
@@ -63226,7 +63298,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -63393,7 +63465,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -63524,7 +63596,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -63775,7 +63847,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -64032,7 +64104,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -64103,7 +64175,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.2
       }
     ]
@@ -64300,7 +64372,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -64467,7 +64539,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -64682,7 +64754,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -64933,7 +65005,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -65190,7 +65262,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -65501,7 +65573,7 @@
         "rate": 3.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.7
       }
     ]
@@ -65627,7 +65699,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.2
       }
     ]
@@ -65884,7 +65956,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -66035,8 +66107,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
@@ -66059,8 +66131,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -66071,8 +66143,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
@@ -66095,8 +66167,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -66137,7 +66209,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.6
       }
     ]
@@ -66184,7 +66256,7 @@
         "rate": 7.1
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -66747,7 +66819,7 @@
         "rate": 8.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.8
       }
     ]
@@ -67193,7 +67265,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -67252,7 +67324,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.95
       }
     ]
@@ -67383,7 +67455,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -67521,7 +67593,7 @@
         "rate": 4.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.6
       }
     ]
@@ -67803,7 +67875,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -68054,7 +68126,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -68311,7 +68383,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -68622,7 +68694,7 @@
         "rate": 3.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.7
       }
     ]
@@ -69186,7 +69258,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -69443,7 +69515,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -69754,7 +69826,7 @@
         "rate": 3.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.7
       }
     ]
@@ -69832,7 +69904,7 @@
         "rate": 4.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -69897,8 +69969,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
@@ -69921,8 +69993,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -69933,8 +70005,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
@@ -69957,8 +70029,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -69999,7 +70071,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.6
       }
     ]
@@ -70250,7 +70322,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -70507,7 +70579,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -70674,7 +70746,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -71010,7 +71082,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -71177,7 +71249,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -71392,7 +71464,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -71643,7 +71715,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -71810,7 +71882,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -71977,7 +72049,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.7
       }
     ]
@@ -72234,7 +72306,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -72545,7 +72617,7 @@
         "rate": 3.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.7
       }
     ]
@@ -72592,7 +72664,7 @@
         "rate": 3.75
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.0
       }
     ]
@@ -72789,7 +72861,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -72883,7 +72955,7 @@
         "rate": 3.2
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.0
       }
     ]
@@ -73059,8 +73131,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "단리"
       },
       {
@@ -73083,8 +73155,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "단리"
       },
       {
@@ -73095,8 +73167,8 @@
       },
       {
         "save_trm": 6,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.7,
+        "intr_rate2": 3.7,
         "intr_type": "복리"
       },
       {
@@ -73119,8 +73191,8 @@
       },
       {
         "save_trm": 12,
-        "intr_rate": 4.02,
-        "intr_rate2": 4.02,
+        "intr_rate": 3.9,
+        "intr_rate2": 3.9,
         "intr_type": "복리"
       },
       {
@@ -73161,7 +73233,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.6
       }
     ]
@@ -73328,7 +73400,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -73525,7 +73597,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.9
       }
     ]
@@ -73692,7 +73764,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -73970,7 +74042,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.2
       }
     ]
@@ -74281,7 +74353,7 @@
         "rate": 3.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.7
       }
     ]
@@ -74448,7 +74520,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -74778,7 +74850,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -74945,7 +75017,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -75160,7 +75232,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -75291,7 +75363,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -75509,7 +75581,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.4
       }
     ]
@@ -75664,7 +75736,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.4
       }
     ]
@@ -75867,7 +75939,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.0
       }
     ]
@@ -75998,7 +76070,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -76057,7 +76129,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -76122,7 +76194,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.1
       }
     ]
@@ -76205,7 +76277,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -76360,7 +76432,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.4
       }
     ]
@@ -76491,7 +76563,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -76736,7 +76808,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.27
       }
     ]
@@ -76777,7 +76849,7 @@
         "rate": 3.6
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -76842,7 +76914,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.1
       }
     ]
@@ -76925,7 +76997,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -76966,7 +77038,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -77291,7 +77363,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.0
       }
     ]
@@ -77386,7 +77458,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -77495,7 +77567,7 @@
         "rate": 5.0
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 10.0
       }
     ]
@@ -77578,7 +77650,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.3
       }
     ]
@@ -77781,7 +77853,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.0
       }
     ]
@@ -77852,7 +77924,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.4
       }
     ]
@@ -77947,7 +78019,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -78404,7 +78476,7 @@
         "rate": 4.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -78475,7 +78547,7 @@
         "rate": 3.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -78783,7 +78855,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -78890,7 +78962,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.4
       }
     ]
@@ -79045,7 +79117,7 @@
         "rate": 3.7
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.4
       }
     ]
@@ -79176,7 +79248,7 @@
         "rate": 3.4
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -79235,7 +79307,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 4.0
       }
     ]
@@ -79374,7 +79446,7 @@
         "rate": 3.95
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 5.0
       }
     ]
@@ -79577,7 +79649,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.0
       }
     ]
@@ -79684,7 +79756,7 @@
         "rate": 3.5
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.8
       }
     ]
@@ -79848,7 +79920,7 @@
         "rate": 3.3
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 3.5
       }
     ]
@@ -80695,7 +80767,7 @@
         "rate": 2.8
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 1.0
       }
     ]
@@ -80736,7 +80808,7 @@
         "rate": 3.9
       },
       {
-        "date": "2026-08-18",
+        "date": "2026-08-19",
         "rate": 2.6
       }
     ]
