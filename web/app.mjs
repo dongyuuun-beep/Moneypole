@@ -52,12 +52,17 @@ function badge(item) {
 function render() {
   const short = ['parking', 'cma'].includes(type);
   $('daysField').hidden = !short; $('termField').hidden = short;
+  $('institutionField').hidden = type === 'cma';
   $('amountLabel').textContent = type === 'savings' ? '매월 납입 금액' : '예치 금액';
   $('categoryNote').textContent = subtitles[type];
   $('resultsTitle').replaceChildren(document.createTextNode(labels[type] + ' '), $('resultCount'));
   $('coverage').textContent = type === 'parking' ? '저축은행 입출금자유예금 · 카카오뱅크 세이프박스' : type === 'cma' ? 'KB증권 개인 RP·발행어음형' : '금융감독원 은행·저축은행 공시';
   const config = settings(), search = $('search').value.trim().toLowerCase();
   let items = allData.filter(item => item.type === type && (item.bank + ' ' + item.name).toLowerCase().includes(search));
+  if (type !== 'cma' && $('institution').value !== 'all') {
+    const savingsBank = $('institution').value === 'savings_bank';
+    items = items.filter(item => item.bank.includes('저축은행') === savingsBank);
+  }
   if (!short && config.term !== 'all') items = items.filter(item => (item.options || []).some(o => String(o.save_trm) === config.term));
   items.sort((a, b) => {
     if ($('sort').value === 'interest') {
@@ -169,7 +174,7 @@ for (const button of document.querySelectorAll('[data-type]')) button.addEventLi
   render();
 });
 for (const button of document.querySelectorAll('[data-amount]')) button.addEventListener('click', () => { $('amount').value = button.dataset.amount; render(); });
-for (const id of ['amount', 'days', 'term', 'baseOnly', 'search', 'sort']) $(id).addEventListener('input', () => { visibleCount = 10; render(); });
+for (const id of ['amount', 'days', 'term', 'baseOnly', 'search', 'sort', 'institution']) $(id).addEventListener('input', () => { visibleCount = 10; render(); });
 $('loadMore').addEventListener('click', () => { visibleCount += 10; render(); });
 $('closeDetail').addEventListener('click', () => $('detailDialog').close());
 $('detailDialog').addEventListener('close', () => { document.body.style.overflow = ''; currentItem = null; });
