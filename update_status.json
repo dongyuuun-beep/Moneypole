@@ -1,54 +1,54 @@
 {
-  "checked_at": "2026-11-08T19:18:51+09:00",
+  "checked_at": "2026-11-08T19:42:45+09:00",
   "timezone": "Asia/Seoul",
   "sources": {
     "fss_deposit_020000": {
       "status": "ok",
       "count": 40,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "fss_deposit_030300": {
       "status": "ok",
       "count": 394,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "fss_savings_020000": {
       "status": "ok",
       "count": 60,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "fss_savings_030300": {
       "status": "ok",
       "count": 278,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "fsb_parking": {
       "status": "ok",
       "count": 158,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "kb_cma": {
       "status": "ok",
       "count": 2,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "kakao_parking": {
       "status": "ok",
       "count": 1,
       "missing_count": 0,
-      "last_success_at": "2026-11-08T19:18:51+09:00",
+      "last_success_at": "2026-11-08T19:42:45+09:00",
       "message": "수집 완료"
     },
     "kfb_parking": {
