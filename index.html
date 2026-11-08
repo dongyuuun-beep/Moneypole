@@ -1,332 +1,68 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MoneyPole - 스마트 금리 비교</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root { --primary: #2b6cb0; --accent: #e53e3e; --bg: #f4f7f8; --base-color: #718096; }
-        body { font-family: 'Pretendard', sans-serif; background: var(--bg); margin: 0; padding-bottom: 50px; color: #333; }
-        body.modal-open { overflow: hidden; height: 100vh; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        header { text-align: center; padding: 20px 0; cursor: pointer; }
-        .logo-container { width: 100%; max-width: 280px; height: 60px; margin: 0 auto; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        header img { max-width: 100%; height: auto; object-fit: contain; transform: translateY(-5px) scale(1.15); transition: transform 0.3s ease; }
-        .scroll-menu { display: flex; overflow-x: auto; gap: 10px; padding: 15px 0; scrollbar-width: none; }
-        .tab-btn { background: #fff; border: 1px solid #ddd; padding: 8px 18px; border-radius: 20px; white-space: nowrap; font-weight: 600; cursor: pointer; }
-        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .filter-section { background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .search-input { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 8px; box-sizing: border-box; margin-bottom: 10px; }
-        .card { background: #fff; padding: 20px; border-radius: 16px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
-        .bank-tag { font-size: 11px; color: #888; margin-bottom: 4px; }
-        .rate-main { color: var(--accent); font-size: 20px; font-weight: 800; }
-        #detailView { display: none; background: #fff; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100%; height: 100%; z-index: 1000; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .detail-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; background: #fff; position: sticky; top: 0; z-index: 1001; }
-        .back-btn { font-size: 24px; cursor: pointer; margin-right: 15px; padding: 5px; }
-        .detail-body { padding: 20px; padding-bottom: 120px; }
-        .info-box { background: #f0f7ff; padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid var(--primary); }
-        .info-title { font-size: 14px; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
-        .info-content { font-size: 13px; line-height: 1.5; color: #444; white-space: pre-wrap; }
-        .chart-container { margin: 20px 0; height: 200px; }
-        .calc-box { background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; border: 1px solid #e2e8f0; }
-        .calc-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 18px; margin-top: 10px; box-sizing: border-box; outline-color: var(--primary); }
-        .calc-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: #666; }
-        .calc-total { border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .compare-card { background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #edf2f7; }
-        .compare-label { font-size: 11px; color: #718096; margin-bottom: 4px; }
-        .compare-val { font-size: 15px; font-weight: bold; }
-        footer { text-align: center; padding: 40px 20px; border-top: 1px solid #eee; margin-top: 30px; }
-        .footer-logo { height: 15px; filter: grayscale(1); opacity: 0.5; margin-bottom: 10px; }
-        .disclaimer { font-size: 11px; color: #999; line-height: 1.6; word-break: keep-all; }
-        .calc-term-select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: #fff; font-size: 14px; outline: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="예금·적금·파킹통장·CMA의 공시 금리와 우대조건, 적용 한도를 비교하세요.">
+  <title>MoneyPole — 내 돈에 맞는 금리</title>
+  <link rel="stylesheet" href="web/styles.css">
+  <script type="module" src="web/app.mjs"></script>
 </head>
 <body>
-    <div class="container" id="mainView">
-        <header onclick="location.reload()">
-            <div class="logo-container"><img src="logo.png" alt="MoneyPole"></div>
-        </header>
-
-        <div class="scroll-menu" id="tabMenu">
-            <button class="tab-btn" data-type="parking">파킹통장</button>
-            <button class="tab-btn active" data-type="deposit">예금</button>
-            <button class="tab-btn" data-type="savings">적금</button>
-            <button class="tab-btn" data-type="cma">CMA</button>
+  <div class="shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="MoneyPole 홈"><span class="brand-icon" aria-hidden="true">m<span>↗</span></span>MoneyPole<span class="brand-dot">.</span></a>
+      <nav class="header-links" aria-label="주요 메뉴"><a href="#compare">금리 비교</a><a href="#guides">금리 가이드</a><span class="header-note">매일 확인하는 금리 비교</span></nav>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">MAKE YOUR MONEY COUNT</p>
+        <h1>내 돈이 머무는 곳,<br>금리부터 비교해요.</h1>
+        <p class="intro-copy">높은 숫자와 실제 받는 이자는 다르니까.<br>우대조건과 적용 한도까지 함께 확인하세요.</p>
+        <div class="intro-path" aria-label="비교 순서"><span><b>01</b> 금액과 기간</span><span><b>02</b> 금리와 조건</span><span><b>03</b> 공식 안내 확인</span></div>
+      </section>
+      <nav class="tabs" id="compare" aria-label="상품 종류">
+        <button type="button" data-type="parking" class="active" aria-pressed="true">파킹통장 <span data-count="parking">—</span></button>
+        <button type="button" data-type="cma" aria-pressed="false">CMA <span data-count="cma">—</span></button>
+        <button type="button" data-type="deposit" aria-pressed="false">예금 <span data-count="deposit">—</span></button>
+        <button type="button" data-type="savings" aria-pressed="false">적금 <span data-count="savings">—</span></button>
+      </nav>
+      <div class="workspace">
+        <aside class="filters" aria-label="비교 조건">
+          <div class="section-label">나의 비교 조건 <span>01</span></div>
+          <label for="amount" id="amountLabel">예치 금액</label>
+          <div class="money-field"><input id="amount" type="number" min="1" max="1000000000000" step="10000" value="10000000"><span>원</span></div>
+          <div class="quick-amounts"><button type="button" data-amount="1000000">100만</button><button type="button" data-amount="10000000">1,000만</button><button type="button" data-amount="50000000">5,000만</button></div>
+          <div id="daysField"><label for="days">보관 일수</label><select id="days"><option value="7">7일</option><option value="30" selected>30일</option><option value="90">90일</option><option value="365">365일</option></select></div>
+          <div id="termField" hidden><label for="term">가입 기간</label><select id="term"><option value="all">전체 기간</option><option value="6">6개월</option><option value="12" selected>12개월</option><option value="24">24개월</option><option value="36">36개월</option></select></div>
+          <label class="checkbox"><input id="baseOnly" type="checkbox"> 우대금리 제외</label>
+          <p class="filter-note">예상 이자는 현재 금리가 유지된다는 가정의 추정치예요. 구간·계산 방식이 검증되지 않은 상품은 계산하지 않아요.</p>
+          <div class="source-note"><span class="status-dot"></span><strong>공식 공시 기준</strong><p id="coverage">수집 범위를 확인하고 있어요.</p></div>
+        </aside>
+        <section class="results" aria-labelledby="resultsTitle">
+          <div class="results-heading"><div><p class="eyebrow" id="categoryNote">자유롭게 넣고 빼는</p><h2 id="resultsTitle">파킹통장 <span id="resultCount"></span></h2></div><span class="unit-label">연 · 세전</span></div>
+          <div class="search-row"><label class="sr-only" for="search">금융기관 또는 상품명 검색</label><input id="search" type="search" placeholder="금융기관 또는 상품명 검색"><label class="sr-only" for="sort">정렬</label><select id="sort"><option value="rate">표시 금리순</option><option value="interest">예상 이자순</option></select></div>
+          <p id="comparisonNote" class="comparison-note"></p>
+          <div id="listArea" aria-live="polite"><div id="leadingProducts"><div class="empty">공시 정보를 불러오고 있어요.</div></div><div id="inlinePlacement" hidden></div><div id="remainingProducts"></div></div>
+          <button type="button" id="loadMore" class="load-more" hidden></button>
+          <details class="collection-details" id="sourceInfo"><summary>데이터 확인 상태</summary><p>최종 확인은 원문 조회에 성공한 시각이며, 금리 적용일과는 다릅니다. 오래되거나 수집이 실패한 값은 별도로 표시합니다.</p><div id="sourceStatus">확인 중</div></details>
+        </section>
+        <aside class="ad-rail" aria-label="비교 도움말">
+          <div id="railPlacement"></div>
+          <p class="rail-caption"><strong>수집 시각도 함께 확인하세요</strong>확인 완료는 공식 공시 조회에 성공했다는 뜻이에요. 금리 적용일·가입 조건은 상세 안내에서 한 번 더 확인해 주세요.</p>
+        </aside>
+      </div>
+      <section class="guides" id="guides" aria-labelledby="guidesTitle">
+        <div class="guides-heading"><div><p class="eyebrow">MONEY NOTES</p><h2 id="guidesTitle">금리를 읽는 세 가지 기준</h2></div><p>상품을 고르기 전에, 숫자 뒤의 조건부터.</p></div>
+        <div class="guide-grid">
+          <article><span class="guide-number">01 / 적용 금액</span><h3>최고금리가 전액에 붙을까요?</h3><p>예를 들어 100만 원까지 5%, 초과분은 1%인 가상의 통장에 1,000만 원을 넣으면 연간 세전 이자는 14만 원이에요. 전체 잔액 기준으로는 연 1.4%에 해당해요.</p></article>
+          <article><span class="guide-number">02 / 보관 기간</span><h3>언제 꺼낼 돈인지 먼저 정해요</h3><p>보관 일수와 만기, 이자 지급일, 중도해지 조건을 함께 확인하세요. CMA는 운용 유형과 재투자 주기에 따라 적용 수익률과 실제 받는 금액이 달라질 수 있어요.</p></article>
+          <article><span class="guide-number">03 / 금리의 기준</span><h3>약정금리와 과거 수익률은 달라요</h3><p>과거 운용실적을 나타내는 수익률은 앞으로 받을 금리를 보장하지 않아요. 상품 유형과 원금 손실 가능성, 예금자보호 여부도 공식 안내에서 확인하세요.</p></article>
         </div>
-
-        <div class="filter-section">
-            <input type="text" id="searchInput" class="search-input" placeholder="은행명 또는 상품명 검색...">
-            <div style="display:flex; justify-content:space-between; font-size:13px; color:#666;">
-                <label><input type="checkbox" id="baseOnly"> 우대금리 제외</label>
-                <select id="termSelect" style="border:none; background:none; font-weight: bold; color: var(--primary);" onchange="renderList()">
-                    <option value="all">전체 기간</option>
-                    <option value="6">6개월</option>
-                    <option value="12" selected>12개월</option>
-                    <option value="24">24개월</option>
-                    <option value="36">36개월</option>
-                </select>
-            </div>
-        </div>
-
-        <div id="listArea"></div>
-
-        <footer>
-            <img src="logo.png" alt="MoneyPole" class="footer-logo">
-            <p class="disclaimer">
-                주의: 위 정보는 실제 금리와 차이가 있을 수 있으므로 가입 전 해당 금융기관에 반드시 확인하시기 바랍니다.<br>
-                투자 시 원금 손실이 발생할 수 있으며, 모든 투자의 책임은 투자자 본인에게 있습니다.
-            </p>
-        </footer>
-    </div>
-
-    <div id="detailView">
-        <div class="detail-header">
-            <span class="back-btn" onclick="closeDetail()">←</span>
-            <div id="detailTitle" style="font-weight:bold;">상품 상세 정보</div>
-        </div>
-        <div class="detail-body">
-            <div id="detailBank" style="color:#888; font-size:13px;">금융기관</div>
-            <div id="detailNameContainer" style="display:flex; align-items: baseline; gap: 8px;">
-                <div id="detailName" style="font-size:22px; font-weight:bold; margin:5px 0;">상품명</div>
-                <div id="detailTermTag" style="color: var(--primary); font-size: 14px; font-weight: 600;"></div>
-            </div>
-            
-            <div id="detailRateContainer">
-                <div id="detailBaseRate" style="font-size: 14px; color: #718096;">기본 0.00%</div>
-                <div id="detailRate" style="font-size:36px; font-weight:900; color:var(--accent); line-height: 1.2;">최고 0.00%</div>
-            </div>
-            
-            <div class="info-box" id="specialConditionBox">
-                <div class="info-title">💡 우대금리 조건</div>
-                <div id="detailCondition" class="info-content">정보를 불러오고 있습니다...</div>
-            </div>
-
-            <div style="margin-top:25px; font-weight:bold; font-size:14px;">금리 변동 추이 (최고금리 기준)</div>
-            <div class="chart-container"><canvas id="rateChart"></canvas></div>
-
-            <div class="calc-box">
-                <div style="font-weight:bold; font-size: 15px; margin-bottom: 10px;">만기 수령액 비교 계산기 (세후)</div>
-                <select id="calcTermSelect" class="calc-term-select" onchange="doCalc()" style="display:none;"></select>
-                <div id="calcTypeDesc" style="font-size: 12px; color: #2b6cb0; font-weight: 600; margin-bottom: 10px;">기준: 12개월 납입</div>
-                <input type="number" id="calcInput" class="calc-input" placeholder="금액 입력" oninput="doCalc()">
-                <div id="calcResult" style="margin-top:15px;"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let allData = []; 
-        let currentItem = null; 
-        let chartInstance = null; 
-        let currentType = 'deposit'; 
-
-        fetch('data.json').then(res => res.json()).then(data => {
-            allData = data;
-            renderList();
-        }).catch(err => console.error("데이터 로드 실패:", err));
-
-        function renderList() {
-            const listArea = document.getElementById('listArea');
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const isBaseOnly = document.getElementById('baseOnly').checked;
-            const termFilter = document.getElementById('termSelect'); // 필터 엘리먼트 참조
-            
-            // [수정] CMA/파킹통장일 때 기간 필터 숨기기
-            if (currentType === 'parking' || currentType === 'cma') {
-                termFilter.style.display = 'none';
-            } else {
-                termFilter.style.display = 'block';
-            }
-
-            listArea.innerHTML = '';
-            if (!allData || allData.length === 0) return;
-
-            let filtered = allData.filter(d => d.type === currentType);
-
-            // 기간 필터 적용 (CMA/파킹통장 아닐 때만)
-            if (currentType !== 'parking' && currentType !== 'cma' && termFilter.value !== 'all') {
-                filtered = filtered.filter(d => {
-                    if (d.options && Array.isArray(d.options)) {
-                        return d.options.some(o => String(o.save_trm) === termFilter.value);
-                    }
-                    return String(d.save_trm) === termFilter.value;
-                });
-            }
-
-            if (keyword) {
-                filtered = filtered.filter(d => 
-                    (d.bank && d.bank.toLowerCase().includes(keyword)) || 
-                    (d.name && d.name.toLowerCase().includes(keyword))
-                );
-            }
-
-            filtered.sort((a,b) => {
-                const valA = isBaseOnly ? (a.base || 0) : (a.max || 0);
-                const valB = isBaseOnly ? (b.base || 0) : (b.max || 0);
-                return valB - valA;
-            });
-
-            filtered.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                let displayMax = item.max || 0;
-                let displayBase = item.base || 0;
-                let displayTrm = item.save_trm || 0;
-
-                // 필터된 기간의 금리를 우선 보여주기
-                if (currentType !== 'parking' && currentType !== 'cma' && termFilter.value !== 'all' && item.options) {
-                    const targetOpt = item.options.find(o => String(o.save_trm) === termFilter.value);
-                    if (targetOpt) {
-                        displayMax = targetOpt.intr_rate2;
-                        displayBase = targetOpt.intr_rate;
-                        displayTrm = targetOpt.save_trm;
-                    }
-                }
-
-                card.innerHTML = `
-                    <div class="bank-tag">${item.bank || '금융기관'} ${displayTrm > 0 ? '| ' + displayTrm + '개월' : ''}</div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div class="prod-name" style="font-weight:600;">${item.name || '상품명'}</div>
-                        <div class="rate-main">${(isBaseOnly ? displayBase : displayMax).toFixed(2)}%</div>
-                    </div>
-                `;
-                card.onclick = () => openDetail(item);
-                listArea.appendChild(card);
-            });
-        }
-
-        function openDetail(item) {
-            currentItem = item;
-            const detailView = document.getElementById('detailView');
-            detailView.style.display = 'block';
-            document.body.classList.add('modal-open');
-            detailView.scrollTo(0, 0); 
-
-            document.getElementById('detailBank').innerText = item.bank || '';
-            document.getElementById('detailName').innerText = item.name || '';
-            document.getElementById('detailTermTag').innerText = item.save_trm ? `${item.save_trm}개월 기준` : ''; 
-            document.getElementById('detailBaseRate').innerText = `기본 연 ${(item.base || 0).toFixed(2)}%`;
-            document.getElementById('detailRate').innerText = `최고 연 ${(item.max || 0).toFixed(2)}%`;
-            document.getElementById('detailCondition').innerText = item.spcl_cnd || "우대 금리 조건 정보가 없습니다.";
-
-            const calcInput = document.getElementById('calcInput');
-            const calcTermSelect = document.getElementById('calcTermSelect');
-            
-            calcTermSelect.innerHTML = '';
-            if (item.options && item.options.length > 0 && currentType !== 'parking' && currentType !== 'cma') {
-                calcTermSelect.style.display = 'block';
-                
-                // [수정] Set을 사용하여 기간 중복 제거
-                const seenTerms = new Set();
-                item.options.forEach((opt, idx) => {
-                    if (!seenTerms.has(opt.save_trm)) {
-                        seenTerms.add(opt.save_trm);
-                        const optionEl = document.createElement('option');
-                        optionEl.value = idx; 
-                        optionEl.innerText = `${opt.save_trm}개월 (기본 ${opt.intr_rate.toFixed(2)}% / 최고 ${opt.intr_rate2.toFixed(2)}%)`;
-                        if (opt.save_trm === item.save_trm) optionEl.selected = true; 
-                        calcTermSelect.appendChild(optionEl);
-                    }
-                });
-            } else {
-                calcTermSelect.style.display = 'none';
-            }
-
-            calcInput.placeholder = (currentType === 'savings') ? "매월 납입할 금액 입력 (원)" : "한 번에 예치할 금액 입력 (원)";
-
-            const history = (item.history && item.history.length > 0) ? item.history : [{date: '현재', rate: item.max || 0}];
-            if(chartInstance) chartInstance.destroy();
-            const ctx = document.getElementById('rateChart').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: history.map(h => h.date),
-                    datasets: [{
-                        label: '최고 금리 추이',
-                        data: history.map(h => h.rate),
-                        borderColor: '#2b6cb0',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(43, 108, 176, 0.05)'
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-            calcInput.value = '';
-            document.getElementById('calcResult').innerHTML = '';
-            doCalc();
-        }
-
-        function closeDetail() { 
-            document.getElementById('detailView').style.display = 'none'; 
-            document.body.classList.remove('modal-open');
-        }
-
-        function doCalc() {
-            const val = parseFloat(document.getElementById('calcInput').value);
-            const calcTypeDesc = document.getElementById('calcTypeDesc');
-            
-            let months = parseInt(currentItem.save_trm) || 12; 
-            let applyBaseRate = currentItem.base || 0;
-            let applyMaxRate = currentItem.max || 0;
-
-            const calcTermSelect = document.getElementById('calcTermSelect');
-            if (currentItem.options && currentItem.options.length > 0 && calcTermSelect.style.display !== 'none' && calcTermSelect.value !== "") {
-                const selectedOpt = currentItem.options[calcTermSelect.value];
-                if (selectedOpt) {
-                    months = parseInt(selectedOpt.save_trm);
-                    applyBaseRate = selectedOpt.intr_rate;
-                    applyMaxRate = selectedOpt.intr_rate2;
-                }
-            }
-
-            calcTypeDesc.innerText = `기준: ${months}개월 ${currentType === 'savings' ? '적금' : '예금'} (단리)`;
-
-            if(!val || isNaN(val)) return;
-
-            const getResult = (ratePercent) => {
-                const rate = ratePercent / 100;
-                let principal = 0, interest = 0;
-                if (currentType === 'savings') {
-                    principal = val * months;
-                    interest = val * rate * (months * (months + 1) / 2 / 12);
-                } else {
-                    principal = val;
-                    interest = val * rate * (months / 12);
-                }
-                return { principal, afterTaxInterest: interest * 0.846 };
-            };
-
-            const baseRes = getResult(applyBaseRate);
-            const maxRes = getResult(applyMaxRate);
-
-            document.getElementById('calcResult').innerHTML = `
-                <div class="compare-grid">
-                    <div class="compare-card">
-                        <div class="compare-label">기본 금리 (${applyBaseRate.toFixed(2)}%)</div>
-                        <div class="compare-val">${Math.floor(baseRes.principal + baseRes.afterTaxInterest).toLocaleString()}원</div>
-                    </div>
-                    <div class="compare-card" style="border-color: var(--accent); background: #fff5f5;">
-                        <div class="compare-label" style="color:var(--accent)">최고 금리 (${applyMaxRate.toFixed(2)}%)</div>
-                        <div class="compare-val" style="color:var(--accent)">${Math.floor(maxRes.principal + maxRes.afterTaxInterest).toLocaleString()}원</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentType = btn.dataset.type;
-                renderList();
-            };
-        });
-
-        document.getElementById('searchInput').oninput = renderList;
-        document.getElementById('baseOnly').onchange = renderList;
-    </script>
+      </section>
+    </main>
+    <footer><a class="brand footer-brand" href="./">MoneyPole.</a><p>공시 반영이 지연될 수 있으므로 가입 전 금융기관의 공식 안내를 확인하세요.<br>CMA 등 투자상품은 원금 손실이 발생할 수 있습니다. 예상 이자는 재투자·일별 잔액·실제 과세 조건에 따라 달라집니다.</p><span>내 돈에 맞는 선택의 시작</span></footer>
+  </div>
+  <dialog id="detailDialog" aria-labelledby="detailName"><div class="dialog-head"><span>상품 자세히 보기</span><button type="button" id="closeDetail" aria-label="상품 상세 닫기">닫기 ×</button></div><div id="detailContent"></div></dialog>
 </body>
 </html>
