@@ -12,15 +12,16 @@
   <div class="shell">
     <header class="site-header">
       <a class="brand" href="./" aria-label="MoneyPole 홈"><span class="brand-icon" aria-hidden="true">m<span>↗</span></span>MoneyPole<span class="brand-dot">.</span></a>
-      <span class="header-note">매일 확인하는 금리 비교</span>
+      <nav class="header-links" aria-label="주요 메뉴"><a href="#compare">금리 비교</a><a href="#guides">금리 가이드</a><span class="header-note">매일 확인하는 금리 비교</span></nav>
     </header>
     <main>
       <section class="intro">
         <p class="eyebrow">MAKE YOUR MONEY COUNT</p>
         <h1>내 돈이 머무는 곳,<br>금리부터 비교해요.</h1>
         <p class="intro-copy">높은 숫자와 실제 받는 이자는 다르니까.<br>우대조건과 적용 한도까지 함께 확인하세요.</p>
+        <div class="intro-path" aria-label="비교 순서"><span><b>01</b> 금액과 기간</span><span><b>02</b> 금리와 조건</span><span><b>03</b> 공식 안내 확인</span></div>
       </section>
-      <nav class="tabs" aria-label="상품 종류">
+      <nav class="tabs" id="compare" aria-label="상품 종류">
         <button type="button" data-type="parking" class="active" aria-pressed="true">파킹통장 <span data-count="parking">—</span></button>
         <button type="button" data-type="cma" aria-pressed="false">CMA <span data-count="cma">—</span></button>
         <button type="button" data-type="deposit" aria-pressed="false">예금 <span data-count="deposit">—</span></button>
@@ -42,10 +43,23 @@
           <div class="results-heading"><div><p class="eyebrow" id="categoryNote">자유롭게 넣고 빼는</p><h2 id="resultsTitle">파킹통장 <span id="resultCount"></span></h2></div><span class="unit-label">연 · 세전</span></div>
           <div class="search-row"><label class="sr-only" for="search">금융기관 또는 상품명 검색</label><input id="search" type="search" placeholder="금융기관 또는 상품명 검색"><label class="sr-only" for="sort">정렬</label><select id="sort"><option value="rate">표시 금리순</option><option value="interest">예상 이자순</option></select></div>
           <p id="comparisonNote" class="comparison-note"></p>
-          <div id="listArea" aria-live="polite"><div class="empty">공시 정보를 불러오고 있어요.</div></div>
-          <details class="collection-details"><summary>데이터 확인 상태</summary><p>최종 확인은 원문 조회에 성공한 시각이며, 금리 적용일과는 다릅니다. 오래되거나 수집이 실패한 값은 별도로 표시합니다.</p><div id="sourceStatus">확인 중</div></details>
+          <div id="listArea" aria-live="polite"><div id="leadingProducts"><div class="empty">공시 정보를 불러오고 있어요.</div></div><div id="inlinePlacement" hidden></div><div id="remainingProducts"></div></div>
+          <button type="button" id="loadMore" class="load-more" hidden></button>
+          <details class="collection-details" id="sourceInfo"><summary>데이터 확인 상태</summary><p>최종 확인은 원문 조회에 성공한 시각이며, 금리 적용일과는 다릅니다. 오래되거나 수집이 실패한 값은 별도로 표시합니다.</p><div id="sourceStatus">확인 중</div></details>
         </section>
+        <aside class="ad-rail" aria-label="비교 도움말">
+          <div id="railPlacement"></div>
+          <p class="rail-caption"><strong>수집 시각도 함께 확인하세요</strong>확인 완료는 공식 공시 조회에 성공했다는 뜻이에요. 금리 적용일·가입 조건은 상세 안내에서 한 번 더 확인해 주세요.</p>
+        </aside>
       </div>
+      <section class="guides" id="guides" aria-labelledby="guidesTitle">
+        <div class="guides-heading"><div><p class="eyebrow">MONEY NOTES</p><h2 id="guidesTitle">금리를 읽는 세 가지 기준</h2></div><p>상품을 고르기 전에, 숫자 뒤의 조건부터.</p></div>
+        <div class="guide-grid">
+          <article><span class="guide-number">01 / 적용 금액</span><h3>최고금리가 전액에 붙을까요?</h3><p>예를 들어 100만 원까지 5%, 초과분은 1%인 가상의 통장에 1,000만 원을 넣으면 연간 세전 이자는 14만 원이에요. 전체 잔액 기준으로는 연 1.4%에 해당해요.</p></article>
+          <article><span class="guide-number">02 / 보관 기간</span><h3>언제 꺼낼 돈인지 먼저 정해요</h3><p>보관 일수와 만기, 이자 지급일, 중도해지 조건을 함께 확인하세요. CMA는 운용 유형과 재투자 주기에 따라 적용 수익률과 실제 받는 금액이 달라질 수 있어요.</p></article>
+          <article><span class="guide-number">03 / 금리의 기준</span><h3>약정금리와 과거 수익률은 달라요</h3><p>과거 운용실적을 나타내는 수익률은 앞으로 받을 금리를 보장하지 않아요. 상품 유형과 원금 손실 가능성, 예금자보호 여부도 공식 안내에서 확인하세요.</p></article>
+        </div>
+      </section>
     </main>
     <footer><a class="brand footer-brand" href="./">MoneyPole.</a><p>공시 반영이 지연될 수 있으므로 가입 전 금융기관의 공식 안내를 확인하세요.<br>CMA 등 투자상품은 원금 손실이 발생할 수 있습니다. 예상 이자는 재투자·일별 잔액·실제 과세 조건에 따라 달라집니다.</p><span>내 돈에 맞는 선택의 시작</span></footer>
   </div>

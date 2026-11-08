@@ -1,11 +1,17 @@
 import {shortTerm, selectedOption, displayRate, estimate, freshness} from './rates.mjs';
+import {createPlacement} from './placements.mjs';
 
 const $ = id => document.getElementById(id);
 const labels = {parking: '파킹통장', cma: 'CMA', deposit: '예금', savings: '적금'};
 const subtitles = {parking: '자유롭게 넣고 빼는', cma: '잠깐 머무는 자금도', deposit: '목돈을 차곡차곡', savings: '매달 쌓아가는'};
 const sourceLabels = {fsb_parking: '저축은행 입출금자유예금', kb_cma: 'KB증권 CMA', kakao_parking: '카카오뱅크 세이프박스', kfb_parking: '시중은행 통합 목록',
   fss_deposit_020000: '은행 예금', fss_deposit_030300: '저축은행 예금', fss_savings_020000: '은행 적금', fss_savings_030300: '저축은행 적금'};
-let allData = [], status = {}, type = 'parking', currentItem = null;
+let allData = [], status = {}, type = 'parking', currentItem = null, visibleCount = 10;
+// Keep these nodes mounted across list updates. Initialize any future ad only
+// after approval/consent and while an eligible placement is visible.
+const inlineSlot = createPlacement('comparison-inline', 'inline');
+$('inlinePlacement').append(inlineSlot);
+$('railPlacement').append(createPlacement('comparison-rail', 'rail'));
 const money = value => Math.floor(value).toLocaleString('ko-KR') + '원';
 const percent = value => Number(value).toFixed(2) + '%';
 function dateText(value) {
@@ -65,8 +71,13 @@ function render() {
   $('comparisonNote').textContent = type === 'parking' ? '최고금리는 잔액 일부에만 적용될 수 있어요. 금액 구간 검증 전에는 예상 이자를 계산하지 않아요.' :
     type === 'cma' ? '약정수익률 기준 · 예금자보호 대상 아님 · 재투자 효과 미반영' : '선택한 기간의 금리로 정렬해요. 우대금리 적용에는 각 상품의 조건 충족이 필요해요.';
   if ($('sort').value === 'interest') $('comparisonNote').textContent += ' 계산 가능한 상품부터 표시하며, 계산 불가 상품은 표시 금리순이에요.';
-  $('listArea').replaceChildren();
-  for (const item of items) {
+  $('leadingProducts').replaceChildren();
+  $('remainingProducts').replaceChildren();
+  $('inlinePlacement').hidden = items.length < 10;
+  $('loadMore').hidden = items.length <= visibleCount;
+  $('loadMore').textContent = `상품 ${Math.min(10, Math.max(0, items.length - visibleCount))}개 더 보기 · ${Math.min(visibleCount, items.length)} / ${items.length}`;
+  let position = 0;
+  for (const item of items.slice(0, visibleCount)) {
     const card = node('article', 'card'), top = node('div', 'card-top');
     const option = selectedOption(item, config.term);
     top.append(node('span', '', item.bank + (short ? (item.subtype ? ` · ${item.subtype}형` : '') : ` · ${option.save_trm}개월`)), badge(item));
@@ -84,9 +95,9 @@ function render() {
     if (calculated) result.append(document.createTextNode('예상 세전 이자 '), node('strong', '', money(calculated.interest)));
     else result.textContent = item.deposit_limit && config.amount > item.deposit_limit ? '입금한도 초과 · 계산 불가' : short ? '금액 구간 확인 후 계산' : '이 계산 방식은 상세 조건 확인 필요';
     bottom.append(result, node('span', '', item.last_checked_at ? `확인 ${dateText(item.last_checked_at)}` : '마지막 확인 기록 없음'));
-    card.append(bottom); $('listArea').append(card);
+    card.append(bottom); (position++ < 6 ? $('leadingProducts') : $('remainingProducts')).append(card);
   }
-  if (!items.length) $('listArea').append(node('div', 'empty', '조건에 맞는 상품이 없어요. 검색어나 기간을 바꿔보세요.'));
+  if (!items.length) $('leadingProducts').append(node('div', 'empty', '조건에 맞는 상품이 없어요. 검색어나 기간을 바꿔보세요.'));
   for (const key of Object.keys(labels)) document.querySelector(`[data-count="${key}"]`).textContent = allData.filter(x => x.type === key).length;
 }
 function section(title) {
@@ -153,12 +164,13 @@ function renderStatus() {
   if (!Object.keys(status.sources || {}).length) $('sourceStatus').textContent = '수집 상태 정보를 가져오지 못했어요. 상품별 확인 시각을 확인하세요.';
 }
 for (const button of document.querySelectorAll('[data-type]')) button.addEventListener('click', () => {
-  type = button.dataset.type;
+  type = button.dataset.type; visibleCount = 10;
   for (const tab of document.querySelectorAll('[data-type]')) { tab.classList.toggle('active', tab === button); tab.setAttribute('aria-pressed', String(tab === button)); }
   render();
 });
 for (const button of document.querySelectorAll('[data-amount]')) button.addEventListener('click', () => { $('amount').value = button.dataset.amount; render(); });
-for (const id of ['amount', 'days', 'term', 'baseOnly', 'search', 'sort']) $(id).addEventListener('input', render);
+for (const id of ['amount', 'days', 'term', 'baseOnly', 'search', 'sort']) $(id).addEventListener('input', () => { visibleCount = 10; render(); });
+$('loadMore').addEventListener('click', () => { visibleCount += 10; render(); });
 $('closeDetail').addEventListener('click', () => $('detailDialog').close());
 $('detailDialog').addEventListener('close', () => { document.body.style.overflow = ''; currentItem = null; });
 $('detailDialog').addEventListener('click', event => { if (event.target === $('detailDialog')) { const r = event.target.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) event.target.close(); } });
@@ -171,6 +183,6 @@ try {
   allData = dataResult.value; status = statusResult.status === 'fulfilled' ? statusResult.value : {};
   render(); renderStatus();
 } catch {
-  $('listArea').replaceChildren(node('div', 'empty error', '데이터를 불러오지 못했어요. 잠시 후 새로고침해 주세요.'));
+  $('leadingProducts').replaceChildren(node('div', 'empty error', '데이터를 불러오지 못했어요. 잠시 후 새로고침해 주세요.'));
   $('sourceStatus').textContent = '데이터 조회 실패';
 }
