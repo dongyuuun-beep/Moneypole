@@ -833,3 +833,18 @@ dialog::backdrop{
 @media (max-width:620px) {
   .institution-field { grid-column: 1 / -1; margin-top: 0; }
 }
+.header-links a[aria-current="page"] { color: var(--accent); font-weight: 650; }
+.support-tabs { gap: 28px; flex-wrap: wrap; }
+.support-summary { font-size: 13px; line-height: 1.85; color: var(--ink); margin: 14px 0 9px; overflow-wrap: anywhere; }
+.support-card .product-button { font-size: 17px; }
+.support-source { border-bottom: 1px solid var(--line); padding: 10px 0; }
+.support-source p { margin: 4px 0; }
+.support-excerpt { max-height: 420px; overflow: auto; }
+@media (max-width:620px) {
+  .support-tabs { gap: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .support-tabs button { padding: 10px 6px; }
+  .support-filters { display: block; }
+  .support-filters .section-label { margin-bottom: 12px; }
+  .support-filters .source-note p { display: block; margin-left: 0; }
+  .support-card .product-button { font-size: 15px; }
+}
