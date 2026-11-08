@@ -14,6 +14,7 @@ from urllib3.util.retry import Retry
 FSB_PAGE = "https://www.fsb.or.kr/ratanym_0100.act"
 KB_PAGE = "https://m.kbsec.com/go.able?linkcd=s010300010005"
 KB_DATA = "https://m.kbsec.com/ndatatopweb/www/json/main/rate_manage_cma.json"
+KAKAO_PAGE = "https://www.kakaobank.com/products/safeboxes"
 
 
 class CollectionError(ValueError):
@@ -84,6 +85,53 @@ def parse_kb(data, today=None):
 
 def fetch_kb(client):
     return parse_kb(get_json(client, KB_DATA))
+
+
+def parse_kakao(html):
+    soup = BeautifulSoup(html, "html.parser")
+
+    def field(container, label):
+        section = soup.select_one(container)
+        headings = section.find_all("strong", string=label) if section else []
+        if len(headings) != 1:
+            raise CollectionError("카카오뱅크 상품 안내 형식 변경")
+        parts = []
+        for sibling in headings[0].find_next_siblings():
+            if sibling.name == "strong":
+                break
+            parts.append(sibling.get_text(" ", strip=True))
+        return "\n".join(parts)
+
+    rate_text = field(".pop-rate .g__pop-content", "기본금리")
+    rate_match = re.fullmatch(r"(\d{4}\.\d{2}\.\d{2}) 기준, 세금공제 전 연\s*(\d+(?:\.\d+)?)%", rate_text)
+    if not rate_match:
+        raise CollectionError("카카오뱅크 기본금리 형식 변경")
+    reference_date = iso_date(rate_match[1].replace(".", "-"))
+    if reference_date > datetime.now(ZoneInfo("Asia/Seoul")).date().isoformat():
+        raise CollectionError("카카오뱅크 미래 조회기준일")
+    rate = number(rate_match[2])
+    limit_text = field(".pop-product-info .g__pop-content", "입금한도")
+    limit_match = re.search(r"증액한도\s*:\s*(\d+(?:\.\d+)?)억원", limit_text)
+    formula = field(".pop-rate .g__pop-content", "이자계산방법")
+    if not limit_match or formula != "매일의 최종 잔액에 약정금리를 적용하여 합산한 이자를 이자지급일에 지급":
+        raise CollectionError("카카오뱅크 입금한도 또는 잔액 계산 방식 변경")
+    limit = float(limit_match[1]) * 100000000
+    return [{"id": "KAKAO_SAFEBOX", "bank": "카카오뱅크", "name": "세이프박스", "type": "parking",
+             "base": rate, "max": rate, "rate_scope": "base_excluding_coupons", "save_trm": 0, "options": [],
+             "intr_type": "공시 기본금리", "rate_model": "flat", "deposit_limit": limit,
+             "rate_tiers": [{"from": 0, "to": limit, "base": rate, "max": rate}],
+             "spcl_cnd": "금리쿠폰 우대는 표시 금리·계산에서 제외. " + field(".pop-rate .g__pop-content", "금리쿠폰"),
+             "join_target": field(".pop-product-info .g__pop-content", "가입대상") + "\n" + field(".pop-product-info .g__pop-content", "가입제한"),
+             "rate_notes": limit_text + "\n" + formula,
+             "payment_cycle": field(".pop-rate .g__pop-content", "이자지급방법"),
+             "reference_date": reference_date, "source_url": KAKAO_PAGE, "product_url": KAKAO_PAGE}]
+
+
+def fetch_kakao(client):
+    response = client.get(KAKAO_PAGE, timeout=(10, 30))
+    response.raise_for_status()
+    response.encoding = "utf-8"
+    return parse_kakao(response.text)
 
 
 def parse_fsb(rows):

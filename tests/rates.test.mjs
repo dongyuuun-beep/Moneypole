@@ -23,6 +23,11 @@ test('CMA uses chosen days instead of defaulting to 12-month deposit', () => {
   const item = {type: 'cma', rate_model: 'flat', rate_tiers: [{from: 0, to: null, base: 2, max: 2}]};
   assert.equal(estimate(item, {amount: 3650000, days: 30}).interest, 6000);
 });
+test('bank parking accounts cannot accrue estimates above their verified deposit limit', () => {
+  const item = {type: 'parking', rate_model: 'flat', rate_tiers: [{from: 0, to: 100000000, base: 1.2, max: 1.2}]};
+  assert.equal(estimate(item, {amount: 100000000, days: 365}).interest, 1200000);
+  assert.equal(estimate(item, {amount: 100000001, days: 365}), null);
+});
 test('savings considers staggered monthly contributions', () => {
   const item = {type: 'savings', save_trm: 12, base: 3, max: 3, intr_type: '단리'};
   assert.equal(estimate(item, {amount: 100000}).interest, 19500);

@@ -3,7 +3,7 @@ import unittest
 from datetime import date
 from unittest.mock import Mock, patch
 
-from collectors import CollectionError, fetch_fsb, fetch_fss, parse_fsb, parse_kb
+from collectors import CollectionError, fetch_fsb, fetch_fss, parse_fsb, parse_kb, parse_kakao
 from update_rates import merge_source, update
 
 STAMP = '2026-11-08T19:00:00+09:00'
@@ -69,6 +69,29 @@ class PreservationTests(unittest.TestCase):
 
 
 class OfficialParserTests(unittest.TestCase):
+    def kakao(self):
+        return '''<div>마케팅 예시 연 99%</div>
+        <div class="pop-rate"><div class="g__pop-content">
+        <strong>기본금리</strong><p>2026.11.01 기준, 세금공제 전 <span>연 1.20%</span></p>
+        <strong>금리쿠폰</strong><p>쿠폰은 별도 조건</p>
+        <strong>이자계산방법</strong><p>매일의 최종 잔액에 약정금리를 적용하여 합산한 이자를 이자지급일에 지급</p>
+        <strong>이자지급방법</strong><p>매월 지급</p></div></div>
+        <div class="pop-product-info"><div class="g__pop-content">
+        <strong>입금한도</strong><p>기본한도 : 1천만원 증액한도 : 1억원</p>
+        <strong>가입대상</strong><p>개인</p><strong>가입제한</strong><p>연결계좌 필요</p></div></div>'''
+
+    def test_kakao_uses_labeled_rate_and_validated_deposit_limit(self):
+        item = parse_kakao(self.kakao())[0]
+        self.assertEqual(item['base'], 1.2)
+        self.assertEqual(item['deposit_limit'], 100000000)
+        self.assertEqual(item['rate_tiers'][0]['to'], 100000000)
+        self.assertEqual(item['rate_scope'], 'base_excluding_coupons')
+
+    def test_kakao_changes_to_balance_formula_or_limit_require_review(self):
+        for html in [self.kakao().replace('증액한도 : 1억원', '앱에서 확인'), self.kakao().replace('매일의 최종 잔액에 약정금리를 적용', '금액 구간별로 차등 적용')]:
+            with self.assertRaises(CollectionError):
+                parse_kakao(html)
+
     def kb(self):
         # Synthetic rates. Conflicting corporate/term fields must not be used.
         return {'cma100': '(기준일 : 2026/08/31, 세전)', 'cma111': '연 2.10%', 'cma112': '연 2.20%',

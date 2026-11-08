@@ -3,7 +3,7 @@ import {shortTerm, selectedOption, displayRate, estimate, freshness} from './rat
 const $ = id => document.getElementById(id);
 const labels = {parking: '파킹통장', cma: 'CMA', deposit: '예금', savings: '적금'};
 const subtitles = {parking: '자유롭게 넣고 빼는', cma: '잠깐 머무는 자금도', deposit: '목돈을 차곡차곡', savings: '매달 쌓아가는'};
-const sourceLabels = {fsb_parking: '저축은행 입출금자유예금', kb_cma: 'KB증권 CMA', kfb_parking: '시중은행 파킹통장',
+const sourceLabels = {fsb_parking: '저축은행 입출금자유예금', kb_cma: 'KB증권 CMA', kakao_parking: '카카오뱅크 세이프박스', kfb_parking: '시중은행 통합 목록',
   fss_deposit_020000: '은행 예금', fss_deposit_030300: '저축은행 예금', fss_savings_020000: '은행 적금', fss_savings_030300: '저축은행 적금'};
 let allData = [], status = {}, type = 'parking', currentItem = null;
 const money = value => Math.floor(value).toLocaleString('ko-KR') + '원';
@@ -33,6 +33,7 @@ function settings(index = null) {
     term: $('term').value, index};
 }
 function limitText(item) {
+  if (item.deposit_limit) return `입금한도: ${money(item.deposit_limit)} (한도 증액 기준)`;
   const limit = item.max_rate_amount;
   if (!limit) return '';
   if (limit.relation === '제한없음') return '최고금리 적용 금액: 공시상 제한 없음 · 우대조건 별도 확인';
@@ -48,7 +49,7 @@ function render() {
   $('amountLabel').textContent = type === 'savings' ? '매월 납입 금액' : '예치 금액';
   $('categoryNote').textContent = subtitles[type];
   $('resultsTitle').replaceChildren(document.createTextNode(labels[type] + ' '), $('resultCount'));
-  $('coverage').textContent = type === 'parking' ? '저축은행 공시 수집 · 시중은행 미지원' : type === 'cma' ? 'KB증권 개인 RP·발행어음형' : '금융감독원 은행·저축은행 공시';
+  $('coverage').textContent = type === 'parking' ? '저축은행 입출금자유예금 · 카카오뱅크 세이프박스' : type === 'cma' ? 'KB증권 개인 RP·발행어음형' : '금융감독원 은행·저축은행 공시';
   const config = settings(), search = $('search').value.trim().toLowerCase();
   let items = allData.filter(item => item.type === type && (item.bank + ' ' + item.name).toLowerCase().includes(search));
   if (!short && config.term !== 'all') items = items.filter(item => (item.options || []).some(o => String(o.save_trm) === config.term));
@@ -72,7 +73,7 @@ function render() {
     const main = node('div', 'card-main'), title = node('button', 'product-button', item.name);
     title.type = 'button'; title.addEventListener('click', () => openDetail(item));
     const rates = node('div'), rate = node('div', 'rate');
-    rate.append(node('small', '', config.baseOnly ? '기본' : '최고'), document.createTextNode(percent(displayRate(item, config.term, config.baseOnly))));
+    rate.append(node('small', '', config.baseOnly || item.rate_scope === 'base_excluding_coupons' ? '기본' : '최고'), document.createTextNode(percent(displayRate(item, config.term, config.baseOnly))));
     rates.append(rate, node('div', 'basic-rate', `기본 ${percent(displayRate(item, config.term, true))}`));
     main.append(title, rates); card.append(top, main);
     if (limitText(item)) card.append(node('div', 'amount-limit', limitText(item)));
@@ -81,7 +82,7 @@ function render() {
     const bottom = node('div', 'card-bottom'), calculated = estimate(item, config);
     const result = node('span');
     if (calculated) result.append(document.createTextNode('예상 세전 이자 '), node('strong', '', money(calculated.interest)));
-    else result.textContent = short ? '금액 구간 확인 후 계산' : '이 계산 방식은 상세 조건 확인 필요';
+    else result.textContent = item.deposit_limit && config.amount > item.deposit_limit ? '입금한도 초과 · 계산 불가' : short ? '금액 구간 확인 후 계산' : '이 계산 방식은 상세 조건 확인 필요';
     bottom.append(result, node('span', '', item.last_checked_at ? `확인 ${dateText(item.last_checked_at)}` : '마지막 확인 기록 없음'));
     card.append(bottom); $('listArea').append(card);
   }
@@ -104,7 +105,7 @@ function openDetail(item) {
   const entries = [['우대조건', item.spcl_cnd || '공시된 조건 정보 없음'], ['적용 금액', limitText(item)],
     ['금액별 안내', item.rate_notes], ['가입 대상', item.join_target], ['이자 지급', item.payment_cycle],
     ['재투자', item.reinvestment], ['예금자보호', item.deposit_protection === false ? '보호 대상 아님' : null],
-    ['금리 적용일', item.effective_from], ['공시일', item.disclosed_on], ['최종 확인', dateText(item.last_checked_at)]];
+    ['금리 적용일', item.effective_from], ['공시일', item.disclosed_on], ['조회기준일', item.reference_date], ['최종 확인', dateText(item.last_checked_at)]];
   for (const [key, value] of entries) if (value) dl.append(node('dt', '', key), node('dd', '', value));
   conditions.append(dl); content.append(conditions);
   const calc = section('내 금액으로 예상 이자 확인');
@@ -125,14 +126,15 @@ function openDetail(item) {
     const result = estimate(item, settings(optionSelect ? Number(optionSelect.value) : null));
     value.textContent = result ? money(result.interest) : '상세 조건 확인 필요';
     caption.textContent = result ? `${result.label} · 일반과세 15.4% 가정 시 세후 이자 ${money(result.interest * .846)}. 실제 과세·일수·재투자에 따라 달라집니다.` :
+      item.deposit_limit && settings().amount > item.deposit_limit ? '입금한도를 초과했어요. 목록의 예치 금액을 한도 안으로 조정해 주세요.' :
       '잔액 구간별 금리, 자유적립식 납입 일정 또는 복리 방식이 검증되지 않아 계산을 제공하지 않아요. 위의 공시 조건과 공식 안내를 확인하세요.';
   }
   optionSelect?.addEventListener('change', calculate); calculate(); panel.append(value, caption); calc.append(panel); content.append(calc);
-  const history = section('표시 최고금리 변동 기록');
+  const history = section('표시 금리 변동 기록');
   const table = node('table', 'history'), head = node('tr'); head.append(node('th', '', '확인일'), node('th', '', '연 · 세전')); table.append(head);
   for (const h of [...(item.history || [])].reverse().slice(0, 10)) { const tr = node('tr'); tr.append(node('td', '', h.date), node('td', '', percent(h.rate))); table.append(tr); }
   history.append(item.history?.length ? table : node('p', '', '저장된 변동 기록이 없어요.'));
-  history.append(node('p', 'calc-caption', '과거 기록은 상품의 대표 최고금리 기준이며, 위에서 선택한 기간의 금리 추이와 다를 수 있어요.'));
+  history.append(node('p', 'calc-caption', '과거 기록은 상품의 대표 표시 금리 기준이며, 위에서 선택한 기간의 금리 추이와 다를 수 있어요. 쿠폰 제외 상품은 공시 기본금리를 기록해요.'));
   content.append(history);
   const sources = section('공식 출처');
   sources.append(link('공식 공시 확인 ↗', item.source_url || 'https://finlife.fss.or.kr/'));

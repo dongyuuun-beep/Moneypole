@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from collectors import CollectionError, fetch_fsb, fetch_fss, fetch_kb, session
+from collectors import CollectionError, fetch_fsb, fetch_fss, fetch_kb, fetch_kakao, session
 
 ROOT = Path(__file__).resolve().parent
 
@@ -69,7 +69,7 @@ def merge_source(existing, incoming, source_id, checked_at, accept_large_changes
 def update(data, previous_status, sources, checked_at, accept_large_changes=False):
     result = copy.deepcopy(data)
     report = {"checked_at": checked_at, "timezone": "Asia/Seoul", "sources": {},
-              "coverage": {"bank_parking": "unavailable", "savings_bank_parking": "FSB", "cma": "KB증권 개인 RP·발행어음형"}}
+              "coverage": {"bank_parking": "카카오뱅크 세이프박스 (개별 공식 페이지)", "savings_bank_parking": "FSB", "cma": "KB증권 개인 RP·발행어음형"}}
     for source_id, collect in sources.items():
         old_status = previous_status.get("sources", {}).get(source_id, {})
         try:
@@ -87,7 +87,7 @@ def update(data, previous_status, sources, checked_at, accept_large_changes=Fals
                 if p.get("source_id") == source_id:
                     p["verification_status"] = "stale"
     report["sources"]["kfb_parking"] = {"status": "unavailable", "count": 0,
-        "message": "기존 은행연합회 URL 오류 응답 확인. 시중은행 파킹통장은 수집 미지원.",
+        "message": "기존 은행연합회 URL 오류 응답 확인. 시중은행 통합 목록은 미지원.",
         "source_url": "https://portal.kfb.or.kr/compare/free_deposit.php"}
     return result, report
 
@@ -104,7 +104,8 @@ def main():
     with session() as client:
         sources = {f"fss_{kind}_{group}": (lambda k=kind, g=group: fetch_fss(client, k, g, os.getenv("FSS_API_KEY")))
                    for kind in ("deposit", "savings") for group in ("020000", "030300")}
-        sources.update({"fsb_parking": lambda: fetch_fsb(client), "kb_cma": lambda: fetch_kb(client)})
+        sources.update({"fsb_parking": lambda: fetch_fsb(client), "kb_cma": lambda: fetch_kb(client),
+                        "kakao_parking": lambda: fetch_kakao(client)})
         data, report = update(data, status, sources, checked_at, args.accept_large_changes)
     atomic_json(args.output_dir / "data.json", data)
     atomic_json(args.output_dir / "update_status.json", report)
