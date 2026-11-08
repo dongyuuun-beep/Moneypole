@@ -1,0 +1,46 @@
+name: MoneyPole Daily Local Support Update
+on:
+  schedule:
+    # 02:47 Asia/Seoul, separated from rate collection.
+    - cron: '47 17 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: catalog-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  update-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - name: Collect five official regional sources without API keys
+        id: collect
+        continue-on-error: true
+        run: python update_support.py
+      - name: Keep support collection report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: support-update-report
+          path: support_status.json
+      - name: Publish successfully checked notices and collection status
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add support.json support_status.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Update official regional support notices"
+          git push
+      - name: Report incomplete collection
+        if: steps.collect.outcome == 'failure'
+        run: |
+          echo 'A regional source failed. Previous records were preserved. See the job summary.'
+          exit 1

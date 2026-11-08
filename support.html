@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="서울시·화성시·용인시·부산시·부안군의 공식 지원 공고를 지역별로 확인하세요.">
+  <title>지역 지원금 찾기 — MoneyPole</title>
+  <link rel="stylesheet" href="web/styles.css?v=support-1">
+  <script type="module" src="web/support.mjs?v=support-1"></script>
+</head>
+<body>
+<div class="shell">
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="MoneyPole 홈"><span class="brand-icon" aria-hidden="true">m<span>↗</span></span>MoneyPole<span class="brand-dot">.</span></a>
+    <nav class="header-links" aria-label="주요 메뉴"><a href="./">금리 비교</a><a href="support.html" aria-current="page">지역 지원금</a><span class="header-note">공식 공고를 한곳에서</span></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">LOCAL MONEY GUIDE</p>
+      <h1>우리 동네 지원금,<br>놓치지 않도록.</h1>
+      <p class="intro-copy">생활비부터 주거·취업 비용까지.<br>내 지역의 공고와 신청 조건을 확인하세요.</p>
+      <div class="intro-path" aria-label="확인 순서"><span><b>01</b> 지역 선택</span><span><b>02</b> 기간·조건 확인</span><span><b>03</b> 공식 원문 확인</span></div>
+    </section>
+    <nav class="tabs support-tabs" aria-label="지원 지역">
+      <button type="button" data-region="all" class="active" aria-pressed="true">전체 <span id="allCount">—</span></button>
+      <button type="button" data-region="seoul" aria-pressed="false">서울시</button>
+      <button type="button" data-region="hwaseong" aria-pressed="false">화성시</button>
+      <button type="button" data-region="yongin" aria-pressed="false">용인시</button>
+      <button type="button" data-region="busan" aria-pressed="false">부산시</button>
+      <button type="button" data-region="buan" aria-pressed="false">부안군</button>
+    </nav>
+    <div class="workspace">
+      <aside class="filters support-filters" aria-label="지원 공고 필터">
+        <div class="section-label">나에게 필요한 지원 <span>01</span></div>
+        <label for="category">지원 분야</label><select id="category"><option value="all">전체 분야</option><option>생활</option><option>주거</option><option>취업·교육</option><option>자산형성</option><option>기타 지원</option></select>
+        <label for="applicationStatus">신청 상태</label><select id="applicationStatus"><option value="available">접수 중·예정·기간 확인 필요</option><option value="open">접수 중</option><option value="upcoming">접수 예정</option><option value="unknown">기간 확인 필요</option><option value="closed">마감된 공고</option><option value="all">마감 포함 전체</option></select>
+        <p class="filter-note">개인 대상 지원 공고를 찾기 위한 참고 정보예요. 나이·소득·세부 거주지·중복수급 조건을 모두 확인한 뒤 신청해 주세요.</p>
+        <div class="source-note"><span class="status-dot"></span><strong>공식 홈페이지 직접 확인</strong><p>등록된 게시판의 검색 범위를 수집해요. 각 지역의 모든 지원사업을 포함하지는 않아요.</p></div>
+      </aside>
+      <section class="results" aria-labelledby="supportTitle">
+        <div class="results-heading"><div><p class="eyebrow" id="regionLabel">5개 지역의 공식 지원 공고</p><h2 id="supportTitle">지역 지원금 <span id="resultCount"></span></h2></div></div>
+        <div class="search-row"><label class="sr-only" for="search">공고명·지역·지원내용 검색</label><input id="search" type="search" placeholder="월세, 응시료, 생활비 등 검색"><label class="sr-only" for="sort">정렬</label><select id="sort"><option value="status">신청 상태순</option><option value="deadline">마감 가까운 순</option><option value="recent">최근 확인순</option></select></div>
+        <p class="comparison-note" id="supportNotice">수집한 공고를 불러오고 있어요.</p>
+        <div id="listArea" aria-live="polite"><div class="empty">공식 공고를 불러오고 있어요.</div></div>
+        <button type="button" id="loadMore" class="load-more" hidden></button>
+        <details class="collection-details"><summary>지역별 수집 범위·확인 상태</summary><p>확인일은 페이지를 조회한 날입니다. 자격이나 현재 예산 잔액을 확인했다는 뜻은 아니에요. 원천 공고의 반영이 늦을 수 있어요.</p><div id="sourceStatus"></div></details>
+      </section>
+      <aside class="ad-rail" aria-label="신청 전 확인 사항">
+        <div id="railPlacement"></div>
+        <p class="rail-caption"><strong>‘기간 확인 필요’는 무슨 뜻인가요?</strong>HTML에서 신청기간을 확인하지 못했거나, 공고가 첨부파일로만 제공되는 경우예요. 게시일을 신청 마감일로 추정하지 않습니다.</p>
+      </aside>
+    </div>
+  </main>
+  <footer><a class="brand footer-brand" href="./">MoneyPole.</a><p>지원금 수급이나 선정 결과를 보장하지 않습니다. 공식 공고의 세부 지역·나이·소득·중복수급 조건과 조기마감을 확인하세요.<br>공식 원문 조회가 지연된 공고는 최신 상태가 아닐 수 있습니다.</p><span>내 돈에 맞는 선택의 시작</span></footer>
+</div>
+<dialog id="detailDialog" aria-labelledby="detailName"><div class="dialog-head"><span>지원 공고 자세히 보기</span><button id="closeDetail" type="button" aria-label="지원 공고 닫기">닫기 ×</button></div><div id="detailContent"></div></dialog>
+</body>
+</html>
