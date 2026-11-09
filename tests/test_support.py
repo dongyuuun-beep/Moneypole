@@ -1,8 +1,9 @@
 import unittest
+from unittest.mock import patch, Mock
 from copy import deepcopy
 from bs4 import BeautifulSoup
 
-from support_collectors import (CollectionError, dates_from_period, parse_busan, parse_seoul_list,
+from support_collectors import (CollectionError, dates_from_period, fetch_listing, parse_busan, parse_seoul_list,
     parse_yongin_detail, parse_hwaseong_detail, relevant)
 from update_support import merge_records, run
 
@@ -14,6 +15,24 @@ def notice(region='seoul', hash='same'):
             'last_checked_at':'2026-11-07T12:00:00+09:00','verification_status':'collected'}
 
 class SupportTests(unittest.TestCase):
+    @patch('support_collectors.time.sleep')
+    @patch('support_collectors.fetch_html')
+    def test_malformed_listing_is_retried_once(self, fetch, sleep):
+        bad = BeautifulSoup('<p>페이지 오류</p>', 'html.parser')
+        good = BeautifulSoup('<div class="category-feed"></div>', 'html.parser')
+        fetch.side_effect = [bad, good]
+        self.assertEqual(fetch_listing(Mock(), 'https://example.go.kr', parse_seoul_list), [])
+        self.assertEqual(fetch.call_count, 2)
+        sleep.assert_called_once_with(1)
+
+    @patch('support_collectors.time.sleep')
+    @patch('support_collectors.fetch_html')
+    def test_persistent_page_error_never_becomes_an_empty_success(self, fetch, sleep):
+        fetch.return_value = BeautifulSoup('<p>페이지 오류</p>', 'html.parser')
+        with self.assertRaises(CollectionError):
+            fetch_listing(Mock(), 'https://example.go.kr', parse_seoul_list)
+        self.assertEqual(fetch.call_count, 2)
+
     def test_only_complete_labeled_ranges_produce_dates(self):
         self.assertEqual(dates_from_period('2026-11-02 09:00 ~ 2026-12-01 18:00'),
                          ('2026-11-02T09:00+09:00','2026-12-01T18:00+09:00'))

@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from collectors import session
+from collectors import CollectionError, session
 from support_collectors import REGIONS, collect_region
 from update_rates import atomic_json, read_json
 
@@ -59,9 +59,10 @@ def run(previous, previous_report, collect, checked_at):
                 for item in result:
                     if item['region'] == key:
                         item['verification_status'] = 'stale'
+                reason = str(exc) if isinstance(exc, CollectionError) else type(exc).__name__
                 report['sources'][key] = {**meta, 'status': 'failed', 'count': 0,
                     'last_success_at': old.get('last_success_at'),
-                    'message': f'{type(exc).__name__}: 공식 페이지 확인 실패 · 이전 값 보존'}
+                    'message': f'{reason}: 공식 페이지 확인 실패 · 이전 값 보존'}
     # Stable report order and item order make diffs easier to inspect.
     report['sources'] = {key: report['sources'][key] for key in REGIONS}
     return sorted(result, key=lambda x: (x['region'], x['id'])), report
