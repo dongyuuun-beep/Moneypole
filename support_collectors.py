@@ -6,6 +6,7 @@ Only labeled application dates and explicit source status drive application stat
 import hashlib
 import html
 import re
+import time
 from datetime import timedelta
 from datetime import datetime
 from urllib.parse import parse_qs, urlencode, urljoin, urlsplit, urlunsplit
@@ -292,6 +293,23 @@ PARSERS = {'seoul': (parse_seoul_list, parse_seoul_detail), 'hwaseong': (parse_h
            'yongin': (parse_yongin_list, parse_yongin_detail), 'buan': (parse_buan_list, parse_buan_detail)}
 
 
+def fetch_listing(client, url, parser):
+    """Retry a malformed successful HTTP response once, without accepting it as empty."""
+    for attempt in range(2):
+        try:
+            soup = fetch_html(client, url)
+            try:
+                return parser(soup)
+            except CollectionError:
+                if any(x in soup.get_text() for x in ['검색된 결과가 없습니다', '게시물이 없습니다', '등록된 게시물이 없습니다', '등록된 데이터가 없습니다']):
+                    return []
+                raise
+        except CollectionError:
+            if attempt:
+                raise
+            time.sleep(1)
+
+
 def collect_region(client, region, previous):
     """Bounded rolling discovery, plus rechecking known details. No completeness claim."""
     config = REGIONS[region]
@@ -311,15 +329,7 @@ def collect_region(client, region, previous):
         urls = [config['url'] + '&' + urlencode({'keyword': word, 'searchType': 'DATA_TITLE', 'startPage': page})
                 for word in ['청년', '지원금', '지원사업'] for page in [1, 2]]
     for url in urls:
-        soup = fetch_html(client, url)
-        try:
-            rows = listing(soup)
-        except CollectionError:
-            # Empty search pages are valid only with an explicit no-results message.
-            if any(x in soup.get_text() for x in ['검색된 결과가 없습니다', '게시물이 없습니다', '등록된 게시물이 없습니다', '등록된 데이터가 없습니다']):
-                pages_checked += 1
-                continue
-            raise
+        rows = fetch_listing(client, url, listing)
         pages_checked += 1
         for title, href, state in rows:
             if relevant(title):
