@@ -6,6 +6,8 @@ export function applicationState(item, now = new Date()) {
   const start = Date.parse(item.application_start || ''), end = Date.parse(item.application_end || '');
   if (Number.isFinite(end) && now > end) return {key: 'closed', label: '마감', stale};
   if (stale) return {key: 'unknown', label: '확인 지연 · 기간 재확인', stale};
+  if (item.benefit_type === 'insurance') return {key: 'unknown', label: '보험 · 청구 조건 확인', stale};
+  if (item.benefit_type === 'discount') return {key: 'unknown', label: '환급·할인 · 이용 조건 확인', stale};
   if (Number.isFinite(start) && Number.isFinite(end) && start <= end) {
     if (now < start) return {key: 'upcoming', label: '접수 예정', stale};
     if (now <= end) return {key: 'open', label: '접수 기간 내', stale};

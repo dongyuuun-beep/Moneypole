@@ -19,9 +19,9 @@ REGIONS = {
     'seoul': {'name': '서울시', 'source_name': '서울시 청년몽땅정보통',
               'url': 'https://youth.seoul.go.kr/infoData/sprtInfo/list.do?key=2309130006',
               'scope': '공식 포털의 지원금·월세·응시료·이사비 검색 공고. 자치구별 거주 조건 별도 확인.'},
-    'hwaseong': {'name': '화성시', 'source_name': '화성시 청년취업끝까지지원센터',
+    'hwaseong': {'name': '화성시', 'source_name': '화성시청·청년센터·경기도 공식 안내',
                  'url': 'https://youthjob.hscity.go.kr/board/notice_list.jsp',
-                 'scope': '시 공식 센터 공지의 개인 대상 비용·수당 지원 공고.'},
+                 'scope': '청년센터 공지와 등록된 시청 주거·가족·생활 혜택, 화성시민에게 적용되는 경기도 교통·기후보험 안내. 전체 사업 목록은 아닙니다.'},
     'yongin': {'name': '용인시', 'source_name': '용인청년포털 청년e랑',
                'url': 'https://youth.yongin.go.kr/web/main/youthPolicy/list',
                'scope': '시 청년 지원사업 목록 중 개인 대상 비용·수당·자산형성 지원.'},
@@ -50,7 +50,7 @@ def safe_link(url, base):
 
 def fetch_html(client, url):
     host = urlsplit(url).hostname
-    allowed = {urlsplit(v['url']).hostname for v in REGIONS.values()} | {'busanjob.net'}
+    allowed = {urlsplit(v['url']).hostname for v in REGIONS.values()} | {'busanjob.net', 'www.hscity.go.kr', 'youth.gg.go.kr'}
     if host not in allowed:
         raise CollectionError('지원금 출처 호스트 불일치')
     # Do not follow arbitrary links/redirects from scraped content.
@@ -310,7 +310,7 @@ def fetch_listing(client, url, parser):
             time.sleep(1)
 
 
-def collect_region(client, region, previous):
+def collect_listed_region(client, region, previous):
     """Bounded rolling discovery, plus rechecking known details. No completeness claim."""
     config = REGIONS[region]
     if region == 'busan':
@@ -351,3 +351,18 @@ def collect_region(client, region, previous):
     if len(candidates) > 45:
         errors.append({'error': 'DetailLimit', 'remaining': len(candidates) - 45})
     return records, errors, pages_checked
+
+
+def collect_region(client, region, previous):
+    if region != 'hwaseong':
+        return collect_listed_region(client, region, previous)
+    from hwaseong_benefits import collect_benefits
+    # Independent page failures must not prevent other city benefits publishing.
+    records, errors, pages = [], [], 0
+    try:
+        old_center = [p for p in previous if urlsplit(p['detail_url']).hostname == 'youthjob.hscity.go.kr']
+        records, errors, pages = collect_listed_region(client, region, old_center)
+    except Exception as exc:
+        errors.append({'url': REGIONS[region]['url'], 'error': type(exc).__name__})
+    extra, failures, checked = collect_benefits(client)
+    return records + extra, errors + failures, pages + checked

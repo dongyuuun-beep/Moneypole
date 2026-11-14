@@ -1,6 +1,16 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {applicationState} from '../web/support-state.mjs';
+
+test('insurance and discounts are never advertised as open grant applications', () => {
+  for (const benefit_type of ['insurance', 'discount']) {
+    const item = {benefit_type, last_checked_at: '2026-11-14T10:00:00+09:00', verification_status: 'collected',
+      application_start: '2026-01-01', application_end: '2026-12-31', source_state: '모집중'};
+    assert.equal(applicationState(item, new Date('2026-11-14T12:00:00+09:00')).key, 'unknown');
+    item.source_state = '마감';
+    assert.equal(applicationState(item, new Date('2026-11-14T12:00:00+09:00')).key, 'closed');
+  }
+});
 const now=new Date('2026-11-08T20:00:00+09:00');
 const base={last_checked_at:'2026-11-08T19:00:00+09:00',verification_status:'collected',application_start:'2026-11-01T09:00+09:00',application_end:'2026-11-30T18:00+09:00'};
 test('explicit early close overrides a future deadline',()=>assert.equal(applicationState({...base,source_state:'마감'},now).key,'closed'));

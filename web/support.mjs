@@ -3,6 +3,14 @@ import {createPlacement} from './placements.mjs';
 const $ = id => document.getElementById(id);
 const regionNames = {seoul:'서울시',hwaseong:'화성시',yongin:'용인시',busan:'부산시',buan:'부안군'};
 let items = [], report = {}, region = 'all', visible = 12;
+const initialRegion = new URLSearchParams(location.search).get('region');
+if (Object.hasOwn(regionNames, initialRegion)) {
+  region = initialRegion;
+  for (const tab of document.querySelectorAll('[data-region]')) {
+    tab.classList.toggle('active', tab.dataset.region === region);
+    tab.setAttribute('aria-pressed', String(tab.dataset.region === region));
+  }
+}
 const date = value => value ? new Date(value).toLocaleString('ko-KR', {timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '확인 기록 없음';
 function node(tag, cls, value) { const n = document.createElement(tag); if(cls)n.className=cls; if(value!==undefined)n.textContent=value;return n; }
 function link(label, url) {
@@ -32,11 +40,12 @@ function render() {
   $('listArea').replaceChildren();
   for(const {item,state} of data.slice(0,visible)) {
     const card=node('article','card support-card'),top=node('div','card-top');
-    top.append(node('span','',item.region_name+' · '+item.category),node('span','badge'+(state.key==='unknown'?' warning':''),state.label));
+    top.append(node('span','',(item.coverage_label||item.region_name)+' · '+item.category),node('span','badge'+(state.key==='unknown'?' warning':''),state.label));
     const title=node('button','product-button',item.title);title.type='button';title.addEventListener('click',()=>openDetail(item));
     const support=item.support_text?item.support_text:'지원금액·세부 조건은 공식 공고에서 확인하세요.';
     const desc=node('p','support-summary',support.length>150?support.slice(0,150)+'…':support);
-    const period=node('p','condition',item.application_period_text?'신청기간: '+item.application_period_text:'신청기간: 공식 원문 확인 필요');
+    const periodTitle=item.period_kind==='coverage'?'보장·청구 안내':item.period_kind==='usage'?'이용 안내':'신청기간';
+    const period=node('p','condition',item.application_period_text?periodTitle+': '+item.application_period_text:periodTitle+': 공식 원문 확인 필요');
     const bottom=node('div','card-bottom');bottom.append(node('span','',item.source_name),node('span','',`확인 ${date(item.last_checked_at)}${state.stale?' · 확인 지연':''}`));
     card.append(top,title,desc,period,bottom);$('listArea').append(card);
   }
@@ -48,7 +57,7 @@ function openDetail(item) {
   const content=$('detailContent'),state=applicationState(item);content.replaceChildren();
   content.append(node('div','detail-bank',item.region_name+' · '+item.source_name));const title=node('h2','',item.title);title.id='detailName';content.append(title,node('span','badge'+(state.key==='unknown'?' warning':''),state.label));
   content.append(section('지원 안내',item.support_text||'HTML에서 지원금액을 확정하지 못했어요. 이미지·첨부파일을 포함한 공식 공고를 확인하세요.'));
-  content.append(section('신청기간',item.application_period_text||'신청기간을 확인하지 못했어요. 게시일을 신청일이나 마감일로 대체하지 않습니다.'));
+  content.append(section(item.period_kind==='coverage'?'보장·청구 안내':item.period_kind==='usage'?'이용 안내':'신청기간',item.application_period_text||'신청기간을 확인하지 못했어요. 게시일을 신청일이나 마감일로 대체하지 않습니다.'));
   content.append(section('지원 대상',item.target_text||'지역·나이·소득·거주기간·중복수급 기준은 공식 공고에서 확인하세요.'));
   content.append(section('신청 전 확인',item.notice));
   const source=section('공식 원문');source.append(link('공식 안내 확인 ↗',item.source_url));
