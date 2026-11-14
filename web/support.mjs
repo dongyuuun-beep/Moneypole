@@ -1,4 +1,4 @@
-import {applicationState} from './support-state.mjs';
+import {applicationState} from './support-state.mjs?v=hwaseong-2';
 import {createPlacement} from './placements.mjs';
 const $ = id => document.getElementById(id);
 const regionNames = {seoul:'서울시',hwaseong:'화성시',yongin:'용인시',busan:'부산시',buan:'부안군'};
