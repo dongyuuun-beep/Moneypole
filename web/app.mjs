@@ -1,4 +1,4 @@
-import {shortTerm, selectedOption, displayRate, estimate, freshness} from './rates.mjs';
+import {shortTerm, selectedOption, displayRate, estimate, freshness, isComparable} from './rates.mjs';
 import {createPlacement} from './placements.mjs';
 
 const $ = id => document.getElementById(id);
@@ -64,6 +64,17 @@ function render() {
     items = items.filter(item => item.bank.includes('저축은행') === savingsBank);
   }
   if (!short && config.term !== 'all') items = items.filter(item => (item.options || []).some(o => String(o.save_trm) === config.term));
+  const now = new Date(), excluded = items.filter(item => !isComparable(item, now));
+  items = items.filter(item => isComparable(item, now));
+  $('excludedProducts').hidden = !excluded.length;
+  $('excludedSummary').textContent = `비교에서 제외한 상품 ${excluded.length}개 · 확인 필요`;
+  $('excludedList').replaceChildren();
+  for (const item of excluded) {
+    const entry = node('p');
+    const reason = status.sources?.[item.source_id]?.missing_products?.find(p => p.id === item.id)?.reason;
+    entry.append(node('strong', '', `${item.bank} · ${item.name}`), document.createTextNode(` — ${reason || freshness(item, now)}. 마지막 금리 확인: ${dateText(item.last_checked_at)}. `), link('공식 출처 ↗', item.source_url));
+    $('excludedList').append(entry);
+  }
   items.sort((a, b) => {
     if ($('sort').value === 'interest') {
       const ea = estimate(a, config), eb = estimate(b, config);
@@ -103,12 +114,13 @@ function render() {
     card.append(bottom); (position++ < 6 ? $('leadingProducts') : $('remainingProducts')).append(card);
   }
   if (!items.length) $('leadingProducts').append(node('div', 'empty', '조건에 맞는 상품이 없어요. 검색어나 기간을 바꿔보세요.'));
-  for (const key of Object.keys(labels)) document.querySelector(`[data-count="${key}"]`).textContent = allData.filter(x => x.type === key).length;
+  for (const key of Object.keys(labels)) document.querySelector(`[data-count="${key}"]`).textContent = allData.filter(x => x.type === key && isComparable(x, now)).length;
 }
 function section(title) {
   const result = node('section', 'detail-section'); result.append(node('h3', '', title)); return result;
 }
 function openDetail(item) {
+  if (!isComparable(item)) { render(); return; }
   currentItem = item;
   const content = $('detailContent'); content.replaceChildren();
   const bank = node('div', 'detail-bank', item.bank); bank.append(document.createTextNode(' · '), badge(item));
@@ -163,7 +175,7 @@ function renderStatus() {
   for (const [key, source] of Object.entries(status.sources || {})) {
     const row = node('div', 'source-row');
     const state = {ok: '확인 완료', partial: '목록 일부 확인 필요', failed: '확인 지연', unavailable: '수집 미지원'}[source.status] || '미확인';
-    row.append(node('span', '', sourceLabels[key] || '공식 출처'), node('span', '', `${state}${source.last_success_at ? ' · ' + dateText(source.last_success_at) : ''}`));
+    row.append(node('span', '', sourceLabels[key] || '공식 출처'), node('span', '', `${state}${source.missing_count ? ' · ' + source.missing_count + '개 비교 제외' : ''}${source.last_success_at ? ' · ' + dateText(source.last_success_at) : ''}`));
     $('sourceStatus').append(row);
   }
   if (!Object.keys(status.sources || {}).length) $('sourceStatus').textContent = '수집 상태 정보를 가져오지 못했어요. 상품별 확인 시각을 확인하세요.';
@@ -187,6 +199,13 @@ try {
   if (dataResult.status !== 'fulfilled' || !Array.isArray(dataResult.value)) throw new Error('data');
   allData = dataResult.value; status = statusResult.status === 'fulfilled' ? statusResult.value : {};
   render(); renderStatus();
+  // Recheck expiry in long-lived and restored tabs, including an open detail.
+  function refreshVerification() {
+    if (currentItem && !isComparable(currentItem)) $('detailDialog').close();
+    render();
+  }
+  setInterval(refreshVerification, 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshVerification(); });
 } catch {
   $('leadingProducts').replaceChildren(node('div', 'empty error', '데이터를 불러오지 못했어요. 잠시 후 새로고침해 주세요.'));
   $('sourceStatus').textContent = '데이터 조회 실패';

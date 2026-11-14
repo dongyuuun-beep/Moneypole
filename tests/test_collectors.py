@@ -4,7 +4,7 @@ from datetime import date
 from unittest.mock import Mock, patch
 
 from collectors import CollectionError, fetch_fsb, fetch_fss, parse_fsb, parse_kb, parse_kakao
-from update_rates import merge_source, update
+from update_rates import merge_source, update, has_collection_failure
 
 STAMP = '2026-11-08T19:00:00+09:00'
 
@@ -45,6 +45,31 @@ class PreservationTests(unittest.TestCase):
         result, missing = merge_source([product(), product('two')], [product()], 'fsb', STAMP)
         self.assertEqual(missing, 1)
         self.assertEqual(result[1]['verification_status'], 'missing')
+
+    def test_isolated_missing_is_nonfatal_and_reappearance_reverified(self):
+        old = [product(), product('two')]
+        result, report = update(old, {}, {'fsb': lambda: [product()]}, STAMP)
+        self.assertFalse(has_collection_failure(report))
+        self.assertEqual(report['sources']['fsb']['missing_count'], 1)
+        self.assertIn('판매 종료 여부 미확인', report['sources']['fsb']['missing_products'][0]['reason'])
+        self.assertEqual(result[1]['last_checked_at'], old[1]['last_checked_at'])
+        self.assertEqual(result[1]['history'], old[1]['history'])
+        result, report = update(result, report, {'fsb': lambda: old}, STAMP)
+        self.assertEqual(result[1]['verification_status'], 'verified')
+        self.assertEqual(report['sources']['fsb']['status'], 'ok')
+
+    def test_large_new_loss_and_real_failures_remain_fatal(self):
+        old = [product(str(i)) for i in range(20)]
+        result, report = update(old, {}, {'fsb': lambda: old[:15]}, STAMP)
+        self.assertTrue(has_collection_failure(report))
+        self.assertEqual(len(result), 20)
+        self.assertTrue(all(p['verification_status'] == 'stale' for p in result))
+        _, report = update(old, {}, {'fsb': lambda: []}, STAMP)
+        self.assertTrue(has_collection_failure(report))
+        for p in old[15:]:
+            p['verification_status'] = 'missing'
+        _, report = update(old, {}, {'fsb': lambda: old[:15]}, STAMP)
+        self.assertFalse(has_collection_failure(report))
 
     def test_large_change_rejected_and_manual_review_can_accept(self):
         with self.assertRaises(CollectionError):
@@ -134,6 +159,14 @@ class OfficialParserTests(unittest.TestCase):
         get.side_effect = [{'result': {'err_cd': '000', 'baseList': [], 'optionList': [], 'max_page_no': 2}}, TimeoutError()]
         with self.assertRaises(TimeoutError):
             fetch_fss(Mock(), 'deposit', '020000', 'synthetic-key')
+
+    @patch('collectors.get_json')
+    def test_fss_distinguishes_missing_base_from_missing_rate_options(self, get):
+        get.return_value = {'result': {'err_cd': '000', 'baseList': [
+            {'fin_co_no': '001', 'fin_prdt_cd': 'NO_RATE'}], 'optionList': [], 'max_page_no': 1}}
+        products = fetch_fss(Mock(), 'deposit', '030300', 'synthetic-key')
+        self.assertEqual(products, [])
+        self.assertIn('유효한 기간별 금리 없음', products.excluded['FSS_deposit_001_NO_RATE'])
 
 
 if __name__ == '__main__':

@@ -195,11 +195,18 @@ def fetch_fsb(client):
     return products
 
 
+class CollectedProducts(list):
+    """Usable rates plus explicit reasons for excluded official base records."""
+    def __init__(self):
+        super().__init__()
+        self.excluded = {}
+
+
 def fetch_fss(client, kind, group, api_key):
     if not api_key:
         raise CollectionError("FSS_API_KEY 미설정 — 기존 데이터 보존")
     endpoint = "depositProductsSearch.json" if kind == "deposit" else "savingProductsSearch.json"
-    products = []
+    products = CollectedProducts()
     for page in range(1, 101):
         data = get_json(client, f"https://finlife.fss.or.kr/finlifeapi/{endpoint}",
                         params={"auth": api_key, "topFinGrpNo": group, "pageNo": page}).get("result", {})
@@ -214,6 +221,7 @@ def fetch_fss(client, kind, group, api_key):
                     for o in options if (o["fin_co_no"], o["fin_prdt_cd"]) == (row["fin_co_no"], row["fin_prdt_cd"])
                     and o.get("intr_rate") is not None and o.get("intr_rate2") is not None]
             if not opts:
+                products.excluded[f"FSS_{kind}_{row['fin_co_no']}_{row['fin_prdt_cd']}"] = "공식 목록에 있으나 유효한 기간별 금리 없음"
                 continue
             selected = min(opts, key=lambda o: ([12, 24, 6].index(o["save_trm"]) if o["save_trm"] in [12, 24, 6] else 3, -o["save_trm"], o["intr_type"] != "단리"))
             products.append({"id": f"FSS_{kind}_{row['fin_co_no']}_{row['fin_prdt_cd']}",

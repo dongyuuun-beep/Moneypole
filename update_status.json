@@ -1,54 +1,68 @@
 {
-  "checked_at": "2026-11-14T07:41:37+09:00",
+  "checked_at": "2026-11-14T12:04:45+09:00",
   "timezone": "Asia/Seoul",
   "sources": {
     "fss_deposit_020000": {
       "status": "ok",
       "count": 40,
       "missing_count": 0,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
+      "missing_products": [],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
       "message": "수집 완료"
     },
     "fss_deposit_030300": {
       "status": "partial",
       "count": 394,
       "missing_count": 1,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
-      "message": "이전 목록 중 누락 상품 보존"
+      "missing_products": [
+        {
+          "id": "FSS_deposit_0010345_HK00007",
+          "bank": "애큐온저축은행",
+          "name": "애큐온모바일예금",
+          "reason": "이번 공식 수집 목록에 없음 · 판매 종료 여부 미확인"
+        }
+      ],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
+      "message": "1개 상품 비교 제외 · 이전 기록 보존"
     },
     "fss_savings_020000": {
       "status": "ok",
       "count": 60,
       "missing_count": 0,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
+      "missing_products": [],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
       "message": "수집 완료"
     },
     "fss_savings_030300": {
       "status": "ok",
       "count": 278,
       "missing_count": 0,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
+      "missing_products": [],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
       "message": "수집 완료"
     },
     "fsb_parking": {
       "status": "ok",
       "count": 158,
       "missing_count": 0,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
+      "missing_products": [],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
       "message": "수집 완료"
     },
     "kb_cma": {
       "status": "ok",
       "count": 2,
       "missing_count": 0,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
+      "missing_products": [],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
       "message": "수집 완료"
     },
     "kakao_parking": {
       "status": "ok",
       "count": 1,
       "missing_count": 0,
-      "last_success_at": "2026-11-14T07:41:37+09:00",
+      "missing_products": [],
+      "last_success_at": "2026-11-14T12:04:45+09:00",
       "message": "수집 완료"
     },
     "kfb_parking": {
