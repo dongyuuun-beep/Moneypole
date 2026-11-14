@@ -1,5 +1,10 @@
 export const shortTerm = item => ['parking', 'cma'].includes(item.type);
 
+export function isComparable(item, now = new Date()) {
+  const age = now - new Date(item.last_checked_at);
+  return item.verification_status === 'verified' && Number.isFinite(age) && age >= 0 && age <= 48 * 3600e3;
+}
+
 export function selectedOption(item, term = 'all', index = null) {
   const options = item.options || [];
   if (index !== null && options[index]) return options[index];
@@ -14,6 +19,7 @@ export function displayRate(item, term, baseOnly) {
 }
 
 export function estimate(item, {amount, days = 30, baseOnly = false, term = 'all', index = null}) {
+  if (!isComparable(item)) return null;
   if (!Number.isFinite(amount) || amount <= 0) return null;
   if (shortTerm(item)) {
     if (!Number.isFinite(days) || days <= 0 || !['flat', 'verified_tiers'].includes(item.rate_model)) return null;
@@ -45,6 +51,6 @@ export function estimate(item, {amount, days = 30, baseOnly = false, term = 'all
 export function freshness(item, now = new Date()) {
   if (!item.last_checked_at) return '미확인';
   if (item.verification_status === 'missing') return '목록 누락 · 확인 필요';
-  if (item.verification_status !== 'verified' || now - new Date(item.last_checked_at) > 48 * 3600e3) return '확인 지연';
+  if (!isComparable(item, now)) return '확인 지연';
   return '확인 완료';
 }

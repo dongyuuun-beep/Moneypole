@@ -54,7 +54,7 @@ jobs:
           if git diff --cached --quiet; then exit 0; fi
           git commit -m "Update official rates and collection status"
           git push
-      - name: Report incomplete collection
+      - name: Report collection failure
         if: steps.collect.outcome == 'failure'
         run: |
           echo 'Some sources failed. Previous values were preserved. See the job summary.'

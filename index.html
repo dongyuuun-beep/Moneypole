@@ -44,9 +44,10 @@
           <div class="results-heading"><div><p class="eyebrow" id="categoryNote">자유롭게 넣고 빼는</p><h2 id="resultsTitle">파킹통장 <span id="resultCount"></span></h2></div><span class="unit-label">연 · 세전</span></div>
           <div class="search-row"><label class="sr-only" for="search">금융기관 또는 상품명 검색</label><input id="search" type="search" placeholder="금융기관 또는 상품명 검색"><label class="sr-only" for="sort">정렬</label><select id="sort"><option value="rate">표시 금리순</option><option value="interest">예상 이자순</option></select></div>
           <p id="comparisonNote" class="comparison-note"></p>
+          <details id="excludedProducts" class="collection-details" hidden><summary id="excludedSummary"></summary><p>공식 수집에서 빠졌거나 최근 48시간 안에 금리를 확인하지 못한 상품은 순위·금리 표시·이자 계산에서 제외합니다. 목록 누락만으로 판매 종료를 뜻하지는 않습니다.</p><div id="excludedList"></div></details>
           <div id="listArea" aria-live="polite"><div id="leadingProducts"><div class="empty">공시 정보를 불러오고 있어요.</div></div><div id="inlinePlacement" hidden></div><div id="remainingProducts"></div></div>
           <button type="button" id="loadMore" class="load-more" hidden></button>
-          <details class="collection-details" id="sourceInfo"><summary>데이터 확인 상태</summary><p>최종 확인은 원문 조회에 성공한 시각이며, 금리 적용일과는 다릅니다. 오래되거나 수집이 실패한 값은 별도로 표시합니다.</p><div id="sourceStatus">확인 중</div></details>
+          <details class="collection-details" id="sourceInfo"><summary>데이터 확인 상태</summary><p>최종 확인은 원문 조회에 성공한 시각이며, 금리 적용일과는 다릅니다. 비교에는 공식 수집에 성공하고 확인 시각이 48시간 이내인 상품만 포함합니다.</p><div id="sourceStatus">확인 중</div></details>
         </section>
         <aside class="ad-rail" aria-label="비교 도움말">
           <div id="railPlacement"></div>

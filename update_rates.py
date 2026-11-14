@@ -63,6 +63,12 @@ def merge_source(existing, incoming, source_id, checked_at, accept_large_changes
         if p.get("source_id") == source_id and p["id"] not in ids:
             p["verification_status"] = "missing"
             missing += 1
+    # Previously quarantined records do not accumulate into new outage alerts.
+    active_ids = {p['id'] for p in existing if p.get('source_id') == source_id
+                  and p.get('verification_status') != 'missing'}
+    newly_missing = sum(p['id'] in active_ids and p.get('verification_status') == 'missing' for p in result)
+    if newly_missing >= 5 and newly_missing / max(1, len(active_ids)) >= .2:
+        raise CollectionError("기존 비교 상품의 20% 이상·5개 이상 누락 — 출처 확인 필요, 기존 데이터 보존")
     return result, missing
 
 
@@ -75,9 +81,13 @@ def update(data, previous_status, sources, checked_at, accept_large_changes=Fals
         try:
             incoming = collect()
             result, missing = merge_source(result, incoming, source_id, checked_at, accept_large_changes)
+            excluded = getattr(incoming, 'excluded', {})
+            missing_products = [{"id": p['id'], "bank": p['bank'], "name": p['name'],
+                                 "reason": excluded.get(p['id'], "이번 공식 수집 목록에 없음 · 판매 종료 여부 미확인")}
+                                for p in result if p.get('source_id') == source_id and p.get('verification_status') == 'missing']
             report["sources"][source_id] = {"status": "partial" if missing else "ok", "count": len(incoming),
-                "missing_count": missing, "last_success_at": checked_at,
-                "message": "이전 목록 중 누락 상품 보존" if missing else "수집 완료"}
+                "missing_count": missing, "missing_products": missing_products, "last_success_at": checked_at,
+                "message": f"{missing}개 상품 비교 제외 · 이전 기록 보존" if missing else "수집 완료"}
         except Exception as exc:
             # API keys can appear in request exception URLs; never print those.
             message = str(exc) if isinstance(exc, CollectionError) else f"{type(exc).__name__} — 응답·네트워크 확인 필요"
@@ -90,6 +100,11 @@ def update(data, previous_status, sources, checked_at, accept_large_changes=Fals
         "message": "기존 은행연합회 URL 오류 응답 확인. 시중은행 통합 목록은 미지원.",
         "source_url": "https://portal.kfb.or.kr/compare/free_deposit.php"}
     return result, report
+
+
+def has_collection_failure(report):
+    # An isolated product omission is a catalog warning, not a source outage.
+    return any(s['status'] == 'failed' for s in report['sources'].values())
 
 
 def main():
@@ -116,7 +131,7 @@ def main():
     if os.getenv("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as output:
             output.write("\n".join(lines) + "\n")
-    return 1 if any(s["status"] in ("failed", "partial") for s in report["sources"].values()) else 0
+    return 1 if has_collection_failure(report) else 0
 
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {displayRate, estimate, freshness} from '../web/rates.mjs';
+import {displayRate, estimate as calculate, freshness, isComparable} from '../web/rates.mjs';
+
+// Calculation fixtures represent products that passed today's source check.
+const estimate = (item, config) => calculate({verification_status: 'verified', last_checked_at: new Date().toISOString(), ...item}, config);
 
 test('selected term controls sorting and interest, not representative rate', () => {
   const item = {type: 'deposit', base: 3, max: 4, save_trm: 12, options: [
@@ -41,4 +44,19 @@ test('old values and failed checks cannot be labeled fresh', () => {
   assert.equal(freshness({}), '미확인');
   assert.equal(freshness({last_checked_at: '2026-11-01', verification_status: 'verified'}, new Date('2026-11-08')), '확인 지연');
   assert.equal(freshness({last_checked_at: '2026-11-08', verification_status: 'stale'}, new Date('2026-11-08')), '확인 지연');
+});
+
+test('missing, stale, unknown and invalid dates cannot enter comparison or calculation', () => {
+  const now = new Date(), item = {type: 'deposit', save_trm: 12, max: 3, intr_type: '단리',
+    verification_status: 'verified', last_checked_at: now.toISOString()};
+  assert.equal(isComparable(item, now), true);
+  for (const change of [{verification_status: 'missing'}, {verification_status: 'stale'},
+    {verification_status: undefined}, {last_checked_at: 'invalid'}, {last_checked_at: undefined},
+    {last_checked_at: new Date(+now - 48 * 3600e3 - 1).toISOString()},
+    {last_checked_at: new Date(+now + 3600e3).toISOString()}]) {
+    const excluded = {...item, ...change};
+    assert.equal(isComparable(excluded, now), false);
+    assert.equal(calculate(excluded, {amount: 1000000}), null);
+    assert.notEqual(freshness(excluded, now), '확인 완료');
+  }
 });
