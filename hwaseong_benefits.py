@@ -24,7 +24,7 @@ PAGES = [
     dict(url=CITY + '/town/user/bbs/BD_selectBbs.do?q_bbsCode=1048&q_bbscttSn=20260716194338594',
          title='결혼장려 연지곤지 통장', category='자산형성'),
     dict(url=CITY + '/www/user/bbs/BD_selectBbs.do?q_bbsCode=1019&q_bbscttSn=20260714105622247',
-         title='시민안전보험', category='생활', benefit_type='insurance'),
+         title='시민안전보험', category='생활', benefit_type='insurance', summary_match='상해의료비'),
     dict(url=CITY + '/www/user/bbs/BD_selectBbs.do?q_bbsCode=1051&q_bbscttSn=20261113085553527',
          title='착한가격업소 지역화폐 캐시백', category='생활', benefit_type='discount', summary_match='시는 올해 10월부터'),
     dict(url='https://youth.gg.go.kr/gg/info/housing-welfare.do?arcNo=10054&mode=view', title='The 경기패스 교통비 환급',
