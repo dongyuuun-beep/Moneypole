@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-21T08:07:26+09:00",
+  "checked_at": "2026-11-22T07:12:00+09:00",
   "timezone": "Asia/Seoul",
   "sources": {
     "fss_deposit_020000": {
@@ -7,7 +7,7 @@
       "count": 40,
       "missing_count": 0,
       "missing_products": [],
-      "last_success_at": "2026-11-21T08:07:26+09:00",
+      "last_success_at": "2026-11-22T07:12:00+09:00",
       "message": "수집 완료"
     },
     "fss_deposit_030300": {
@@ -22,7 +22,7 @@
           "reason": "이번 공식 수집 목록에 없음 · 판매 종료 여부 미확인"
         }
       ],
-      "last_success_at": "2026-11-21T08:07:26+09:00",
+      "last_success_at": "2026-11-22T07:12:00+09:00",
       "message": "1개 상품 비교 제외 · 이전 기록 보존"
     },
     "fss_savings_020000": {
@@ -30,7 +30,7 @@
       "count": 60,
       "missing_count": 0,
       "missing_products": [],
-      "last_success_at": "2026-11-21T08:07:26+09:00",
+      "last_success_at": "2026-11-22T07:12:00+09:00",
       "message": "수집 완료"
     },
     "fss_savings_030300": {
@@ -38,7 +38,7 @@
       "count": 278,
       "missing_count": 0,
       "missing_products": [],
-      "last_success_at": "2026-11-21T08:07:26+09:00",
+      "last_success_at": "2026-11-22T07:12:00+09:00",
       "message": "수집 완료"
     },
     "fsb_parking": {
@@ -46,7 +46,7 @@
       "count": 158,
       "missing_count": 0,
       "missing_products": [],
-      "last_success_at": "2026-11-21T08:07:26+09:00",
+      "last_success_at": "2026-11-22T07:12:00+09:00",
       "message": "수집 완료"
     },
     "kb_cma": {
@@ -54,16 +54,14 @@
       "count": 2,
       "missing_count": 0,
       "missing_products": [],
-      "last_success_at": "2026-11-21T08:07:26+09:00",
+      "last_success_at": "2026-11-22T07:12:00+09:00",
       "message": "수집 완료"
     },
     "kakao_parking": {
-      "status": "ok",
-      "count": 1,
-      "missing_count": 0,
-      "missing_products": [],
+      "status": "failed",
+      "count": 0,
       "last_success_at": "2026-11-21T08:07:26+09:00",
-      "message": "수집 완료"
+      "message": "ConnectTimeout — 응답·네트워크 확인 필요"
     },
     "kfb_parking": {
       "status": "unavailable",
